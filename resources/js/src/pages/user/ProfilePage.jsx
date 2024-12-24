@@ -1,0 +1,74 @@
+import { useEffect, useMemo } from "react";
+import { Badge, Box, Card, Container, Group } from "@mantine/core";
+import {
+    ProfileBtnService,
+    ProfileHeader,
+    ProfileInformation,
+    ProfileProgressActas,
+    TextSection,
+    TitlePage,
+} from "../../components";
+import { useEscrutinioStore } from "../../hooks";
+
+const ProfilePage = () => {
+    const usuario = useMemo(() => {
+        return JSON.parse(localStorage.getItem("service_user")) || {};
+    }, []);
+    const {
+        resultadosEscrutinio,
+        startLoadEscrutinioActas,
+        startClearEscrutinios,
+    } = useEscrutinioStore();
+
+    useEffect(() => {
+        startLoadEscrutinioActas();
+
+        return () => {
+            startClearEscrutinios();
+        };
+    }, []);
+
+    return (
+        <Container size="md">
+            <TitlePage order={1}>Perfil</TitlePage>
+            <Card
+                withBorder
+                shadow="sm"
+                radius="md"
+                p="lg"
+                mt={20}
+                mb={20}
+                sx={{ position: "static", height: "50" }}
+            >
+                <Card.Section withBorder inheritPadding py="xs">
+                    <Group justify="space-between">
+                        <TextSection fw={700} tt="" fz={18} color="dimmed">
+                            Bienvenido
+                        </TextSection>
+                        <Badge color="indigo.5" radius="lg" size="lg">
+                            {usuario?.role || "Sin datos"}
+                        </Badge>
+                    </Group>
+                </Card.Section>
+                <Card.Section withBorder inheritPadding py="xs">
+                    <ProfileHeader usuario={usuario} />
+                </Card.Section>
+                <Card.Section withBorder inheritPadding py="xs">
+                    <ProfileInformation usuario={usuario} />
+                </Card.Section>
+                <Card.Section withBorder inheritPadding py="xs">
+                    <ProfileBtnService />
+                </Card.Section>
+                <Card.Section withBorder inheritPadding py="xs">
+                    {resultadosEscrutinio?.map((escrutinio, index) => (
+                        <Box key={index} mt={20}>
+                            <ProfileProgressActas escrutinio={escrutinio} />
+                        </Box>
+                    ))}
+                </Card.Section>
+            </Card>
+        </Container>
+    );
+};
+
+export default ProfilePage;

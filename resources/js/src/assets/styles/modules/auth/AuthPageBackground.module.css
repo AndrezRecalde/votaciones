@@ -1,0 +1,28 @@
+.wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-size: cover;
+    background-image: url(https://prefecturadeesmeraldas.gob.ec/wp-content/uploads/2024/10/25101-scaled.jpg);
+}
+
+.wrapper_paper {
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: rem(450px);
+
+    @media (min-width: em(350px)) {
+      max-width: rem(350px);
+    }
+
+    @media (min-width: em(470px)) {
+      max-width: rem(470px);
+    }
+}
+
+.title {
+    margin-top: auto;
+    font-weight: 900;
+}

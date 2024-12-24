@@ -1,0 +1,44 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "@popperjs/core": "^2.11.6",
+        "@vitejs/plugin-react": "^4.2.0",
+        "axios": "^1.6.4",
+        "bootstrap": "^5.2.3",
+        "laravel-vite-plugin": "^1.0",
+        "postcss": "^8.4.49",
+        "postcss-preset-mantine": "^1.17.0",
+        "postcss-simple-vars": "^7.0.1",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "sass": "^1.56.1",
+        "vite": "^5.0"
+    },
+    "dependencies": {
+        "@mantine/charts": "^7.15.1",
+        "@mantine/core": "^7.15.1",
+        "@mantine/dates": "^7.15.1",
+        "@mantine/form": "^7.15.1",
+        "@mantine/hooks": "^7.15.1",
+        "@reduxjs/toolkit": "^2.5.0",
+        "@tabler/icons-react": "^3.24.0",
+        "chart.js": "^4.4.7",
+        "chartjs-plugin-datalabels": "^2.2.0",
+        "clsx": "^2.1.1",
+        "dayjs": "^1.11.13",
+        "mantine-react-table": "^2.0.0-beta.7",
+        "mapbox-gl": "^3.9.0",
+        "react-chartjs-2": "^5.2.0",
+        "react-redux": "^9.2.0",
+        "react-router-dom": "^6.28.0",
+        "recharts": "2",
+        "redux": "^5.0.1",
+        "sweetalert2": "^11.14.5",
+        "swr": "^2.2.5"
+    }
+}
