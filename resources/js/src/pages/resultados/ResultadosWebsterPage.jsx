@@ -1,5 +1,13 @@
 import { useEffect, useMemo } from "react";
-import { ActionIcon, Container, Divider, Grid, Group, rem } from "@mantine/core";
+import {
+    ActionIcon,
+    Container,
+    Divider,
+    Grid,
+    Group,
+    LoadingOverlay,
+    rem,
+} from "@mantine/core";
 import {
     ChartResultado,
     StatEscrutinio,
@@ -23,6 +31,7 @@ const ResultadosWebsterPage = () => {
     }, []);
 
     const {
+        isLoading,
         pageLoad,
         message,
         errores,
@@ -89,6 +98,11 @@ const ResultadosWebsterPage = () => {
                 ) : null}
             </Group>
             <Divider my="md" />
+            <LoadingOverlay
+                visible={isLoading}
+                zIndex={1000}
+                overlayProps={{ radius: "sm", blur: 2 }}
+            />
             <Grid>
                 <Grid.Col span={{ base: 14, xs: 12, sm: 12, md: 4, lg: 4 }}>
                     <WebsterBusqueda dig={DIGNIDAD_CURRENT} />

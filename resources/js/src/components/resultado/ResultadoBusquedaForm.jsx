@@ -70,13 +70,13 @@ export const ResultadoBusquedaForm = ({ dig }) => {
         form.setFieldValue("recinto_id", null);
     }, [parroquia_id]);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         setStorageFields(form.getTransformedValues());
-        await startLoadTotalDeVotos(form.getTransformedValues());
-        await startLoadTotalActasIngresadas(form.getTransformedValues());
-        await startLoadTotalJuntas(form.getTransformedValues());
-        await startLoadResultadosCandidatos(form.getTransformedValues());
+        startLoadTotalDeVotos(form.getTransformedValues());
+        startLoadTotalActasIngresadas(form.getTransformedValues());
+        startLoadTotalJuntas(form.getTransformedValues());
+        startLoadResultadosCandidatos(form.getTransformedValues());
     };
 
     return (

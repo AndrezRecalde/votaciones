@@ -8,11 +8,11 @@ import Swal from "sweetalert2";
 const DigitacionPage = () => {
     const { pageLoad, startClearActa, message, errores } = useActaStore();
 
-    /* useEffect(() => {
+    useEffect(() => {
         return () => {
             startClearActa();
         };
-    }, []); */
+    }, []);
 
     useEffect(() => {
         if (message !== undefined) {

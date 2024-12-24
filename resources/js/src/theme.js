@@ -1,6 +1,7 @@
 import cx from 'clsx';
-import { Container, DEFAULT_THEME, createTheme, mergeMantineTheme } from '@mantine/core';
+import { Container, DEFAULT_THEME, Loader, createTheme, mergeMantineTheme } from '@mantine/core';
 import classes from "./assets/styles/Container.module.css";
+import { CssLoader } from './components';
 
 export const themeOrverride = createTheme({
   /* Put your mantine theme override here */
@@ -14,6 +15,12 @@ export const themeOrverride = createTheme({
         root: cx({ [classes.responsiveContainer]: size === 'responsive' }),
       }),
     }),
+    Loader: Loader.extend({
+        defaultProps: {
+          loaders: { ...Loader.defaultLoaders, custom: CssLoader },
+          type: 'custom',
+        },
+      }),
   },
 });
 

@@ -1,7 +1,15 @@
 import { useEffect } from "react";
-import { Box, Button, Container, Group } from "@mantine/core";
-import { BusquedaActaForm, BusquedaActaTable, TitlePage } from "../../components";
-import { useActaStore, useDignidadStore, useJurisdiccionStore } from "../../hooks";
+import { Box, Button, Container, Group, LoadingOverlay } from "@mantine/core";
+import {
+    BusquedaActaForm,
+    BusquedaActaTable,
+    TitlePage,
+} from "../../components";
+import {
+    useActaStore,
+    useDignidadStore,
+    useJurisdiccionStore,
+} from "../../hooks";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { IconFileTypeXls } from "@tabler/icons-react";
 
@@ -10,7 +18,7 @@ const BusquedaActaPage = () => {
     const { startLoadDignidades } = useDignidadStore();
     const { startLoadCantones, startClearJurisdicciones } =
         useJurisdiccionStore();
-    const { pageLoad, startExportExcelActas } = useActaStore();
+    const { isLoading, pageLoad, startExportExcelActas } = useActaStore();
 
     const form = useForm({
         initialValues: {
@@ -62,13 +70,16 @@ const BusquedaActaPage = () => {
                 </Button>
             </Group>
             <BusquedaActaForm form={form} />
-            {
-                pageLoad ? (
-                    <Box mt={50}>
-                        <BusquedaActaTable />
-                    </Box>
-                ) : null
-            }
+            <LoadingOverlay
+                visible={isLoading}
+                zIndex={500}
+                overlayProps={{ radius: "sm", blur: 2 }}
+            />
+            {pageLoad ? (
+                <Box mt={50}>
+                    <BusquedaActaTable />
+                </Box>
+            ) : null}
         </Container>
     );
 };

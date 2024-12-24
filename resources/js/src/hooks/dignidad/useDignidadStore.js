@@ -20,7 +20,7 @@ export const useDignidadStore = () => {
     const startLoadDignidades = async ({ activo = null, tipo = null}) => {
         try {
             dispatch(onLoading(true));
-            const { data } = await apiAxios.post("/admin/dignidades", {
+            const { data } = await apiAxios.post("/general/dignidades", {
                 activo,
                 tipo
             });

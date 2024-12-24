@@ -44,12 +44,14 @@ export const SeleccionForm = () => {
 
     // Valores iniciales y validación
     const INITIAL_PROVINCIA_ID = usuario?.provincia_id;
+    const INITIAL_CANTON_ID = usuario?.canton_id || null;
+
 
     const searchForm = useForm({
         initialValues: {
-            dignidad_id: 1,
-            provincia_id: INITIAL_PROVINCIA_ID,
-            canton_id: null,
+            dignidad_id: null,
+            provincia_id: convertToString(INITIAL_PROVINCIA_ID),
+            canton_id: convertToString(INITIAL_CANTON_ID),
             parroquia_id: null,
             zona_id: null,
             junta_id: null,
@@ -81,6 +83,28 @@ export const SeleccionForm = () => {
         junta_id,
     } = searchForm.values;
 
+
+    // Efectos combinados para dependencias
+    useEffect(() => {
+        if (provincia_id) searchForm.setFieldValue("canton_id", null);
+        startLoadCantones({ provincia_id });
+    }, [provincia_id]);
+
+    useEffect(() => {
+        if (canton_id) searchForm.setFieldValue("parroquia_id", null);
+        startLoadParroquias({ canton_id });
+    }, [canton_id]);
+
+    useEffect(() => {
+        if (parroquia_id && canton_id) searchForm.setFieldValue("zona_id", null);
+        startLoadZonas({ parroquia_id });
+    }, [canton_id, parroquia_id]);
+
+    useEffect(() => {
+        if (zona_id && canton_id) searchForm.setFieldValue("junta_id", null);
+        startLoadJuntas({ zona_id });
+    }, [canton_id, zona_id]);
+
     // Cargar datos iniciales
     useEffect(() => {
         startLoadProvincias({
@@ -102,27 +126,6 @@ export const SeleccionForm = () => {
 
         startLoadDignidades({ activo: true });
     }, []);
-
-    // Efectos combinados para dependencias
-    useEffect(() => {
-        if (provincia_id) searchForm.setFieldValue("canton_id", null);
-        startLoadCantones({ provincia_id });
-    }, [provincia_id]);
-
-    useEffect(() => {
-        if (canton_id) searchForm.setFieldValue("parroquia_id", null);
-        startLoadParroquias({ canton_id });
-    }, [canton_id]);
-
-    useEffect(() => {
-        if (parroquia_id) searchForm.setFieldValue("zona_id", null);
-        startLoadZonas({ parroquia_id });
-    }, [canton_id, parroquia_id]);
-
-    useEffect(() => {
-        if (zona_id) searchForm.setFieldValue("junta_id", null);
-        startLoadJuntas({ zona_id });
-    }, [canton_id, zona_id]);
 
     const handleSubmit = (e) => {
         e.preventDefault();

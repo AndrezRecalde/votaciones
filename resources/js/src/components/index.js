@@ -15,9 +15,11 @@ import { ActivateBtn } from "./elements/buttons/ActivateBtn";
 import { ModalActivateElement } from "./elements/modal/ModalActivateElement";
 import { FormActivateElement } from "./elements/modal/FormActivateElement";
 
-
 /* Elements: Alerts */
 import { AlertSection } from "./elements/alert/AlertSection";
+
+/* Elements: Loader */
+import { CssLoader } from "./elements/loader/CssLoader";
 
 /* Elements: Mantine React Table */
 import { TableContent } from "./elements/tables/TableContent";
@@ -124,6 +126,9 @@ export {
 
     /* Elements: Alerts */
     AlertSection,
+
+    /* Elements: Loader */
+    CssLoader,
 
     /* Elements: Mantine React Table */
     TableContent,

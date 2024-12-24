@@ -15,18 +15,18 @@ export const MapBusquedaForm = ({ form }) => {
         startClearResultados
     } = useResultadoStore();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit =  (e) => {
         e.preventDefault();
         console.log("submit");
-        await startLoadTotalDeVotosGuess({
+        startLoadTotalDeVotosGuess({
             dignidad_id,
             provincia_id: 8,
         });
-        await startLoadResultadosCandidatosGuess({
+        startLoadResultadosCandidatosGuess({
             dignidad_id,
             privinicia_id: 8,
         });
-        await startLoadResultadosForMap(dignidad_id);
+        startLoadResultadosForMap(dignidad_id);
     };
 
     useEffect(() => {

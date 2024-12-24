@@ -31,6 +31,7 @@ export const resultadosSlice = createSlice({
         onLoadResultadosCandidatos: (state, { payload }) => {
             state.resultadoCandidatos = payload;
             state.pageLoad = true;
+            state.isLoading = false;
         },
         onLoadResultadosForMap: (state, { payload }) => {
             state.resultadosForMap = payload;

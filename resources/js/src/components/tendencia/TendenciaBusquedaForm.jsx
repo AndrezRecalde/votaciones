@@ -18,7 +18,7 @@ export const TendenciaBusquedaForm = () => {
         startLoadParroquias,
         startLoadZonas,
     } = useJurisdiccionStore();
-    const { startLoadTendencias } = useTendenciaStore();
+    const { isLoading, startLoadTendencias } = useTendenciaStore();
 
     const form = useForm({
         initialValues: {
@@ -128,7 +128,7 @@ export const TendenciaBusquedaForm = () => {
                         })}
                     />
                 </SimpleGrid>
-                <BtnSubmit IconSection={IconSearch}>
+                <BtnSubmit IconSection={IconSearch} loading={isLoading}>
                     Realizar Búsqueda
                 </BtnSubmit>
             </Stack>

@@ -3,6 +3,7 @@ import { useErrorException } from "../../hooks";
 import {
     onClearTendencias,
     onLoadErrores,
+    onLoading,
     onLoadTendencias,
 } from "../../store/admin/tendencia/tendenciaSlice";
 import apiAxios from "../../api/apiAxios";
@@ -18,6 +19,7 @@ export const useTendenciaStore = () => {
 
     const startLoadTendencias = async ({ dignidad_id, zona_id }) => {
         try {
+            dispatch(onLoading(true));
             const { data } = await apiAxios.post(
                 "/admin/resultados/tendencia/zonas",
                 {

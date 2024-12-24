@@ -8,18 +8,19 @@ export const WebsterBusquedaForm = ({ form }) => {
     const { dignidades } = useDignidadStore();
     const { cantones } = useJurisdiccionStore();
     const {
+        isLoading,
         startLoadTotalDeVotos,
         startLoadTotalActasIngresadas,
         startLoadTotalJuntas,
         startLoadResultadosCandidatos,
     } = useResultadoStore();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        await startLoadTotalDeVotos(form.getTransformedValues());
-        await startLoadTotalActasIngresadas(form.getTransformedValues());
-        await startLoadTotalJuntas(form.getTransformedValues());
-        await startLoadResultadosCandidatos(form.getTransformedValues());
+        startLoadTotalDeVotos(form.getTransformedValues());
+        startLoadTotalActasIngresadas(form.getTransformedValues());
+        startLoadTotalJuntas(form.getTransformedValues());
+        startLoadResultadosCandidatos(form.getTransformedValues());
     };
 
 
@@ -81,7 +82,7 @@ export const WebsterBusquedaForm = ({ form }) => {
                         ]}
                         defaultValue="TODAS"
                     />
-                <BtnSubmit IconSection={IconSearch}>Realizar Búsqueda</BtnSubmit>
+                <BtnSubmit IconSection={IconSearch} loading={isLoading}>Realizar Búsqueda</BtnSubmit>
             </Stack>
         </Box>
     );

@@ -1,4 +1,4 @@
-import { Box, Drawer, Paper } from "@mantine/core";
+import { Box, Drawer } from "@mantine/core";
 import { MapBusquedaForm, StatVocacion, TableResultado, WebsterEscanioTable } from "../..";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { useResultadoStore } from "../../../hooks";

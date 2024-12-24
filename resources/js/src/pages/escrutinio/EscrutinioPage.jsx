@@ -1,19 +1,20 @@
 import { useEffect } from "react";
-import { Badge, Container, Divider, Group } from "@mantine/core";
+import { Badge, Container, Divider, Group, LoadingOverlay } from "@mantine/core";
 import { useEscrutinioStore, useFechaStore } from "../../hooks";
 import { EscrutinioChart, EscrutinioTable, TitlePage } from "../../components";
 import Swal from "sweetalert2";
 
 const EscrutinioPage = () => {
     const { fechaActual } = useFechaStore();
-    const { startLoadEscrutinios, startClearEscrutinios, errores } = useEscrutinioStore();
+    const { isLoading, startLoadEscrutinios, startClearEscrutinios, errores } =
+        useEscrutinioStore();
 
     useEffect(() => {
         startLoadEscrutinios();
 
         return () => {
             startClearEscrutinios();
-          }
+        };
     }, []);
 
     useEffect(() => {
@@ -38,6 +39,11 @@ const EscrutinioPage = () => {
                     {`Fecha & Hora del reporte: ${fechaActual()}`}
                 </Badge>
             </Group>
+            <LoadingOverlay
+                visible={isLoading}
+                zIndex={1000}
+                overlayProps={{ radius: "sm", blur: 2 }}
+            />
             <Divider my="md" />
             <EscrutinioChart />
             <Divider my="lg" />

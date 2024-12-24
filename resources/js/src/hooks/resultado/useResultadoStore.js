@@ -3,6 +3,7 @@ import { useErrorException } from "../error/useErrorException";
 import {
     onClearResultados,
     onLoadErrores,
+    onLoading,
     onLoadMessage,
     onLoadResultadosCandidatos,
     onLoadResultadosForMap,
@@ -111,6 +112,7 @@ export const useResultadoStore = () => {
         legible = null,
     }) => {
         try {
+            dispatch(onLoading(true));
             const { data } = await apiAxios.post("/admin/resultados/totales", {
                 dignidad_id,
                 provincia_id,

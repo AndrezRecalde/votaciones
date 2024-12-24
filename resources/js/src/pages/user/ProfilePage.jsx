@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { Badge, Box, Card, Container, Group } from "@mantine/core";
+import { Badge, Box, Card, Container, Group, LoadingOverlay } from "@mantine/core";
 import {
     ProfileBtnService,
     ProfileHeader,
@@ -15,6 +15,7 @@ const ProfilePage = () => {
         return JSON.parse(localStorage.getItem("service_user")) || {};
     }, []);
     const {
+        isLoading,
         resultadosEscrutinio,
         startLoadEscrutinioActas,
         startClearEscrutinios,
@@ -60,6 +61,11 @@ const ProfilePage = () => {
                     <ProfileBtnService />
                 </Card.Section>
                 <Card.Section withBorder inheritPadding py="xs">
+                    <LoadingOverlay
+                        visible={isLoading}
+                        zIndex={1000}
+                        overlayProps={{ radius: "sm", blur: 2 }}
+                    />
                     {resultadosEscrutinio?.map((escrutinio, index) => (
                         <Box key={index} mt={20}>
                             <ProfileProgressActas escrutinio={escrutinio} />

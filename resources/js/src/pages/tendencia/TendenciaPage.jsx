@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { Box, Container, Divider } from "@mantine/core";
+import { Box, Container, Divider, LoadingOverlay } from "@mantine/core";
 import {
     TendenciaBusquedaForm,
     TendenciaChart,
@@ -17,7 +17,7 @@ const TendenciaPage = () => {
     }, []);
     const { startLoadDignidades, startClearDignidades } = useDignidadStore();
     const { startLoadCantones } = useJurisdiccionStore();
-    const { pageLoad, startClearTendencias } = useTendenciaStore();
+    const { isLoading, pageLoad, startClearTendencias } = useTendenciaStore();
 
     useEffect(() => {
         startLoadDignidades({ activo: true });
@@ -34,6 +34,11 @@ const TendenciaPage = () => {
             <TitlePage order={2}>Tendencias</TitlePage>
             <Divider my="md" />
             <TendenciaBusquedaForm />
+            <LoadingOverlay
+                visible={isLoading}
+                zIndex={500}
+                overlayProps={{ radius: "sm", blur: 2 }}
+            />
             {pageLoad ? (
                 <Box mt={50}>
                     <TitlePage order={4}>

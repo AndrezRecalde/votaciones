@@ -6,6 +6,7 @@ import {
     Container,
     Divider,
     Group,
+    LoadingOverlay,
     rem,
     SimpleGrid,
     Stack,
@@ -20,7 +21,7 @@ import {
 } from "../../components";
 import Swal from "sweetalert2";
 import { IconFileTypeXls } from "@tabler/icons-react";
-import useSWR from "swr";
+//import useSWR from "swr";
 
 const DIGNIDAD_CURRENT = 1;
 
@@ -30,6 +31,7 @@ const ResultadosPresidencialesPage = () => {
     }, []);
 
     const {
+        isLoading,
         errores,
         pageLoad,
         totalDeVotos,
@@ -86,7 +88,11 @@ const ResultadosPresidencialesPage = () => {
             <Card withBorder shadow="sm" radius="md" mt={20}>
                 <ResultadoBusquedaForm dig={DIGNIDAD_CURRENT} />
             </Card>
-
+            <LoadingOverlay
+                visible={isLoading}
+                zIndex={1000}
+                overlayProps={{ radius: "sm", blur: 2 }}
+            />
             {pageLoad && totalDeVotos !== null ? (
                 <Stack>
                     <TitlePage ta="center" order={2} mt={20}>

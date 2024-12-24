@@ -89,7 +89,6 @@ Route::group(
         Route::get('/distritos', [DistritoController::class, 'getDistritos']);
 
         /* Dignidad */
-        Route::post('/dignidades', [DignidadController::class, 'getDignidades']);
         Route::put('/update/status/dignidad/{id}', [DignidadController::class, 'updateStatus']);
 
 
@@ -141,6 +140,10 @@ Route::group(
         Route::post('/recintos', [StateController::class, 'getRecintos']);
         Route::post('/zonas', [StateController::class, 'getZonas']);
         Route::post('/juntas', [StateController::class, 'getJuntas']);
+
+
+        /* Dignidades */
+        Route::post('/dignidades', [DignidadController::class, 'getDignidades']);
 
         /* Candidatos para el ACTA */
         Route::post('/acta/listar/candidatos', [CandidatoController::class, 'getDignidadesForActa2']);

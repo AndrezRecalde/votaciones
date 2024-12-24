@@ -29,6 +29,12 @@ const GuessResultadosPage = () => {
     const { startLoadDignidadesGuess } = useDignidadStore();
     const { resultadosForMap, message, errores } = useResultadoStore();
 
+    const cantonColors = {};
+    resultadosForMap?.forEach((item) => {
+        cantonColors[item.nombre_canton] =
+            item.dignidades[0]?.candidatos[0]?.color || "#627BC1";
+    });
+
     useEffect(() => {
         //startLoadCantonesGuess({ provincia_id: 8 });
         startLoadDignidadesGuess({ activo: true });
@@ -86,7 +92,12 @@ const GuessResultadosPage = () => {
                 source: "states",
                 layout: {},
                 paint: {
-                    "fill-color": "#627BC1",
+                    "fill-color": [
+                        "match",
+                        ["get", "DPA_DESCAN"],
+                        ...Object.entries(cantonColors).flat(),
+                        "#627BC1", // Color por defecto si no hay coincidencia
+                    ],
                     "fill-opacity": [
                         "case",
                         ["boolean", ["feature-state", "hover"], false],
