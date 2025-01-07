@@ -75,4 +75,14 @@ class GuessController extends Controller
             return response()->json(['status' => HTTPStatus::Error, 'msg' => HTTPStatus::NotFound], 404);
         }
     }
+
+    function verifiedGuess(Request $request): JsonResponse
+    {
+        $guess = Guess::where('codigo', $request->codigo)->first();
+        if ($guess) {
+            return response()->json(['status' => HTTPStatus::Success, 'guess' => $guess], 200);
+        } else {
+            return response()->json(['status' => HTTPStatus::Error, 'msg' => HTTPStatus::NotFound], 404);
+        }
+    }
 }
