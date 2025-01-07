@@ -79,16 +79,17 @@ class OrganizacionController extends Controller
             if ($organizacion) {
                 // Verificar si se está actualizando el logo
                 if ($request->hasFile('logo_url')) {
-                    $filename = $organizacion->logo_url;
-                    if ($filename) {
-                        Storage::disk('public')->delete($filename);
+                    // Eliminar el archivo antiguo si existe
+                    if ($organizacion->logo_url) {
+                        Storage::disk('public')->delete($organizacion->logo_url);
                     }
-                    $organizacion->fill($request->validated());
 
                     $logo = $request->file('logo_url');
                     $filename = 'logo_' . uniqid() . '.' . $logo->getClientOriginalExtension();
                     $save_path = '/logos/organizaciones/' . $organizacion->id . '/';
                     $public_path = $save_path . $filename;
+
+                    // Guardar el archivo en la ruta especificada
                     $path = Storage::putFileAs(
                         'public' . $save_path,
                         $logo,
@@ -100,11 +101,15 @@ class OrganizacionController extends Controller
                         return response()->json(['status' => HTTPStatus::Error, 'msg' => 'Error al cargar los archivos'], 500);
                     }
 
+                    // Actualizar el campo `logo_url` con la nueva ruta
                     $organizacion->logo_url = $public_path;
                 }
 
                 // Actualizar otros datos de la organización
-                $organizacion->update(array_filter($request->validated()));
+                $validatedData = $request->validated();
+                // Remover el campo `logo_url` para evitar sobrescribirlo si no se actualizó
+                unset($validatedData['logo_url']);
+                $organizacion->update($validatedData);
 
                 // Actualizar aliados si están presentes en la solicitud
                 if ($request->has('aliados') && is_array($request->aliados)) {
@@ -123,6 +128,7 @@ class OrganizacionController extends Controller
             return response()->json(['status' => HTTPStatus::Error, 'msg' => $th->getMessage()], 500);
         }
     }
+
 
 
     function destroy(int $id): JsonResponse

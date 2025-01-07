@@ -123,6 +123,11 @@ Route::group(
         Route::post('/resultados/totales', [ResultadoController::class, 'getResultados']);
         Route::post('/resultados/total/votos', [ResultadoController::class, 'getTotalVotos']);
         Route::post('/resultados/tendencia/zonas', [ResultadoController::class, 'getTendencias']);
+        Route::post('/resultados/export-pdf', [ResultadoController::class, 'exportResultadosPDF']);
+
+
+        /* WhatsApp: Enviar Mensajes */
+        Route::post('/resultados/send-whatsapp', [TwilioController::class, 'sendWhatsApp']);
     }
 );
 

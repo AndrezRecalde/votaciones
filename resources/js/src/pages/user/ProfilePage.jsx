@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { Badge, Box, Card, Container, Group, LoadingOverlay } from "@mantine/core";
 import {
+    BadgeElement,
     ProfileBtnService,
     ProfileHeader,
     ProfileInformation,
@@ -46,9 +47,9 @@ const ProfilePage = () => {
                         <TextSection fw={700} tt="" fz={18} color="dimmed">
                             Bienvenido
                         </TextSection>
-                        <Badge color="indigo.5" radius="lg" size="lg">
+                        <BadgeElement variant="filled" radiud="lg">
                             {usuario?.role || "Sin datos"}
-                        </Badge>
+                        </BadgeElement>
                     </Group>
                 </Card.Section>
                 <Card.Section withBorder inheritPadding py="xs">

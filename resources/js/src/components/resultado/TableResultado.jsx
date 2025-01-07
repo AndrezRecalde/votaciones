@@ -11,7 +11,7 @@ export const TableResultado = () => {
         () => [
             {
                 id: "numero_organizacion", //normal accessorKey
-                accessorFn: (row) => row.numero_organizacion + " " + row.sigla, //access nested data with dot notation
+                accessorFn: (row) => row.nombre_organizacion + " - " + row.numero_organizacion, //access nested data with dot notation
                 header: "Lista",
                 filterVariant: "autocomplete",
             },
@@ -81,7 +81,7 @@ export const TableResultado = () => {
                 },
             },
         },
-        mantineTableBodyCellProps: ({ column, cell }) => ({
+        /* mantineTableBodyCellProps: ({ column, cell }) => ({
             style:
                 column.id === "numero_organizacion"
                     ? {
@@ -89,7 +89,7 @@ export const TableResultado = () => {
                           color: "white",
                       }
                     : {},
-        }),
+        }), */
     });
 
     return <TableContent table={table} />;

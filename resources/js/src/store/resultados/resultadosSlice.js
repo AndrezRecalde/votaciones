@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     pageLoad: false,
     isLoading: false,
+    isSendingWhats: false,
+    isExport: false,
     totalDeVotos: 0,
     totalActasIngresadas: 0,
     totalJuntas: 0,
@@ -18,6 +20,12 @@ export const resultadosSlice = createSlice({
     reducers: {
         onLoading: (state, { payload }) => {
             state.isLoading = payload;
+        },
+        onSending: (state, { payload }) => {
+            state.isSendingWhats = payload;
+        },
+        onExport: (state, { payload }) => {
+            state.isExport = payload;
         },
         onLoadTotalDeVotos: (state, { payload }) => {
             state.totalDeVotos = payload;
@@ -35,6 +43,10 @@ export const resultadosSlice = createSlice({
         },
         onLoadResultadosForMap: (state, { payload }) => {
             state.resultadosForMap = payload;
+            state.isLoading = false;
+        },
+        onClearResultadosMap: (state) => {
+            state.resultadosForMap = [];
         },
         onClearResultados: (state) => {
             state.totalDeVotos = 0;
@@ -58,11 +70,14 @@ export const resultadosSlice = createSlice({
 
 export const {
     onLoading,
+    onSending,
+    onExport,
     onLoadTotalDeVotos,
     onLoadTotalIngresadas,
     onLoadTotalJuntas,
     onLoadResultadosCandidatos,
     onLoadResultadosForMap,
+    onClearResultadosMap,
     onClearResultados,
     onLoadMessage,
     onLoadErrores,

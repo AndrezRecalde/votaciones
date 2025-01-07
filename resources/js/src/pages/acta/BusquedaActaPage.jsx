@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Box, Button, Container, Group, LoadingOverlay } from "@mantine/core";
+import { Box, Button, Container, Divider, Group, LoadingOverlay } from "@mantine/core";
 import {
     BusquedaActaForm,
     BusquedaActaTable,
@@ -58,7 +58,7 @@ const BusquedaActaPage = () => {
     };
 
     return (
-        <Container size="xl">
+        <Container size="xxl">
             <Group justify="space-between">
                 <TitlePage order={2}>Búsqueda de Actas</TitlePage>
                 <Button
@@ -69,6 +69,7 @@ const BusquedaActaPage = () => {
                     Exportar
                 </Button>
             </Group>
+            <Divider my="md" />
             <BusquedaActaForm form={form} />
             <LoadingOverlay
                 visible={isLoading}

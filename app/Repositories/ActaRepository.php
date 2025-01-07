@@ -4,10 +4,11 @@ namespace App\Repositories;
 
 use App\Interfaces\ActaInterface;
 use App\Models\Candidato;
+use Illuminate\Database\Eloquent\Collection;
 
 class ActaRepository implements ActaInterface
 {
-    public function getDignidadesForActaWithId($dignidad_id, $provincia_id, $canton_id, $parroquia_id, $acta_id)
+    public function getDignidadesForActaWithId($dignidad_id, $provincia_id, $canton_id, $parroquia_id, $acta_id): Collection
     {
 
         $candidatos = Candidato::from('candidatos as c')
@@ -30,7 +31,7 @@ class ActaRepository implements ActaInterface
         return $candidatos;
     }
 
-    public function getDignidadesForActa($dignidad_id, $provincia_id, $canton_id, $parroquia_id)
+    public function getDignidadesForActa($dignidad_id, $provincia_id, $canton_id, $parroquia_id): Collection
     {
 
         $candidatos = Candidato::from('candidatos as c')

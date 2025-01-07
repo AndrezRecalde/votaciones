@@ -30,11 +30,11 @@ export const MapBusquedaForm = ({ form }) => {
     };
 
     useEffect(() => {
-        startClearResultados();
+        //startClearResultados();
 
-      /* return () => {
+      return () => {
         startClearResultados();
-      } */
+      }
     }, [dignidad_id])
 
 

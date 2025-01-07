@@ -9,6 +9,7 @@ import {
     rem,
 } from "@mantine/core";
 import {
+    BadgeElement,
     ChartResultado,
     StatEscrutinio,
     StatVocacion,
@@ -18,7 +19,7 @@ import {
     WebsterTable,
 } from "../../components";
 import { IconFileTypePdf } from "@tabler/icons-react";
-import { useResultadoStore } from "../../hooks";
+import { useFechaStore, useResultadoStore } from "../../hooks";
 import Swal from "sweetalert2";
 
 const DIGNIDAD_CURRENT = 3;
@@ -29,7 +30,7 @@ const ResultadosWebsterPage = () => {
     const usuario = useMemo(() => {
         return JSON.parse(localStorage.getItem("service_user")) || {};
     }, []);
-
+    const { fechaActual } = useFechaStore();
     const {
         isLoading,
         pageLoad,
@@ -85,7 +86,7 @@ const ResultadosWebsterPage = () => {
         <Container size="xl">
             <Group justify="space-between" mb={10}>
                 <TitlePage order={2}>Resultados Webster</TitlePage>
-                {pageLoad && (totalDeVotos !== null || totalDeVotos > 0) ? (
+                {/* {pageLoad && (totalDeVotos !== null || totalDeVotos > 0) ? (
                     <ActionIcon
                         size={42}
                         variant="default"
@@ -95,7 +96,7 @@ const ResultadosWebsterPage = () => {
                             style={{ width: rem(24), height: rem(24) }}
                         />
                     </ActionIcon>
-                ) : null}
+                ) : null} */}
             </Group>
             <Divider my="md" />
             <LoadingOverlay
@@ -122,6 +123,11 @@ const ResultadosWebsterPage = () => {
                         <Grid.Col
                             span={{ base: 14, xs: 12, sm: 12, md: 12, lg: 12 }}
                         >
+                            <Group justify="center">
+                                <BadgeElement variant="filled">
+                                    {`Fecha & Hora del reporte: ${fechaActual()}`}
+                                </BadgeElement>
+                            </Group>
                             <WebsterTable />
                         </Grid.Col>
                         {/* <Grid.Col

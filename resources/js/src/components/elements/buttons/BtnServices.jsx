@@ -1,6 +1,17 @@
 import cx from "clsx";
-import { ActionIcon, Button, rem, useComputedColorScheme, useMantineColorScheme } from "@mantine/core";
-import { IconChecks, IconMoon, IconSunHigh } from "@tabler/icons-react";
+import {
+    ActionIcon,
+    Button,
+    rem,
+    useComputedColorScheme,
+    useMantineColorScheme,
+} from "@mantine/core";
+import {
+    IconBrandWhatsapp,
+    IconChecks,
+    IconMoon,
+    IconSunHigh,
+} from "@tabler/icons-react";
 
 export const BtnSubmit = ({
     children,
@@ -37,6 +48,7 @@ export const BtnSubmit = ({
 };
 
 export const BtnSection = ({
+    disabled = false,
     fullWidth = false,
     heigh = 40,
     fontSize = 14,
@@ -52,6 +64,7 @@ export const BtnSection = ({
             mb={mb}
             fullWidth={fullWidth}
             variant="default"
+            disabled={disabled}
             leftSection={<IconSection color={"#6d79f7"} />}
             styles={{
                 root: {
@@ -82,7 +95,7 @@ export const BtnDarkMode = ({ classes }) => {
                 )
             }
             size={35}
-            radius="md"
+            radius="lg"
             aria-label="Toggle color scheme"
         >
             <IconSunHigh
@@ -94,6 +107,25 @@ export const BtnDarkMode = ({ classes }) => {
             <IconMoon
                 className={cx(classes.icon, classes.dark)}
                 stroke={1.5}
+                style={{ width: rem(22), height: rem(22) }}
+            />
+        </ActionIcon>
+    );
+};
+
+export const BtnSendWhatsapp = ({ handleAction }) => {
+    return (
+        <ActionIcon
+        variant="light"
+        color="#25D366"
+        onClick={handleAction}
+        size={35}
+        radius="lg"
+        aria-label="Btn send whatsapp"
+        >
+            <IconBrandWhatsapp
+                stroke={1.8}
+                color="#128C7E"
                 style={{ width: rem(22), height: rem(22) }}
             />
         </ActionIcon>

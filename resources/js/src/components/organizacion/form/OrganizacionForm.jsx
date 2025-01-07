@@ -21,8 +21,9 @@ export const OrganizacionForm = ({ form }) => {
     const { modalActionOrganizacion } = useUiOrganizacion();
     const [preview, setPreview] = useState(null);
     const [file, setFile] = useState(null);
-    const icon = <IconPhoto style={{ width: rem(18), height: rem(18) }} stroke={1.5} />;
-
+    const icon = (
+        <IconPhoto style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
+    );
 
     useEffect(() => {
         if (activateOrganizacion !== null) {
@@ -37,7 +38,7 @@ export const OrganizacionForm = ({ form }) => {
                 .then((blob) => {
                     const file = new File(
                         [blob],
-                        activateOrganizacion.logo_url,
+                        "/storage" + activateOrganizacion.logo_url,
                         { type: blob.type }
                     );
                     setFile(file);

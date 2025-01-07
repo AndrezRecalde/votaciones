@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { IconChevronDown } from "@tabler/icons-react";
 import {
     Box,
@@ -18,13 +18,21 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { BtnDarkMode, Logo, UserBtnHeader } from "../../components";
+import {
+    BtnDarkMode,
+    BtnSendWhatsapp,
+    Logo,
+    UserBtnHeader,
+    WhatsAppModalResultados,
+} from "../../components";
 import {
     HEADER_MENU,
     navResultados,
     PREFIX_ROUTES,
 } from "../../routes/router/routes";
 import classes from "../../assets/styles/modules/layout/HeaderMenu.module.css";
+import { useResultadoStore, useUiResultado } from "../../hooks";
+import Swal from "sweetalert2";
 
 const HeaderMenu = () => {
     const usuario = useMemo(() => {
@@ -63,6 +71,52 @@ const HeaderMenu = () => {
             </Group>
         </UnstyledButton>
     ));
+    const { isSendingWhats, message, errores } = useResultadoStore();
+    const { modalActionWhatsApp } = useUiResultado();
+
+    useEffect(() => {
+        if (isSendingWhats) {
+            Swal.fire({
+                icon: "warning",
+                text: "Un momento porfavor, se está enviando el mensaje...",
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+        } else {
+            Swal.close(); // Cierra el modal cuando isExport es false
+        }
+    }, [isSendingWhats]);
+
+    useEffect(() => {
+        if (message !== undefined) {
+            Swal.fire({
+                icon: message.status,
+                text: message.msg,
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            return;
+        }
+    }, [message]);
+
+    useEffect(() => {
+        if (errores !== undefined) {
+            Swal.fire({
+                icon: "error",
+                title: "Opps...",
+                text: errores,
+                confirmButtonColor: "#094293",
+            });
+            return;
+        }
+    }, [errores]);
+
+    const handleOpenModal = (e) => {
+        e.preventDefault();
+        modalActionWhatsApp(true);
+    };
 
     return (
         <Box pb={120}>
@@ -137,6 +191,7 @@ const HeaderMenu = () => {
                     )}
 
                     <Group visibleFrom="sm">
+                        <BtnSendWhatsapp handleAction={handleOpenModal} />
                         <BtnDarkMode classes={classes} />
                         <UserBtnHeader classes={classes} />
                     </Group>
@@ -204,6 +259,7 @@ const HeaderMenu = () => {
                         <Divider my="sm" />
 
                         <Group justify="center" grow pb="xl" px="md">
+                            <BtnSendWhatsapp handleAction={handleOpenModal} />
                             <BtnDarkMode classes={classes} />
                             <UserBtnHeader
                                 classes={classes}
@@ -214,6 +270,7 @@ const HeaderMenu = () => {
                 ) : null}
             </Drawer>
             <Outlet />
+            <WhatsAppModalResultados />
         </Box>
     );
 };

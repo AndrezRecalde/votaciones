@@ -3,7 +3,6 @@ import {
     Box,
     Divider,
     Select,
-    SimpleGrid,
     Stack,
     TextInput,
 } from "@mantine/core";
@@ -18,7 +17,7 @@ import {
 } from "../../../hooks";
 
 export const CandidatoForm = ({ form }) => {
-    const { provincia_id, canton_id, parroquia_id, distrito_id } = form.values;
+    const { provincia_id, canton_id, distrito_id } = form.values;
     const { activateCandidato, startAddCandidatos } = useCandidatoStore();
     const { modalActionCandidato } = useUiCandidato();
     const { organizaciones } = useOrganizacionStore();

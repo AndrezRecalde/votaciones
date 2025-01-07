@@ -2,6 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useErrorException } from "../error/useErrorException";
 import {
     onClearResultados,
+    onClearResultadosMap,
+    onExport,
     onLoadErrores,
     onLoading,
     onLoadMessage,
@@ -10,6 +12,7 @@ import {
     onLoadTotalDeVotos,
     onLoadTotalIngresadas,
     onLoadTotalJuntas,
+    onSending,
 } from "../../store/resultados/resultadosSlice";
 import apiAxios from "../../api/apiAxios";
 
@@ -17,6 +20,8 @@ export const useResultadoStore = () => {
     const {
         pageLoad,
         isLoading,
+        isSendingWhats,
+        isExport,
         totalDeVotos,
         totalActasIngresadas,
         totalJuntas,
@@ -133,10 +138,13 @@ export const useResultadoStore = () => {
         }
     };
 
+    const startClearResultadosMap = () => {
+        dispatch(onClearResultadosMap());
+    };
+
     const startClearResultados = () => {
         dispatch(onClearResultados());
     };
-
 
     /* Hooks para el MAPA */
     const startLoadTotalDeVotosGuess = async ({
@@ -200,8 +208,9 @@ export const useResultadoStore = () => {
 
     const startLoadResultadosForMap = async (dignidad_id) => {
         try {
+            dispatch(onLoading(true));
             const { data } = await apiAxios.post("/resultados-cantones", {
-                dignidad_id
+                dignidad_id,
             });
             const { resultados } = data;
             dispatch(onLoadResultadosForMap(resultados));
@@ -211,11 +220,54 @@ export const useResultadoStore = () => {
         }
     };
 
+    const startSendWhatsApp = async (values) => {
+        try {
+            dispatch(onSending(true));
+            const { data } = await apiAxios.post(
+                "/admin/resultados/send-whatsapp",
+                values
+            );
+            dispatch(onLoadMessage(data));
+            setTimeout(() => {
+                dispatch(onLoadMessage(undefined));
+            }, 40);
+            dispatch(onSending(false));
+        } catch (error) {
+            console.log(error);
+            ExceptionMessageError(error);
+        }
+    };
 
+    /* EXportaciones PDF */
+    const startExportResultadosPDF = async (dignidad_id, resultados, totalDeVotos) => {
+        try {
+            onExport(true);
+            const response = await apiAxios.post(
+                "/admin/resultados/export-pdf",
+                {
+                    dignidad_id,
+                    resultados,
+                    totalDeVotos
+                },
+                { responseType: "blob" }
+            );
+            const pdfBlob = new Blob([response.data], {
+                type: "application/pdf",
+            });
+            const url = window.open(URL.createObjectURL(pdfBlob));
+            window.URL.revokeObjectURL(url);
+            dispatch(onExport(false));
+        } catch (error) {
+            console.log(error);
+            ExceptionMessageError(error);
+        }
+    };
 
     return {
         pageLoad,
         isLoading,
+        isSendingWhats,
+        isExport,
         totalDeVotos,
         totalActasIngresadas,
         totalJuntas,
@@ -231,6 +283,9 @@ export const useResultadoStore = () => {
         startLoadResultadosCandidatos,
         startLoadResultadosCandidatosGuess,
         startLoadResultadosForMap,
+        startSendWhatsApp,
+        startExportResultadosPDF,
         startClearResultados,
+        startClearResultadosMap
     };
 };

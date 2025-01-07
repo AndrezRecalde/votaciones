@@ -12,9 +12,9 @@ import { MapResultadosDrawer } from "../../components";
 import Swal from "sweetalert2";
 
 const initialPoints = {
-    longitud: -79.5,
-    latitud: 0.5316,
-    zoom: 8.1,
+    longitud: -78.5,
+    latitud: 0.6316,
+    zoom: 8.5,
 };
 
 const GuessResultadosPage = () => {
@@ -32,7 +32,7 @@ const GuessResultadosPage = () => {
     const cantonColors = {};
     resultadosForMap?.forEach((item) => {
         cantonColors[item.nombre_canton] =
-            item.dignidades[0]?.candidatos[0]?.color || "#627BC1";
+            item.dignidades[0]?.candidatos[0]?.color || "#dfe5f5";
     });
 
     useEffect(() => {
@@ -71,7 +71,7 @@ const GuessResultadosPage = () => {
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
             // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
-            style: "mapbox://styles/mapbox/streets-v12",
+            style: "mapbox://styles/mapbox/light-v11",
             center: [initialPoints.longitud, initialPoints.latitud],
             zoom: initialPoints.zoom,
         });
@@ -96,7 +96,7 @@ const GuessResultadosPage = () => {
                         "match",
                         ["get", "DPA_DESCAN"],
                         ...Object.entries(cantonColors).flat(),
-                        "#627BC1", // Color por defecto si no hay coincidencia
+                        "#dfe5f5", // Color por defecto si no hay coincidencia
                     ],
                     "fill-opacity": [
                         "case",

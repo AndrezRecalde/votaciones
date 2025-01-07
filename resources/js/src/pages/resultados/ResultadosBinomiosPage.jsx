@@ -1,5 +1,10 @@
 import { useEffect, useMemo } from "react";
-import { useResultadoStore, useStorageStore } from "../../hooks";
+import {
+    useFechaStore,
+    useResultadoStore,
+    useStorageStore,
+    useUiResultado,
+} from "../../hooks";
 import {
     ActionIcon,
     Card,
@@ -12,15 +17,17 @@ import {
     Stack,
 } from "@mantine/core";
 import {
+    BadgeElement,
     ChartResultado,
     ResultadoBusquedaForm,
+    ResultadosExportModal,
     StatEscrutinio,
     StatVocacion,
     TableResultado,
     TitlePage,
 } from "../../components";
 import Swal from "sweetalert2";
-import { IconFileTypeXls } from "@tabler/icons-react";
+import { IconFileTypePdf } from "@tabler/icons-react";
 //import useSWR from "swr";
 
 const DIGNIDAD_CURRENT = 1;
@@ -29,8 +36,10 @@ const ResultadosPresidencialesPage = () => {
     const usuario = useMemo(() => {
         return JSON.parse(localStorage.getItem("service_user")) || {};
     }, []);
-
+    const { modalActionResultadosExport } = useUiResultado();
+    const { fechaActual } = useFechaStore();
     const {
+        isExport,
         isLoading,
         errores,
         pageLoad,
@@ -70,6 +79,26 @@ const ResultadosPresidencialesPage = () => {
         }
     }, [errores]);
 
+    useEffect(() => {
+        if (isExport === true) {
+            Swal.fire({
+                icon: "warning",
+                text: "Un momento porfavor, se está exportando",
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+        } else {
+            Swal.close(); // Cierra el modal cuando isExport es false
+        }
+    }, [isExport]);
+
+    const handleOpenExport = (e) => {
+        e.preventDefault();
+        modalActionResultadosExport(true);
+    };
+
     return (
         <Container size="xl">
             <Group justify="space-between">
@@ -78,8 +107,9 @@ const ResultadosPresidencialesPage = () => {
                     size={42}
                     variant="default"
                     aria-label="download-xls"
+                    onClick={(e) => handleOpenExport(e)}
                 >
-                    <IconFileTypeXls
+                    <IconFileTypePdf
                         style={{ width: rem(24), height: rem(24) }}
                     />
                 </ActionIcon>
@@ -107,6 +137,11 @@ const ResultadosPresidencialesPage = () => {
                         <StatEscrutinio />
                     </SimpleGrid>
                     <SimpleGrid cols={1} mb={30}>
+                        <Group justify="center">
+                            <BadgeElement variant="filled">
+                                {`Fecha & Hora del reporte: ${fechaActual()}`}
+                            </BadgeElement>
+                        </Group>
                         <ChartResultado />
                     </SimpleGrid>
                     <SimpleGrid cols={1} mb={30}>
@@ -115,6 +150,7 @@ const ResultadosPresidencialesPage = () => {
                     </SimpleGrid>
                 </Stack>
             ) : null}
+            <ResultadosExportModal />
         </Container>
     );
 };

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { Badge, Container, Divider, Group, LoadingOverlay } from "@mantine/core";
+import { Container, Divider, Group, LoadingOverlay } from "@mantine/core";
 import { useEscrutinioStore, useFechaStore } from "../../hooks";
-import { EscrutinioChart, EscrutinioTable, TitlePage } from "../../components";
+import { BadgeElement, EscrutinioChart, EscrutinioTable, TitlePage } from "../../components";
 import Swal from "sweetalert2";
 
 const EscrutinioPage = () => {
@@ -35,9 +35,9 @@ const EscrutinioPage = () => {
                 <TitlePage order={2}>
                     Avance de Escrutinio por Dignidades
                 </TitlePage>
-                <Badge variant="light" size="lg" radius="md" color="indigo.7">
+                <BadgeElement variant="light">
                     {`Fecha & Hora del reporte: ${fechaActual()}`}
-                </Badge>
+                </BadgeElement>
             </Group>
             <LoadingOverlay
                 visible={isLoading}

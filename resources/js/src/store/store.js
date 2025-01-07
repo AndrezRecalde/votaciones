@@ -18,6 +18,7 @@ import {
     uiDistritoSlice,
     uiGuessSlice,
     uiOrganizacionSlice,
+    uiResultadosSlice,
     uiUsuarioSlice,
     usuarioSlice,
 } from "../store";
@@ -53,6 +54,7 @@ export const store = configureStore({
         acta: actaSlice.reducer,
 
         resultados: resultadosSlice.reducer,
+        uiResultados: uiResultadosSlice.reducer,
 
         escrutinio: escrutinioSlice.reducer,
 

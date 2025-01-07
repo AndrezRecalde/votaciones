@@ -40,6 +40,7 @@ import { useActaStore } from "./acta/useActaStore";
 
 /* Resultados */
 import { useResultadoStore } from "./resultado/useResultadoStore";
+import { useUiResultado } from "./resultado/useUiResultado";
 
 /* Escrutinio */
 import { useEscrutinioStore } from "./escrutinio/useEscrutinioStore";
@@ -100,6 +101,7 @@ export {
 
     /* Resultados */
     useResultadoStore,
+    useUiResultado,
 
     /* Escrutinio */
     useEscrutinioStore,

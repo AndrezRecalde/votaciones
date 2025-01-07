@@ -9,6 +9,7 @@ import { TextSection } from "./elements/titles/TextSection";
 import { BtnSubmit } from "./elements/buttons/BtnServices";
 import { BtnSection } from "./elements/buttons/BtnServices";
 import { BtnDarkMode } from "./elements/buttons/BtnServices";
+import { BtnSendWhatsapp } from "./elements/buttons/BtnServices";
 import { ActivateBtn } from "./elements/buttons/ActivateBtn";
 
 /* Elements: Modal */
@@ -17,6 +18,9 @@ import { FormActivateElement } from "./elements/modal/FormActivateElement";
 
 /* Elements: Alerts */
 import { AlertSection } from "./elements/alert/AlertSection";
+
+/* Elements: Badge */
+import { BadgeElement } from "./elements/badge/BadgeElement";
 
 /* Elements: Loader */
 import { CssLoader } from "./elements/loader/CssLoader";
@@ -82,6 +86,10 @@ import { StatEscrutinio } from "./resultado/StatEscrutinio";
 import { EscrutinioParcial } from "./resultado/EscrutinioParcial";
 import { ChartResultado } from "./resultado/ChartResultado";
 import { TableResultado } from "./resultado/TableResultado";
+import { WhatsAppModalResultados } from "./resultado/modal/WhatsAppModalResultados";
+import { WhatsAppForm } from "./resultado/form/WhatsAppForm";
+import { ResultadosExportModal } from "./resultado/modal/ResultadosExportModal";
+import { ResultadosExportForm } from "./resultado/form/ResultadosExportForm";
 
 /* Webster */
 import { WebsterBusqueda } from "./resultado/webster/WebsterBusqueda";
@@ -118,6 +126,7 @@ export {
     BtnSubmit,
     BtnSection,
     BtnDarkMode,
+    BtnSendWhatsapp,
     ActivateBtn,
 
     /* Elements: Modals */
@@ -126,6 +135,9 @@ export {
 
     /* Elements: Alerts */
     AlertSection,
+
+    /* Elements: Badge */
+    BadgeElement,
 
     /* Elements: Loader */
     CssLoader,
@@ -185,6 +197,10 @@ export {
     EscrutinioParcial,
     ChartResultado,
     TableResultado,
+    WhatsAppModalResultados,
+    WhatsAppForm,
+    ResultadosExportModal,
+    ResultadosExportForm,
 
     /* Webster */
     WebsterBusqueda,

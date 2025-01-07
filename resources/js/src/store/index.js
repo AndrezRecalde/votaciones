@@ -38,6 +38,7 @@ import { juntaSlice } from "./admin/jurisdiccion/junta/juntaSlice";
 
 /* Resultados */
 import { resultadosSlice } from "./resultados/resultadosSlice";
+import { uiResultadosSlice } from "./resultados/uiResultadosSlice";
 
 /* Escrutinios */
 import { escrutinioSlice } from "./admin/escrutinio/escrutinioSlice";
@@ -95,6 +96,7 @@ export {
 
     /* Resultados */
     resultadosSlice,
+    uiResultadosSlice,
 
     /* Escrutinios */
     escrutinioSlice,
