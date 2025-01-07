@@ -1,11 +1,19 @@
-import { Box, Divider, rem, Select, Stack } from "@mantine/core";
-import { BtnSection, BtnSubmit } from "../../../components";
+import {
+    ActionIcon,
+    Box,
+    Divider,
+    Group,
+    rem,
+    Select,
+    Stack,
+} from "@mantine/core";
+import { BtnSubmit, TextSection } from "../../../components";
 import {
     useDignidadStore,
     useResultadoStore,
     useUiResultado,
 } from "../../../hooks";
-import { IconCheck, IconDownload, IconRotate2 } from "@tabler/icons-react";
+import { IconDownload, IconRotate2 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 
 export const ResultadosExportForm = ({ form }) => {
@@ -19,6 +27,7 @@ export const ResultadosExportForm = ({ form }) => {
         startLoadResultadosForMap,
         startLoadTotalDeVotosGuess,
         startExportResultadosPDF,
+        startClearResultadosMap
     } = useResultadoStore();
 
     const handleSubmit = (e) => {
@@ -40,9 +49,10 @@ export const ResultadosExportForm = ({ form }) => {
 
     const handleExportPDF = (e) => {
         e.preventDefault();
-        console.log(dignidad_id, resultadosForMap, totalDeVotos)
+        console.log(dignidad_id, resultadosForMap, totalDeVotos);
         startExportResultadosPDF(dignidad_id, resultadosForMap, totalDeVotos);
         modalActionResultadosExport(false);
+        startClearResultadosMap();
     };
 
     return (
@@ -67,17 +77,26 @@ export const ResultadosExportForm = ({ form }) => {
                     })}
                 />
                 {resultadosForMap.length !== 0 ? (
-                    <IconCheck style={{ width: rem(22), height: rem(22) }} color="teal" />
+                    <Group justify="center">
+                        <TextSection fw={600} fz={12}>
+                            ¡Los datos se han cargado exitosamente!
+                        </TextSection>
+
+                        <ActionIcon
+                            disabled={disabled}
+                            size={50}
+                            variant="default"
+                            aria-label="ActionIcon with size as a number"
+                            onClick={handleExportPDF}
+                        >
+                            <IconDownload
+                                style={{ width: rem(22), height: rem(22) }}
+                                color="teal"
+                            />
+                        </ActionIcon>
+                    </Group>
                 ) : null}
                 <BtnSubmit IconSection={IconRotate2}>Cargar datos</BtnSubmit>
-                <BtnSection
-                    IconSection={IconDownload}
-                    disabled={disabled}
-                    handleAction={handleExportPDF}
-                    heigh={45}
-                >
-                    Exportar Resultados
-                </BtnSection>
             </Stack>
         </Box>
     );
