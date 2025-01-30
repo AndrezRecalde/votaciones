@@ -72,7 +72,7 @@ export const UsuarioForm = ({ form }) => {
                 <TextInput
                     withAsterisk
                     label="Nombres completos"
-                    placeholder="Digite los nombres completos"
+                    placeholder="Nombres y Apellidos"
                     {...form.getInputProps("nombres_completos")}
                 />
                 <TextInput

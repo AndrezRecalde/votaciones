@@ -73,7 +73,7 @@ export const UserBtnHeader = ({ classes, toggleMobile = null }) => {
                 {menuRoutes
                     .slice(0, -1)
                     .map(({ label, path, link, icon: Icon, color, role }) => {
-                        if (role && role !== usuario.role) return null;
+                        if (role && role !== usuario?.role) return null;
                         return (
                             <Menu.Item
                                 key={path}
