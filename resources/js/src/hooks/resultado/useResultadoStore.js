@@ -62,7 +62,7 @@ export const useResultadoStore = () => {
                 dispatch(onLoadTotalDeVotos(totalDeVotos));
             }
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -83,7 +83,7 @@ export const useResultadoStore = () => {
             const { totalActasIngresadas } = data;
             dispatch(onLoadTotalIngresadas(totalActasIngresadas));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -102,7 +102,7 @@ export const useResultadoStore = () => {
             const { totalJuntas } = data;
             dispatch(onLoadTotalJuntas(totalJuntas));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -132,7 +132,7 @@ export const useResultadoStore = () => {
                 ? dispatch(onClearResultados())
                 : dispatch(onLoadResultadosCandidatos(candidatos));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             dispatch(onClearResultados());
             ExceptionMessageError(error);
         }
@@ -171,7 +171,7 @@ export const useResultadoStore = () => {
                 dispatch(onLoadTotalDeVotos(totalDeVotos));
             }
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -200,7 +200,7 @@ export const useResultadoStore = () => {
                 ? dispatch(onClearResultados())
                 : dispatch(onLoadResultadosCandidatos(candidatos));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             dispatch(onClearResultados());
             ExceptionMessageError(error);
         }
@@ -215,7 +215,7 @@ export const useResultadoStore = () => {
             const { resultados } = data;
             dispatch(onLoadResultadosForMap(resultados));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -233,7 +233,7 @@ export const useResultadoStore = () => {
             }, 40);
             dispatch(onSending(false));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -258,7 +258,7 @@ export const useResultadoStore = () => {
             window.URL.revokeObjectURL(url);
             dispatch(onExport(false));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };

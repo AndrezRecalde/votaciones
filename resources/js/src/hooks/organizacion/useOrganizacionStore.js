@@ -31,7 +31,7 @@ export const useOrganizacionStore = () => {
             const { organizaciones } = data;
             dispatch(onLoadOrganizaciones(organizaciones));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -72,7 +72,7 @@ export const useOrganizacionStore = () => {
                 dispatch(onLoadMessage(undefined));
             }, 40);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -88,7 +88,7 @@ export const useOrganizacionStore = () => {
                 dispatch(onLoadMessage(undefined));
             }, 40);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };

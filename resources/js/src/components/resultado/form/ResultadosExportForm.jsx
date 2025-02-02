@@ -32,7 +32,7 @@ export const ResultadosExportForm = ({ form }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(form.getTransformedValues());
+        //console.log(form.getTransformedValues());
         startLoadTotalDeVotosGuess({
             dignidad_id,
             provincia_id: 8,
@@ -49,7 +49,7 @@ export const ResultadosExportForm = ({ form }) => {
 
     const handleExportPDF = (e) => {
         e.preventDefault();
-        console.log(dignidad_id, resultadosForMap, totalDeVotos);
+        //console.log(dignidad_id, resultadosForMap, totalDeVotos);
         startExportResultadosPDF(dignidad_id, resultadosForMap, totalDeVotos);
         modalActionResultadosExport(false);
         startClearResultadosMap();

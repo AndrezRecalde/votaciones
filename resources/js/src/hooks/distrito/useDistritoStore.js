@@ -18,7 +18,7 @@ export const useDistritoStore = () => {
             const { distritos } = data;
             dispatch(onLoadDistritos(distritos));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     }

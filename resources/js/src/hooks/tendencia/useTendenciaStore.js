@@ -30,7 +30,7 @@ export const useTendenciaStore = () => {
             const { tendencias } = data;
             dispatch(onLoadTendencias(tendencias));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };

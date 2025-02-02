@@ -21,7 +21,7 @@ export const WhatsAppForm = ({ form }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(form.getValues());
+        //console.log(form.getValues());
         startSendWhatsApp(form.getValues());
         form.reset();
         modalActionWhatsApp(false);

@@ -21,7 +21,7 @@ export const useEscrutinioStore = () => {
             const { escrutinios } = data;
             dispatch(onLoadEscrutinios(escrutinios));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     }
@@ -35,7 +35,7 @@ export const useEscrutinioStore = () => {
             const { total } = data;
             dispatch(onLoadEscrutinios(total));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     }

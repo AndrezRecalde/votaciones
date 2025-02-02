@@ -126,7 +126,7 @@ const GuessResultadosPage = () => {
                 //hoveredPolygonId = canton_id
                 let nombre_canton = e.features[0].properties.DPA_DESCAN;
                 let html = "";
-                console.log(hoveredPolygonId);
+                //console.log(hoveredPolygonId);
 
                 if (e.features.length > 0) {
                     if (hoveredPolygonId !== null) {

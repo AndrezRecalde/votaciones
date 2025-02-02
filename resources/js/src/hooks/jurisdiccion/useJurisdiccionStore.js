@@ -43,7 +43,7 @@ export const useJurisdiccionStore = () => {
             const { provincias } = data;
             dispatch(onLoadProvincias(provincias));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -57,7 +57,7 @@ export const useJurisdiccionStore = () => {
             const { cantones } = data;
             dispatch(onLoadCantones(cantones));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -71,7 +71,7 @@ export const useJurisdiccionStore = () => {
             const { cantones } = data;
             dispatch(onLoadCantones(cantones));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -85,7 +85,7 @@ export const useJurisdiccionStore = () => {
             const { parroquias } = data;
             dispatch(onLoadParroquias(parroquias));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -99,7 +99,7 @@ export const useJurisdiccionStore = () => {
             const { recintos } = data;
             dispatch(onLoadRecintos(recintos));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -113,7 +113,7 @@ export const useJurisdiccionStore = () => {
             const { zonas } = data;
             dispatch(onLoadZonas(zonas));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -127,7 +127,7 @@ export const useJurisdiccionStore = () => {
             const { juntas } = data;
             dispatch(onLoadJuntas(juntas));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };

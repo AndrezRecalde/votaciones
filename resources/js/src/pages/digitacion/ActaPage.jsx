@@ -73,7 +73,7 @@ const ActaPage = () => {
             return;
         }
         startAddActa(selectedFields, actaForm.getTransformedValues());
-        console.log(selectedFields, actaForm.getTransformedValues())
+        //console.log(selectedFields, actaForm.getTransformedValues())
         actaForm.reset();
     };
 

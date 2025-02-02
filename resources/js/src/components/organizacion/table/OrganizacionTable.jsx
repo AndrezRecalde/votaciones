@@ -57,10 +57,10 @@ export const OrganizacionTable = () => {
 
     const handleDelete = useCallback(
         (selected) => {
-            setActivateCandidato(selected);
+            setActivateOrganizacion(selected);
             Swal.fire({
                 icon: "warning",
-                text: `Estas seguro de eliminar ${selected.nombre_candidato}?`,
+                text: `Estas seguro de eliminar ${selected.nombre_organizacion}?`,
                 showDenyButton: true,
                 confirmButtonColor: "#3085d6",
                 confirmButtonText: "Si",

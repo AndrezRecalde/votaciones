@@ -44,7 +44,7 @@ apiAxios.interceptors.response.use(
 
         // Manejar errores 401 (No autorizado)
         if (response && response.status === 401) {
-            console.log("Error 401: No autorizado, redirigiendo al login...");
+            //console.log("Error 401: No autorizado, redirigiendo al login...");
             localStorage.removeItem("auth_token"); // Limpiar el token almacenado
             window.location.href = "/auth/login"; // Redirigir a la página de inicio de sesión
         }

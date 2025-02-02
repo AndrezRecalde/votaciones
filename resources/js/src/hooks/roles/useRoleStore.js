@@ -18,7 +18,7 @@ export const useRoleStore = () => {
             const { roles } = data;
             dispatch(onLoadRoles(roles));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     }

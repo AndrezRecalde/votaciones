@@ -27,7 +27,7 @@ export const useDignidadStore = () => {
             const { dignidades } = data;
             dispatch(onLoadDignidades(dignidades));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -42,7 +42,7 @@ export const useDignidadStore = () => {
             const { dignidades } = data;
             dispatch(onLoadDignidades(dignidades));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -59,7 +59,7 @@ export const useDignidadStore = () => {
                     dispatch(onLoadMessage(undefined));
                 }, 40);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };

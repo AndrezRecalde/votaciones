@@ -43,7 +43,7 @@ export const useActaStore = () => {
             const { infoJunta } = data;
             dispatch(onActivateJunta(infoJunta));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -63,7 +63,7 @@ export const useActaStore = () => {
                 return;
             }
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -86,11 +86,11 @@ export const useActaStore = () => {
                     acta_id: id,
                 }
             );
-            console.log(data);
+            //console.log(data);
             const { candidatos } = data;
             dispatch(onActivateCandidatos(candidatos));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -109,7 +109,7 @@ export const useActaStore = () => {
                 dispatch(onClearActa());
             }, 40);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -127,7 +127,7 @@ export const useActaStore = () => {
                 dispatch(onClearActa());
             }, 40);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -142,7 +142,7 @@ export const useActaStore = () => {
             const { actas } = data;
             dispatch(onLoadActas(actas));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     }
@@ -163,7 +163,7 @@ export const useActaStore = () => {
             document.body.appendChild(link);
             link.click();
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     }

@@ -17,7 +17,7 @@ export const MapBusquedaForm = ({ form }) => {
 
     const handleSubmit =  (e) => {
         e.preventDefault();
-        console.log("submit");
+        //console.log("submit");
         startLoadTotalDeVotosGuess({
             dignidad_id,
             provincia_id: 8,
