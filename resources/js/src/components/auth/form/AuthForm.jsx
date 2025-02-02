@@ -16,7 +16,6 @@ import { IconChevronsRight } from "@tabler/icons-react";
 
 export const AuthForm = () => {
     const { isLoading, startLogin, validate, errores } = useAuthStore();
-    //const { modalActionRegisterUser } = useUiAuth();
 
     const form = useForm({
         initialValues: {

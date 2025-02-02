@@ -3,7 +3,6 @@ import { useTitleHook } from "./title/useTitleHook";
 
 /* Authentication */
 import { useAuthStore } from "./auth/useAuthStore";
-import { useUiAuth } from "./auth/useUiAuth";
 
 /* Usuario */
 import { useUsuarioStore } from "./usuario/useUsuarioStore";
@@ -66,7 +65,6 @@ export {
 
     /* Authentication */
     useAuthStore,
-    useUiAuth,
 
     /* Usuario */
     useUsuarioStore,

@@ -134,13 +134,27 @@ class AuthController extends Controller
         ]);
     }
 
-    function logout(): JsonResponse
+    function logout(Request $request): JsonResponse
     {
-        auth()->user()->tokens()->delete();
+        // Obtener el usuario autenticado
+        $user = Auth::user();
 
+        if ($user) {
+            // Revocar todos los tokens del usuario
+            $user->tokens()->delete();
+        }
+
+        // Cerrar la sesión (si se usa guard 'web')
+        Auth::guard('web')->logout();
+
+        // Invalidar la sesión del usuario
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Eliminar la cookie de autenticación (para Sanctum basado en cookies)
         return response()->json([
-            'status' =>  HTTPStatus::Success,
-            'msg'    =>  'Sesión finalizada'
-        ]);
+            'status' => 200,
+            'msg'    => 'Sesión finalizada'
+        ])->cookie('laravel_session', '', -1); // Expira inmediatamente
     }
 }
