@@ -6,6 +6,7 @@ use App\Enums\HTTPStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Acta;
 use App\Models\ActaCandidato;
+use App\Models\Guess;
 use App\Services\TwilioService;
 use Illuminate\Http\Request;
 
@@ -20,40 +21,59 @@ class TwilioController extends Controller
 
     public function sendWhatsApp(Request $request)
     {
+        // Si el request tiene un mensaje, solo lo envía a los teléfonos de Guess
         if ($request->message) {
-            return $this->sendCustomWhatsAppMessage($request->phone, $request->message);
+            return $this->sendBulkWhatsAppMessage(
+                Guess::pluck('telefono')->toArray(),
+                $request->message
+            );
         }
 
-        $resultados = $this->fetchResultados($request);
+        // Realiza la consulta si hay una dignidad_id
+        $resultados = $this->getElectionResults($request);
         $totalIngresadas = $this->fetchTotalIngresadas($request)->digitadas;
 
-        $mensaje = $request->dignidad_id == 2 || $request->dignidad_id == 3
-            ? $this->generateWebsterResultsMessage($resultados, $totalIngresadas)
-            : $this->generateResultadosMessage($resultados, $totalIngresadas);
+        if (!$resultados->isEmpty()) {
+            $mensaje = $this->formatElectionResults($request->dignidad_id, $resultados, $totalIngresadas);
+            return $this->sendBulkWhatsAppMessage(
+                Guess::pluck('telefono')->toArray(),
+                $mensaje
+            );
+        }
 
-        return $this->sendCustomWhatsAppMessage($request->phone, $mensaje);
+        return response()->json([
+            'success' => false,
+            'message' => 'No se encontraron resultados para los filtros proporcionados.',
+        ]);
     }
 
-    private function sendCustomWhatsAppMessage(string $phone, string $message)
+    /**
+     * Envía un mensaje de WhatsApp a múltiples números de teléfono.
+     */
+    private function sendBulkWhatsAppMessage(array $phones, string $message)
     {
         try {
-            $response = $this->twilioService->sendWhatsAppMessage($phone, $message);
+            $responses = [];
+            foreach ($phones as $phone) {
+                $responses[] = $this->twilioService->sendWhatsAppMessage($phone, $message);
+            }
 
             return response()->json([
-                'status' => HTTPStatus::Success,
-                'msg' => 'Mensaje enviado correctamente.',
-                'data' => $response,
+                'success' => true,
+                'message' => 'Mensajes enviados correctamente.',
+                'data' => $responses,
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => HTTPStatus::Error,
-                'msg' => 'Error al enviar el mensaje.',
+                'success' => false,
+                'message' => 'Error al enviar los mensajes.',
                 'error' => $e->getMessage(),
             ], 500);
         }
     }
 
-    function fetchTotalIngresadas(Request $request)  {
+    function fetchTotalIngresadas(Request $request)
+    {
         return Acta::from('actas as a')
             ->selectRaw('COUNT(a.id) AS digitadas')
             ->join('dignidades as d', 'd.id', 'a.dignidad_id')
@@ -67,7 +87,10 @@ class TwilioController extends Controller
             ->first();
     }
 
-    private function fetchResultados(Request $request)
+    /**
+     * Realiza la consulta de resultados electorales.
+     */
+    private function getElectionResults(Request $request)
     {
         return ActaCandidato::from('acta_candidato as ac')
             ->selectRaw('d.nombre_dignidad, c.nombre_candidato,
@@ -96,23 +119,47 @@ class TwilioController extends Controller
             ->get();
     }
 
-    private function generateWebsterResultsMessage($resultados, $totalIngresadas)
+    /**
+     * Formatea los resultados de la elección en un mensaje de WhatsApp.
+     */
+    private function formatElectionResults($dignidadId, $resultados, $totalIngresadas)
     {
-        $totalEscanios = 5; // Número de escaños a asignar
-        $divisores = [1, 3, 5, 7, 9]; // Divisores de Webster
+        if (in_array($dignidadId, [2, 3])) {
+            return $this->calculateWebsterSeats($resultados, $totalIngresadas);
+        }
+
+        // Formato para dignidades normales
+        $mensaje = "*RESULTADOS: " . $resultados[0]->nombre_dignidad . "*\n\n";
+        $mensaje .= "*ESCRUTADO: " . number_format(($totalIngresadas / 1413) * 100, 2) . "%*\n\n";
+
+        foreach ($resultados as $resultado) {
+            $mensaje .= "*_Candidato:_* " . $resultado->nombre_candidato . "\n";
+            $mensaje .= "*_Total de votos:_* " . $resultado->total_votos . "\n\n";
+            $mensaje .= "-----------------------------------\n";
+        }
+
+        return $mensaje;
+    }
+
+    /**
+     * Aplica el método de Webster para calcular los escaños y formatea el mensaje.
+     */
+    private function calculateWebsterSeats($resultados, $totalIngresadas)
+    {
+        $totalEscanios = 5;
+        $divisores = [1, 3, 5, 7, 9];
         $tablaWebster = [];
 
         foreach ($resultados as $partido) {
             foreach ($divisores as $divisor) {
                 $tablaWebster[] = [
-                    'nombre_organizacion' => $partido['nombre_organizacion'],
-                    'cociente' => $partido['total_votos'] / $divisor,
+                    'nombre_organizacion' => $partido->nombre_organizacion,
+                    'cociente' => $partido->total_votos / $divisor,
                 ];
             }
         }
 
         usort($tablaWebster, fn($a, $b) => $b['cociente'] <=> $a['cociente']);
-
         $escaniosSeleccionados = array_slice($tablaWebster, 0, $totalEscanios);
 
         $conteoEscanios = [];
@@ -120,27 +167,12 @@ class TwilioController extends Controller
             $conteoEscanios[$escanio['nombre_organizacion']] = ($conteoEscanios[$escanio['nombre_organizacion']] ?? 0) + 1;
         }
 
-        $mensaje = "*RESULTADOS: " . $resultados[0]['nombre_dignidad'] . "*\n";
-        $mensaje .= "*ESCRUTADO: " . number_format(($totalIngresadas/1402) * 100, 2) . "%*\n\n";
-
+        $mensaje = "*RESULTADOS: " . $resultados[0]->nombre_dignidad . "*\n\n";
+        $mensaje .= "*ESCRUTADO: " . number_format(($totalIngresadas / 1413) * 100, 2) . "%*\n\n";
         foreach ($resultados as $partido) {
-            $mensaje .= "*_Candidato:_* " . $partido['nombre_organizacion'] . "\n";
+            $mensaje .= "*_Candidato:_* " . $partido->nombre_organizacion . "\n";
             $mensaje .= "*_Total de votos:_* " . $partido['total_votos'] . "\n";
-            $mensaje .= "*_Total de escaños:_* " . ($conteoEscanios[$partido['nombre_organizacion']] ?? 0) . "\n\n";
-            $mensaje .= "-----------------------------------\n";
-        }
-
-        return $mensaje;
-    }
-
-    private function generateResultadosMessage($resultados, $totalIngresadas)
-    {
-        $mensaje = "*Resultados: " . $resultados[0]['nombre_dignidad'] . "*\n";
-        $mensaje .= "*ESCRUTADO: " . number_format(($totalIngresadas/1402) * 100, 2) . "%*\n\n";
-
-        foreach ($resultados as $resultado) {
-            $mensaje .= "*_Candidato:_* " . $resultado['nombre_candidato'] . "\n";
-            $mensaje .= "*_Total de votos:_* " . $resultado['total_votos'] . "\n\n";
+            $mensaje .= "*_Total de escanios:_* " . ($conteoEscanios[$partido->nombre_organizacion] ?? 0) . "\n\n";
             $mensaje .= "-----------------------------------\n";
         }
 

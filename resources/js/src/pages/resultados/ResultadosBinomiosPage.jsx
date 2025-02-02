@@ -3,6 +3,7 @@ import {
     useFechaStore,
     useResultadoStore,
     useStorageStore,
+    useTitleHook,
     useUiResultado,
 } from "../../hooks";
 import {
@@ -33,6 +34,7 @@ import { IconFileTypePdf } from "@tabler/icons-react";
 const DIGNIDAD_CURRENT = 1;
 
 const ResultadosPresidencialesPage = () => {
+    useTitleHook("Elecciones | Binomios");
     const usuario = useMemo(() => {
         return JSON.parse(localStorage.getItem("service_user")) || {};
     }, []);

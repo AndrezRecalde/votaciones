@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { Container, Divider, Group, LoadingOverlay } from "@mantine/core";
-import { useEscrutinioStore, useFechaStore } from "../../hooks";
+import { useEscrutinioStore, useFechaStore, useTitleHook } from "../../hooks";
 import { BadgeElement, EscrutinioChart, EscrutinioTable, TitlePage } from "../../components";
 import Swal from "sweetalert2";
 
 const EscrutinioPage = () => {
+    useTitleHook("Elecciones | Escrutinio");
     const { fechaActual } = useFechaStore();
     const { isLoading, startLoadEscrutinios, startClearEscrutinios, errores } =
         useEscrutinioStore();

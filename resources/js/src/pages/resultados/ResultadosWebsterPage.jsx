@@ -18,8 +18,8 @@ import {
     //WebsterEscanioTable,
     WebsterTable,
 } from "../../components";
+import { useFechaStore, useResultadoStore, useTitleHook } from "../../hooks";
 import { IconFileTypePdf } from "@tabler/icons-react";
-import { useFechaStore, useResultadoStore } from "../../hooks";
 import Swal from "sweetalert2";
 
 const DIGNIDAD_CURRENT = 3;
@@ -27,6 +27,7 @@ const DIGNIDAD_CURRENT = 3;
 //TODO: COLOCAR UN LOADER CADA VEZ QUE SE CAMBIE LA CONSULTA DE DIGNIDAD_ID
 
 const ResultadosWebsterPage = () => {
+    useTitleHook("Elecciones | Webster");
     const usuario = useMemo(() => {
         return JSON.parse(localStorage.getItem("service_user")) || {};
     }, []);

@@ -57,7 +57,7 @@ Route::post('/send-whatsapp', [TwilioController::class, 'sendWhatsApp']);
 Route::group(
     [
         'prefix' => 'admin',
-        'middleware' => ['auth:sanctum', CheckRole::class . ':ADMIN']
+        'middleware' => ['auth:sanctum', CheckRole::class . ':ADMIN|RESPONSABLE']
     ],
     function () {
 
@@ -134,7 +134,7 @@ Route::group(
 Route::group(
     [
         'prefix' => 'general',
-        'middleware' => ['auth:sanctum',  CheckRole::class . ':DIGITADOR|ADMIN']
+        'middleware' => ['auth:sanctum',  CheckRole::class . ':DIGITADOR|ADMIN|RESPONSABLE']
     ],
     function () {
 

@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { Container } from "@mantine/core";
 import { SeleccionForm, TitlePage } from "../../components";
-import { useActaStore } from "../../hooks";
+import { useActaStore, useTitleHook } from "../../hooks";
 import ActaPage from "./ActaPage";
 import Swal from "sweetalert2";
 
 const DigitacionPage = () => {
+    useTitleHook("Elecciones | Digitación");
     const { pageLoad, startClearActa, message, errores } = useActaStore();
 
     useEffect(() => {

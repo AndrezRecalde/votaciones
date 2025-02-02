@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
         $adminRole = Role::create(['name' => 'ADMIN']);
         $digitadorRole = Role::create(['name' => 'DIGITADOR']);
         $visualizadorRole = Role::create(['name' => 'VISUALIZADOR']);
+        $responsable = Role::create(['name' => 'RESPONSABLE']);
 
 
         $admin = New User;

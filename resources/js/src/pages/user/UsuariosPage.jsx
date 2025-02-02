@@ -8,10 +8,11 @@ import {
     ModalActivateElement,
 } from "../../components";
 import { IconPencilPlus } from "@tabler/icons-react";
-import { useUiUsuario, useUsuarioStore } from "../../hooks";
+import { useTitleHook, useUiUsuario, useUsuarioStore } from "../../hooks";
 import Swal from "sweetalert2";
 
 const UsuariosPage = () => {
+    useTitleHook("Elecciones | Usuarios");
     const {
         startLoadUsuarios,
         startUpdateActivo,

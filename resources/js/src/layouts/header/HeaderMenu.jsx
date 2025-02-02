@@ -124,7 +124,7 @@ const HeaderMenu = () => {
                 <Group justify="space-between" h="100%">
                     {/* Logo */}
                     <Logo height={70} width={45} mx={10} />
-                    {usuario.role === "ADMIN" ? (
+                    {usuario.role === "ADMIN" || usuario.role === "RESPONSABLE" ? (
                         <Group h="100%" gap={0} visibleFrom="sm">
                             <NavLink
                                 to={`${PREFIX_ROUTES.ADMIN}/${HEADER_MENU.DIGITACION}`}
@@ -267,7 +267,16 @@ const HeaderMenu = () => {
                             />
                         </Group>
                     </ScrollArea>
-                ) : null}
+                ) : (
+                    <Group h="100%" gap={0} visibleFrom="sm">
+                        <NavLink
+                            to={`${PREFIX_ROUTES.DIGITADOR}/${HEADER_MENU.DIGITACION}`}
+                            className={classes.link}
+                        >
+                            Digitación
+                        </NavLink>
+                    </Group>
+                )}
             </Drawer>
             <Outlet />
             <WhatsAppModalResultados />

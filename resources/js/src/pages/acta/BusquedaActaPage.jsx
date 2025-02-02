@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Box, Button, Container, Divider, Group, LoadingOverlay } from "@mantine/core";
+import { isNotEmpty, useForm } from "@mantine/form";
 import {
     BusquedaActaForm,
     BusquedaActaTable,
@@ -9,11 +10,12 @@ import {
     useActaStore,
     useDignidadStore,
     useJurisdiccionStore,
+    useTitleHook,
 } from "../../hooks";
-import { isNotEmpty, useForm } from "@mantine/form";
 import { IconFileTypeXls } from "@tabler/icons-react";
 
 const BusquedaActaPage = () => {
+    useTitleHook("Elecciones | Busq. Actas");
     const usuario = JSON.parse(localStorage.getItem("service_user"));
     const { startLoadDignidades } = useDignidadStore();
     const { startLoadCantones, startClearJurisdicciones } =

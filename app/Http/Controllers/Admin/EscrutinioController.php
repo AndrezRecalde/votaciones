@@ -26,7 +26,7 @@ class EscrutinioController extends Controller
     {
         $total = Acta::from('actas as a')
             ->selectRaw('COUNT(a.id) as total_ingresadas, d.nombre_dignidad,
-                        CONCAT(ROUND((COUNT(a.id) / 1402 * 100), 2)) as porcentaje')
+                        CONCAT(ROUND((COUNT(a.id) / 1413 * 100), 2)) as porcentaje')
             ->rightJoin('dignidades as d', 'd.id', 'a.dignidad_id')
             ->where('d.activo', 1)
             ->groupBy('a.dignidad_id', 'd.nombre_dignidad')

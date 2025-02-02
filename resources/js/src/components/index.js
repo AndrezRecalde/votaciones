@@ -30,8 +30,8 @@ import { TableContent } from "./elements/tables/TableContent";
 import { TableMenu } from "./elements/tables/TableMenu";
 
 /* Elements: Auth */
-import { AuthForm } from "./auth/AuthForm";
-
+import { AuthForm } from "./auth/form/AuthForm";
+import { RegistroUsuarioModal } from "./auth/modal/RegistroUsuarioModal";
 
 /* Usuario */
 import { UserBtnHeader } from "./user/UserBtnHeader";
@@ -148,6 +148,7 @@ export {
 
     /* Elements: Auth */
     AuthForm,
+    RegistroUsuarioModal,
 
     /* Usuario */
     UserBtnHeader,

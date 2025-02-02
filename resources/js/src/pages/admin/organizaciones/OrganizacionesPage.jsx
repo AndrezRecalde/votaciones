@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { Container, Divider, Group } from "@mantine/core";
 import { BtnSection, OrganizacionModal, OrganizacionTable, TitlePage } from "../../../components";
+import { useOrganizacionStore, useTitleHook, useUiOrganizacion } from "../../../hooks";
 import { IconPencilPlus } from "@tabler/icons-react";
-import { useOrganizacionStore, useUiOrganizacion } from "../../../hooks";
 import Swal from "sweetalert2";
 
 const OrganizacionesPage = () => {
+    useTitleHook("Elecciones | Organizaciones");
     const {
         startLoadOrganizaciones,
         startClearOrganizaciones,

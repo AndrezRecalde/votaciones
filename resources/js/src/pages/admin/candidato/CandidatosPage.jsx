@@ -8,10 +8,11 @@ import {
     TitlePage,
 } from "../../../components";
 import { IconPencilPlus } from "@tabler/icons-react";
-import { useCandidatoStore, useUiCandidato } from "../../../hooks";
+import { useCandidatoStore, useTitleHook, useUiCandidato } from "../../../hooks";
 import Swal from "sweetalert2";
 
 const CandidatosPage = () => {
+    useTitleHook("Elecciones | Candidatos");
     const {
         startLoadCandidatos,
         startClearCandidatos,

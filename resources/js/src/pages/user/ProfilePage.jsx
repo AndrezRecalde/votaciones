@@ -9,9 +9,10 @@ import {
     TextSection,
     TitlePage,
 } from "../../components";
-import { useEscrutinioStore } from "../../hooks";
+import { useEscrutinioStore, useTitleHook } from "../../hooks";
 
 const ProfilePage = () => {
+        useTitleHook("Elecciones | Perfil");
     const usuario = useMemo(() => {
         return JSON.parse(localStorage.getItem("service_user")) || {};
     }, []);

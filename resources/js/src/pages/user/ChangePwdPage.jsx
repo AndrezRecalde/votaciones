@@ -1,9 +1,8 @@
+import { useEffect } from "react";
 import { Container } from "@mantine/core";
 import { ChangePwdForm, TextSection, TitlePage } from "../../components";
-import { useTitleHook } from "../../hooks";
-import { useUsuarioStore } from "../../hooks";
+import { useTitleHook, useUsuarioStore } from "../../hooks";
 import { useForm } from "@mantine/form";
-import { useEffect } from "react";
 import Swal from "sweetalert2";
 
 const ChangePwdPage = () => {

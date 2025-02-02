@@ -1,18 +1,11 @@
 import { useEffect } from "react";
 import { Modal } from "@mantine/core";
 import { TextSection, UsuarioForm } from "../../../components";
-import {
-    useJurisdiccionStore,
-    useRoleStore,
-    useUiUsuario,
-    useUsuarioStore,
-} from "../../../hooks";
 import { isNotEmpty, useForm } from "@mantine/form";
+import { useJurisdiccionStore, useRoleStore, useUiAuth } from "../../../hooks";
 
-export const UsuarioModal = () => {
-    const usuario = JSON.parse(localStorage.getItem("service_user"));
-    const { isOpenModalUsuario, modalActionUsuario } = useUiUsuario();
-    const { setActivateUsuario } = useUsuarioStore();
+export const RegistroUsuarioModal = () => {
+    const { isOpenModalRegisterUser, modalActionRegisterUser } = useUiAuth();
     const { startLoadRoles, startClearRoles } = useRoleStore();
     const { startLoadProvincias, startClearJurisdicciones } =
         useJurisdiccionStore();
@@ -43,30 +36,30 @@ export const UsuarioModal = () => {
     });
 
     useEffect(() => {
-        if (isOpenModalUsuario) {
-            startLoadRoles();
-            startLoadProvincias({ provincia_id: usuario.provincia_id });
-        }
+            if (isOpenModalRegisterUser) {
+                startLoadRoles();
+                startLoadProvincias({ provincia_id: 8 });
+            }
 
-        return () => {
-            startClearRoles();
-            startClearJurisdicciones();
+            return () => {
+                startClearRoles();
+                startClearJurisdicciones();
+            };
+        }, [isOpenModalRegisterUser]);
+
+        const handleCloseModal = () => {
+            //setActivateUsuario(null);
+            form.reset();
+            modalActionRegisterUser(false);
         };
-    }, [isOpenModalUsuario]);
-
-    const handleCloseModal = () => {
-        setActivateUsuario(null);
-        form.reset();
-        modalActionUsuario(false);
-    };
 
     return (
         <Modal
-            opened={isOpenModalUsuario}
+            opened={isOpenModalRegisterUser}
             onClose={handleCloseModal}
             title={
                 <TextSection tt="" fz={16} fw={700}>
-                    Usuario
+                    Registro de usuario
                 </TextSection>
             }
             overlayProps={{

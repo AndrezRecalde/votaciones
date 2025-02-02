@@ -8,13 +8,15 @@ import {
     PasswordInput,
     Stack,
     TextInput,
+    UnstyledButton,
 } from "@mantine/core";
-import { AlertSection, BtnSubmit } from "../../components";
-import { useAuthStore } from "../../hooks";
+import { AlertSection, BtnSubmit } from "../../../components";
+import { useAuthStore } from "../../../hooks";
 import { IconChevronsRight } from "@tabler/icons-react";
 
 export const AuthForm = () => {
     const { isLoading, startLogin, validate, errores } = useAuthStore();
+    //const { modalActionRegisterUser } = useUiAuth();
 
     const form = useForm({
         initialValues: {
@@ -80,9 +82,9 @@ export const AuthForm = () => {
                             type: "checkbox",
                         })}
                     />
-                    {/* <Anchor component="button" size="sm">
-                        ¿Olvidó su contraseña?
-                    </Anchor> */}
+                    {/* <UnstyledButton onClick={() => modalActionRegisterUser(true)}>
+                        Registrarme
+                    </UnstyledButton> */}
                 </Group>
                 <BtnSubmit IconSection={IconChevronsRight}>Acceder</BtnSubmit>
             </Stack>

@@ -9,9 +9,11 @@ import {
     useDignidadStore,
     useJurisdiccionStore,
     useTendenciaStore,
+    useTitleHook,
 } from "../../hooks";
 
 const TendenciaPage = () => {
+    useTitleHook("Elecciones | Tendencias");
     const usuario = useMemo(() => {
         return JSON.parse(localStorage.getItem("service_user")) || {};
     }, []);

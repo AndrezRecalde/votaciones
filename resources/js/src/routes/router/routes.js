@@ -81,7 +81,7 @@ const adminRoutes = generateRoutes(
         { path: HEADER_MENU.ACTAS, Component: BusquedaActaPage },
 
     ],
-    ["ADMIN"]
+    ["ADMIN", "RESPONSABLE"]
 );
 
 const digitadorRoutes = generateRoutes(
@@ -201,6 +201,14 @@ export const menuRoutes = [
         icon: IconUserPlus,
         color: "#1250fc",
         role: "ADMIN"
+    },
+    {
+        label: "Usuarios",
+        path: "usuarios",
+        link: "/admin/usuarios",
+        icon: IconUserPlus,
+        color: "#1250fc",
+        role: "RESPONSABLE"
     },
     {
         label: "Organizaciones",

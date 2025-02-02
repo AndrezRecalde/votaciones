@@ -29,6 +29,7 @@ class UserRequest extends FormRequest
             'dni'               =>  ['required', Rule::unique('users')->ignore($this->request->get('id'))],
             'provincia_id'      =>  'required',
             'canton_id'         =>  '',
+            'es_responsable'    =>  '',
             'role'              =>  'required'
         ];
     }

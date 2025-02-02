@@ -25,7 +25,7 @@ class AuthController extends Controller
                 ->selectRaw('u.id, u.nombres_completos, u.dni, u.activo,
                              u.provincia_id, p.nombre_provincia,
                              p.cod_cne_prov as cod_cne,
-                             u.canton_id, c.nombre_canton,
+                             u.canton_id, c.nombre_canton, u.es_responsable,
                              r.id as role_id, r.name as role')
                 ->join('model_has_roles as mhr', 'mhr.model_id', 'u.id')
                 ->join('roles as r', 'r.id', 'mhr.role_id')
@@ -61,7 +61,7 @@ class AuthController extends Controller
             ->selectRaw('u.id, u.nombres_completos, u.dni, u.activo,
                          u.provincia_id, p.nombre_provincia,
                          p.cod_cne_prov as cod_cne,
-                         u.canton_id, c.nombre_canton,
+                         u.canton_id, c.nombre_canton, u.es_responsable,
                          r.id as role_id, r.name as role')
             ->join('model_has_roles as mhr', 'mhr.model_id', 'u.id')
             ->join('roles as r', 'r.id', 'mhr.role_id')
@@ -118,7 +118,7 @@ class AuthController extends Controller
             ->selectRaw('u.id, u.nombres_completos, u.dni, u.activo,
                          u.provincia_id, p.nombre_provincia,
                          p.cod_cne_prov as cod_cne,
-                         u.canton_id, c.nombre_canton,
+                         u.canton_id, c.nombre_canton, u.es_responsable,
                          r.id as role_id, r.name as role')
             ->join('model_has_roles as mhr', 'mhr.model_id', 'u.id')
             ->join('roles as r', 'r.id', 'mhr.role_id')

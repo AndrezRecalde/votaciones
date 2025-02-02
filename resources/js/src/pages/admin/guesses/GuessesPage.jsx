@@ -7,11 +7,12 @@ import {
     ModalActivateElement,
     TitlePage,
 } from "../../../components";
+import { useGuessStore, useTitleHook, useUiGuess } from "../../../hooks";
 import { IconPencilPlus } from "@tabler/icons-react";
-import { useGuessStore, useUiGuess } from "../../../hooks";
 import Swal from "sweetalert2";
 
 const GuessesPage = () => {
+    useTitleHook("Elecciones | Invitados");
     const {
         startLoadGuess,
         startUpdateActivo,

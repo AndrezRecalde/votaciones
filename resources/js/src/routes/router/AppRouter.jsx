@@ -34,7 +34,7 @@ export const AppRouter = () => {
                 path={path}
                 element={
                     <PrivateRoutes
-                        requiredRole={roles.includes(role) ? role : ""}
+                        requiredRole={roles}
                     >
                         <Component />
                     </PrivateRoutes>

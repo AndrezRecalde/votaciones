@@ -5,11 +5,12 @@ import {
     Card,
     Checkbox,
     Flex,
+    Group,
     Paper,
     SimpleGrid,
 } from "@mantine/core";
 import { BtnSubmit, TextSection } from "../../components";
-import { IconRotate2 } from "@tabler/icons-react";
+import { IconCheckbox, IconRotate2 } from "@tabler/icons-react";
 import classes from "../../assets/styles/modules/digitacion/ActaDigitacion.module.css";
 
 export const ActaNovedadForm = ({ actaForm }) => {
@@ -18,8 +19,14 @@ export const ActaNovedadForm = ({ actaForm }) => {
     const { startClearActa, startActivateSearch, activateActa } =
         useActaStore();
 
-    const { num_votos, votos_blancos, votos_nulos, votos_validos, legible, cuadrada } =
-    actaForm.values;
+    const {
+        num_votos,
+        votos_blancos,
+        votos_nulos,
+        votos_validos,
+        legible,
+        cuadrada,
+    } = actaForm.values;
 
     useEffect(() => {
         setTotales(
@@ -53,7 +60,8 @@ export const ActaNovedadForm = ({ actaForm }) => {
                         </TextSection>
                     }
                     wrapperProps={{
-                        onClick: () => actaForm.setFieldValue("legible", !legible),
+                        onClick: () =>
+                            actaForm.setFieldValue("legible", !legible),
                     }}
                     {...actaForm.getInputProps("legible", {
                         type: "checkbox",
@@ -68,7 +76,8 @@ export const ActaNovedadForm = ({ actaForm }) => {
                         </TextSection>
                     }
                     wrapperProps={{
-                        onClick: () => actaForm.setFieldValue("cuadrada", !cuadrada),
+                        onClick: () =>
+                            actaForm.setFieldValue("cuadrada", !cuadrada),
                     }}
                     {...actaForm.getInputProps("cuadrada", {
                         type: "checkbox",
@@ -102,13 +111,20 @@ export const ActaNovedadForm = ({ actaForm }) => {
                 </Card.Section>
             ) : activateActa?.creador ? (
                 <Card.Section withBorder inheritPadding py="lg">
-                    <Paper shadow="xs" p="xl" className={classes.cardUserInfo}>
-                        <TextSection fw={700} fz={14} ta="left">
-                            Acta Ingresada por:
-                        </TextSection>
-                        <TextSection tt="" fw={500} fz={15} ta="left">
-                            {activateActa?.creador}
-                        </TextSection>
+                    <Paper shadow="xs" p="xl">
+                        <Group justify="space-between">
+                            <div>
+                                <TextSection fw={700} fz={14} ta="left">
+                                    Acta Ingresada por:
+                                </TextSection>
+                                <TextSection tt="" fw={500} fz={15} ta="left">
+                                    {activateActa?.creador}
+                                </TextSection>
+                            </div>
+                            <div>
+                                <IconCheckbox stroke={1.5} size={35} />
+                            </div>
+                        </Group>
                     </Paper>
                 </Card.Section>
             ) : null}
