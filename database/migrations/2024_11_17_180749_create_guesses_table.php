@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('guesses', function (Blueprint $table) {
             $table->id();
             $table->string('nombres_completos');
-            $table->string('telefono', 12);
+            $table->string('telefono', 15);
             $table->integer('codigo');
             $table->boolean('activo')->default(false);
             $table->timestamps();

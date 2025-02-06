@@ -11,7 +11,6 @@ const AuthRoutes = () => (
     <PublicRoutes>
         <Routes>
             <Route path={authRoutes.path} element={<authRoutes.Component />} />
-            <Route path={guessRoutes.path} element={<guessRoutes.Component />} />
             <Route
                 path="/*"
                 element={<Navigate replace to={authRoutes.link} />}
@@ -60,6 +59,7 @@ export const AppRouter = () => {
     return (
         <RoutesNotFound>
             <Route path="/*" element={<AuthRoutes />} />
+            <Route path={guessRoutes.path} element={<guessRoutes.Component />} />
             <Route element={<HeaderMenu />}>
                 <Route
                     path="/admin/*"
