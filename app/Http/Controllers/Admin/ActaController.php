@@ -57,15 +57,15 @@ class ActaController extends Controller
                 $candidatos = $this->actaRepository->getDignidadesForActa($acta->dignidad_id, $acta->provincia_id, $acta->canton_id, $acta->parroquia_id);
             }
 
-            $votos = [];
+            $votos = $request->num_votos ?? []; // Asegura que es un array
             $index = 0;
 
             foreach ($candidatos as $candidato) {
-                $votos[$index] = $request->num_votos[$index];
+                $num_voto = $votos[$index] ?? 0; // Si el índice no existe, usa 0
                 $acta->candidatos()->attach([
-                    $candidato->id => ['num_votos' => !is_null($votos[$index]) ? $votos[$index] : 0]
+                    $candidato->id => ['num_votos' => $num_voto]
                 ]);
-                $index += 1;
+                $index++;
             }
 
             return response()->json(['status' => HTTPStatus::Success, 'msg' => HTTPStatus::ActaCreated], 201);
@@ -94,17 +94,17 @@ class ActaController extends Controller
                     $candidatos = $this->actaRepository->getDignidadesForActa($acta->dignidad_id, $acta->provincia_id, $acta->canton_id, $acta->parroquia_id);
                 }
 
-                $votos = [];
+                $votos = $request->num_votos ?? []; // Asegura que es un array
                 $index = 0;
-                $acta->candidatos()->detach();
 
                 foreach ($candidatos as $candidato) {
-                    $votos[$index] = $request->num_votos[$index];
+                    $num_voto = $votos[$index] ?? 0; // Si el índice no existe, usa 0
                     $acta->candidatos()->attach([
-                        $candidato->id => ['num_votos' => !is_null($votos[$index]) ? $votos[$index] : 0]
+                        $candidato->id => ['num_votos' => $num_voto]
                     ]);
-                    $index += 1;
+                    $index++;
                 }
+
                 return response()->json(['status' => HTTPStatus::Success, 'msg' => HTTPStatus::ActaUpdated], 201);
             } else {
                 return response()->json(['status' => HTTPStatus::Error, 'msg' => HTTPStatus::NotFound], 404);
