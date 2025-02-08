@@ -9,8 +9,8 @@ export const WebsterEscanioTable = () => {
 
   const [asignacion, setAsignacion] = useState([]);
 
-  // Función para calcular los escaños
-  const calcularWebster = (resultadoCandidatos, totalEscaños) => {
+  // Funcion para calcular los escanos
+  const calcularWebster = (resultadoCandidatos, totalEscanos) => {
     const divisores = [1, 3, 5, 7, 9]; // Divisores de Webster
     let tablaWebster = [];
 
@@ -29,43 +29,41 @@ export const WebsterEscanioTable = () => {
     // Ordenar la tabla de mayor a menor cociente
     tablaWebster.sort((a, b) => b.cociente - a.cociente);
 
-    // Seleccionar los partidos con los 5 cocientes más altos
-    const escañosSeleccionados = tablaWebster.slice(0, totalEscaños);
+    // Seleccionar los partidos con los 5 cocientes mas altos
+    const escanosSeleccionados = tablaWebster.slice(0, totalEscanos);
 
-    // Contar cuántos escaños recibe cada partido
-    const conteoEscaños = {};
-    escañosSeleccionados.forEach((escaño) => {
-      if (!conteoEscaños[escaño.nombre_partido]) {
-        conteoEscaños[escaño.nombre_partido] = 0;
+    // Contar cuantos escanos recibe cada partido
+    const conteoEscanos = {};
+    escanosSeleccionados.forEach((escano) => {
+      if (!conteoEscanos[escano.nombre_partido]) {
+        conteoEscanos[escano.nombre_partido] = 0;
       }
-      conteoEscaños[escaño.nombre_partido]++;
+      conteoEscanos[escano.nombre_partido]++;
     });
 
     // Retornar el resultado en formato legible
     return resultadoCandidatos.map((partido) => ({
       nombre_partido: partido.nombre_organizacion,
-      escaños: conteoEscaños[partido.nombre_organizacion] || 0,
+      escanos: conteoEscanos[partido.nombre_organizacion] || 0,
       total: partido.total_votos,
       color: partido.color,
     }));
   };
 
-  // Calcular los escaños al cargar el componente
+  // Calcular los escanos al cargar el componente
   const calcular = () => {
-    const resultado = calcularWebster(resultadoCandidatos, 5); // Total de escaños: 5
+    const resultado = calcularWebster(resultadoCandidatos, 5); // Total de escanos: 5
     setAsignacion(resultado);
   };
 
   useEffect(() => {
     calcular();
-
-  }, [resultadoCandidatos])
-
+  }, [resultadoCandidatos]);
 
   return (
     <div>
       <TitlePage order={3}>Distribución de Escaños - Método de Webster</TitlePage>
-      {/* <button onClick={calcular}>Calcular Escaños</button> */}
+      {/* <button onClick={calcular}>Calcular Escanos</button> */}
       <Table withTableBorder withColumnBorders horizontalSpacing="md" verticalSpacing="md">
         <Table.Thead>
           <Table.Tr>
@@ -75,11 +73,11 @@ export const WebsterEscanioTable = () => {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {asignacion.map((partido) => (
+          {asignacion.map((partido, index) => (
             <Table.Tr key={partido.nombre_partido}>
               <Table.Td>{partido.nombre_partido}</Table.Td>
               <Table.Td>{partido.total}</Table.Td>
-              <Table.Td style={{ background: partido.color }}>{partido.escaños}</Table.Td>
+              <Table.Td style={{ background: index < 5 ? partido.color: null }}>{partido.escanos}</Table.Td>
             </Table.Tr>
           ))}
         </Table.Tbody>
@@ -87,5 +85,3 @@ export const WebsterEscanioTable = () => {
     </div>
   );
 };
-
-

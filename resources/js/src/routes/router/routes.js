@@ -73,7 +73,7 @@ const adminRoutes = generateRoutes(
         { path: "guesses", Component: GuessesPage },
         { path: "candidatos", Component: CandidatosPage },
         { path: "organizaciones", Component: OrganizacionesPage },
-        { path: HEADER_MENU.DIGITACION, Component: DigitacionPage },
+        //{ path: HEADER_MENU.DIGITACION, Component: DigitacionPage },
         { path: HEADER_MENU.ESCRUTINIO, Component: EscrutinioPage },
         { path: HEADER_MENU.RESULTADO_BINOMIOS, Component: ResultadosBinomiosPage },
         { path: HEADER_MENU.RESULTADO_WEBSTER, Component: ResultadosWebsterPage },
@@ -89,7 +89,7 @@ const digitadorRoutes = generateRoutes(
     [
         { path: "digitacion-acta", Component: DigitacionPage },
     ],
-    ["DIGITADOR"]
+    ["ADMIN", "DIGITADOR", "RESPONSABLE"]
 );
 
 const peerRoutes = generateRoutes(

@@ -127,7 +127,7 @@ const HeaderMenu = () => {
                     {usuario.role === "ADMIN" || usuario.role === "RESPONSABLE" ? (
                         <Group h="100%" gap={0} visibleFrom="sm">
                             <NavLink
-                                to={`${PREFIX_ROUTES.ADMIN}/${HEADER_MENU.DIGITACION}`}
+                                to={`${PREFIX_ROUTES.DIGITADOR}/${HEADER_MENU.DIGITACION}`}
                                 className={classes.link}
                             >
                                 Digitación
@@ -217,7 +217,7 @@ const HeaderMenu = () => {
                     <ScrollArea h="calc(100vh - 80px" mx="-md">
                         <Divider my="sm" />
                         <NavLink
-                            to={`${PREFIX_ROUTES.ADMIN}/${HEADER_MENU.DIGITACION}`}
+                            to={`${PREFIX_ROUTES.DIGITADOR}/${HEADER_MENU.DIGITACION}`}
                             className={classes.link}
                         >
                             Digitación

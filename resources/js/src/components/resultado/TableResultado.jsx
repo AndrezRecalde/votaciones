@@ -81,15 +81,15 @@ export const TableResultado = () => {
                 },
             },
         },
-        /* mantineTableBodyCellProps: ({ column, cell }) => ({
+        mantineTableBodyCellProps: ({ column, cell }) => ({
             style:
-                column.id === "numero_organizacion"
+                cell.row.index < 3 // Solo aplica estilo a la primera fila
                     ? {
                           backgroundColor: cell.row.original.color,
-                          color: "white",
+                          color: "black",
                       }
                     : {},
-        }), */
+        }),
     });
 
     return <TableContent table={table} />;
