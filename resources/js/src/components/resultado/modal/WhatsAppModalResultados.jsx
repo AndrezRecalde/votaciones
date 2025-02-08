@@ -10,7 +10,7 @@ export const WhatsAppModalResultados = () => {
 
     const form = useForm({
         initialValues: {
-            phone: "+593939242242",
+            phone: "+593968604145",
             dignidad_id: null,
             provincia_id: 8,
             isMessage: false,
