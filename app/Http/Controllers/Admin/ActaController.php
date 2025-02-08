@@ -96,7 +96,7 @@ class ActaController extends Controller
 
                 $votos = $request->num_votos ?? []; // Asegura que es un array
                 $index = 0;
-
+                $acta->candidatos()->detach();
                 foreach ($candidatos as $candidato) {
                     $num_voto = $votos[$index] ?? 0; // Si el índice no existe, usa 0
                     $acta->candidatos()->attach([

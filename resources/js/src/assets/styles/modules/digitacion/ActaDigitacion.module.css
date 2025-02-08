@@ -1,29 +1,34 @@
-
 .checkbox {
-    border: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+    border: 1px solid
+        light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
     padding: var(--mantine-spacing-md) var(--mantine-spacing-md);
     border-radius: var(--mantine-radius-md);
     font-weight: 500;
-    transition:
-      color 100ms ease,
-      background-color 100ms ease,
-      border-color 100ms ease;
+    transition: color 100ms ease, background-color 100ms ease,
+        border-color 100ms ease;
     cursor: pointer;
     margin-top: var(--mantine-spacing-sm);
 
+    & input[type="checkbox"] {
+        background-color: var(--mantine-color-indigo-filled);
+        border-color: var(--mantine-color-indigo-filled);
+        color: var(--mantine-color-white);
+        cursor: not-allowed;
+    }
+
     &[data-checked] {
-      background-color: var(--mantine-color-indigo-filled);
-      border-color: var(--mantine-color-indigo-filled);
-      color: var(--mantine-color-white);
+        background-color: var(--mantine-color-indigo-filled);
+        border-color: var(--mantine-color-indigo-filled);
+        color: var(--mantine-color-white);
     }
 
     & * {
-      pointer-events: none;
-      user-select: none;
+        pointer-events: none;
+        user-select: none;
     }
-  }
+}
 
-  .item + .item {
+.item + .item {
     padding-top: var(--mantine-spacing-sm);
     margin-top: var(--mantine-spacing-sm);
     border-top: 1px solid var(--mantine-color-gray-3);
@@ -34,11 +39,11 @@
     padding: 20px;
     border-radius: 8px;
     color: #fff;
-  }
+}
 
-  .cardTotales {
+.cardTotales {
     background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
     padding: 20px;
     border-radius: 8px;
     color: #fff;
-  }
+}

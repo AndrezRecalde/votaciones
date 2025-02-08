@@ -50,6 +50,7 @@ export const useActaStore = () => {
 
     const startLoadActa = async (dignidad_id, junta_id) => {
         try {
+            dispatch(onLoading(true));
             const { data } = await apiAxios.post(
                 "/general/digitacion/buscar/acta",
                 {
@@ -88,6 +89,7 @@ export const useActaStore = () => {
             );
             //console.log(data);
             const { candidatos } = data;
+            //console.log(candidatos)
             dispatch(onActivateCandidatos(candidatos));
         } catch (error) {
             //console.log(error);
@@ -100,7 +102,6 @@ export const useActaStore = () => {
             const finalForm = { ...seleccion, ...acta };
             const { data } = await apiAxios.post(
                 "/general/digitacion/store/acta",
-
                 finalForm
             );
             dispatch(onLoadMessage(data));

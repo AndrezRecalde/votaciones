@@ -5,17 +5,17 @@ import { useActaStore, useStorageStore } from "../../hooks";
 import classes from "../../assets/styles/modules/digitacion/ActaDigitacion.module.css";
 
 export const ActaCardDetalleForm = ({ actaForm }) => {
-    const { activateActa, startLoadCandidatos, activateCandidatos } =
+    const { existeActa, activateActa, startLoadCandidatos, activateCandidatos } =
         useActaStore();
     const { selectedFields } = useStorageStore();
 
     useEffect(() => {
-        if (activateActa !== null) {
-            startLoadCandidatos(activateActa);
-            return;
-        }
-        startLoadCandidatos(selectedFields);
-    }, [activateActa]);
+        const timeout = setTimeout(() => {
+            startLoadCandidatos(activateActa ?? selectedFields);
+        }, 300); // Espera 300ms antes de ejecutar la carga
+
+        return () => clearTimeout(timeout); // Limpia el timeout si el valor cambia antes de los 300ms
+    }, [existeActa, selectedFields]);
 
     useEffect(() => {
         if (activateCandidatos !== null) {

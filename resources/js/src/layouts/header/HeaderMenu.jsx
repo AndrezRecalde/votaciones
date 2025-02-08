@@ -124,7 +124,8 @@ const HeaderMenu = () => {
                 <Group justify="space-between" h="100%">
                     {/* Logo */}
                     <Logo height={70} width={45} mx={10} />
-                    {usuario.role === "ADMIN" || usuario.role === "RESPONSABLE" ? (
+                    {usuario.role === "ADMIN" ||
+                    usuario.role === "RESPONSABLE" ? (
                         <Group h="100%" gap={0} visibleFrom="sm">
                             <NavLink
                                 to={`${PREFIX_ROUTES.DIGITADOR}/${HEADER_MENU.DIGITACION}`}
@@ -191,7 +192,10 @@ const HeaderMenu = () => {
                     )}
 
                     <Group visibleFrom="sm">
-                        <BtnSendWhatsapp handleAction={handleOpenModal} />
+                        {usuario.role === "ADMIN" ? (
+                            <BtnSendWhatsapp handleAction={handleOpenModal} />
+                        ) : null}
+
                         <BtnDarkMode classes={classes} />
                         <UserBtnHeader classes={classes} />
                     </Group>
@@ -259,7 +263,11 @@ const HeaderMenu = () => {
                         <Divider my="sm" />
 
                         <Group justify="center" grow pb="xl" px="md">
-                            <BtnSendWhatsapp handleAction={handleOpenModal} />
+                            {usuario.role === "ADMIN" ? (
+                                <BtnSendWhatsapp
+                                    handleAction={handleOpenModal}
+                                />
+                            ) : null}
                             <BtnDarkMode classes={classes} />
                             <UserBtnHeader
                                 classes={classes}

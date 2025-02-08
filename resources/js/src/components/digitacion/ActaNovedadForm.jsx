@@ -68,6 +68,7 @@ export const ActaNovedadForm = ({ actaForm }) => {
                     })}
                 />
                 <Checkbox
+                    disabled
                     className={classes.checkbox}
                     label={
                         <TextSection tt="" fw={500} fz={15} ta="left">
@@ -75,10 +76,10 @@ export const ActaNovedadForm = ({ actaForm }) => {
                             check.
                         </TextSection>
                     }
-                    wrapperProps={{
+                    /* wrapperProps={{
                         onClick: () =>
                             actaForm.setFieldValue("cuadrada", !cuadrada),
-                    }}
+                    }} */
                     {...actaForm.getInputProps("cuadrada", {
                         type: "checkbox",
                     })}
@@ -100,13 +101,20 @@ export const ActaNovedadForm = ({ actaForm }) => {
 
             {activateActa?.actualizador ? (
                 <Card.Section withBorder inheritPadding py="lg">
-                    <Paper shadow="xs" p="xl" className={classes.cardUserInfo}>
-                        <TextSection fw={700} fz={14} ta="left">
-                            Acta Modificada Por:
-                        </TextSection>
-                        <TextSection tt="" fw={500} fz={15} ta="left">
-                            {activateActa?.actualizador}
-                        </TextSection>
+                    <Paper shadow="xs" p="xl">
+                        <Group justify="space-between">
+                            <div>
+                                <TextSection fw={700} fz={14} ta="left">
+                                    Acta Actualizada por:
+                                </TextSection>
+                                <TextSection tt="" fw={500} fz={15} ta="left">
+                                    {activateActa?.actualizador}
+                                </TextSection>
+                            </div>
+                            <div>
+                                <IconCheckbox stroke={1.5} size={35} />
+                            </div>
+                        </Group>
                     </Paper>
                 </Card.Section>
             ) : activateActa?.creador ? (

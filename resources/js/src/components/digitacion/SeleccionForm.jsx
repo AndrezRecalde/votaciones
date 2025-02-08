@@ -32,6 +32,7 @@ export const SeleccionForm = () => {
         startLoadJuntas,
     } = useJurisdiccionStore();
     const {
+        isLoading,
         disabledSearch,
         startLoadInfoJunta,
         startLoadActa,
@@ -263,7 +264,7 @@ export const SeleccionForm = () => {
                     />
                 </Grid.Col>
             </Grid>
-            <BtnSubmit disabled={disabledSearch} fontSize={20} heigh={50}>
+            <BtnSubmit disabled={disabledSearch} loading={isLoading} fontSize={20} heigh={50}>
                 Buscar acta
             </BtnSubmit>
         </Box>
