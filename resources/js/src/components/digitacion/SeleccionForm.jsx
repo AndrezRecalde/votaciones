@@ -9,6 +9,7 @@ import {
     useStorageStore,
 } from "../../hooks";
 import classes from "../../assets/styles/modules/digitacion/LabelsDigitacion.module.css";
+import { IconListSearch } from "@tabler/icons-react";
 
 const isValid = (value) => value !== null && value !== undefined;
 
@@ -264,7 +265,7 @@ export const SeleccionForm = () => {
                     />
                 </Grid.Col>
             </Grid>
-            <BtnSubmit disabled={disabledSearch} loading={isLoading} fontSize={20} heigh={50}>
+            <BtnSubmit disabled={disabledSearch} loading={isLoading} IconSection={IconListSearch} fontSize={20} heigh={50}>
                 Buscar acta
             </BtnSubmit>
         </Box>

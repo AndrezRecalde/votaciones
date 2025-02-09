@@ -113,7 +113,7 @@ const GuessResultadosPage = () => {
                 source: "states",
                 layout: {},
                 paint: {
-                    "line-color": "#627BC1",
+                    "line-color": "#4a4949",
                     "line-width": 2,
                 },
             });
