@@ -63,6 +63,7 @@ export const useActaStore = () => {
                 dispatch(onActivateActa(acta));
                 return;
             }
+            dispatch(onLoading(false));
         } catch (error) {
             //console.log(error);
             ExceptionMessageError(error);
