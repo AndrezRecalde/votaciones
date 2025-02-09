@@ -51,6 +51,10 @@ Route::post('/resultados/totales', [ResultadoController::class, 'getResultados']
 Route::post('/resultados/total/votos', [ResultadoController::class, 'getTotalVotos']);
 Route::post('/resultados-cantones', [ResultadoController::class, 'getResultadosPorCanton']);
 
+Route::post('/total/juntas', [JuntaController::class, 'getTotalJuntas']);
+Route::post('/actas/ingresadas', [ActaController::class, 'getTotalActasIngresadas']);
+
+
 /* WhatsApp: Enviar Mensajes */
 Route::post('/send-whatsapp', [TwilioController::class, 'sendWhatsApp']);
 

@@ -12,9 +12,8 @@ export const MapBusquedaForm = ({ form }) => {
         startLoadResultadosForMap,
         startLoadTotalDeVotosGuess,
 
-        startLoadTotalDeVotos,
-        startLoadTotalActasIngresadas,
-        startLoadTotalJuntas,
+        startLoadTotalActasIngresadasMapa,
+        startLoadTotalJuntasMapa,
 
         startClearResultados
     } = useResultadoStore();
@@ -32,15 +31,11 @@ export const MapBusquedaForm = ({ form }) => {
         });
         startLoadResultadosForMap(dignidad_id);
 
-        startLoadTotalDeVotos({
+        startLoadTotalActasIngresadasMapa({
             dignidad_id,
             provincia_id: 8,
         });
-        startLoadTotalActasIngresadas({
-            dignidad_id,
-            provincia_id: 8,
-        });
-        startLoadTotalJuntas({
+        startLoadTotalJuntasMapa({
             dignidad_id,
             provincia_id: 8,
         });

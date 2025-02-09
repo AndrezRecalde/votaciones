@@ -67,6 +67,7 @@ export const useResultadoStore = () => {
         }
     };
 
+
     const startLoadTotalActasIngresadas = async ({
         dignidad_id,
         provincia_id,
@@ -88,6 +89,27 @@ export const useResultadoStore = () => {
         }
     };
 
+    const startLoadTotalActasIngresadasMapa = async ({
+        dignidad_id,
+        provincia_id,
+        canton_id = null,
+        parroquia_id = null,
+    }) => {
+        try {
+            const { data } = await apiAxios.post("/actas/ingresadas", {
+                dignidad_id,
+                provincia_id,
+                canton_id,
+                parroquia_id,
+            });
+            const { totalActasIngresadas } = data;
+            dispatch(onLoadTotalIngresadas(totalActasIngresadas));
+        } catch (error) {
+            //console.log(error);
+            ExceptionMessageError(error);
+        }
+    };
+
     const startLoadTotalJuntas = async ({
         provincia_id,
         canton_id = null,
@@ -95,6 +117,26 @@ export const useResultadoStore = () => {
     }) => {
         try {
             const { data } = await apiAxios.post("/general/total/juntas", {
+                provincia_id,
+                canton_id,
+                parroquia_id,
+            });
+            const { totalJuntas } = data;
+            dispatch(onLoadTotalJuntas(totalJuntas));
+        } catch (error) {
+            //console.log(error);
+            ExceptionMessageError(error);
+        }
+    };
+
+
+    const startLoadTotalJuntasMapa = async ({
+        provincia_id,
+        canton_id = null,
+        parroquia_id = null,
+    }) => {
+        try {
+            const { data } = await apiAxios.post("/total/juntas", {
                 provincia_id,
                 canton_id,
                 parroquia_id,
@@ -286,6 +328,8 @@ export const useResultadoStore = () => {
         startSendWhatsApp,
         startExportResultadosPDF,
         startClearResultados,
-        startClearResultadosMap
+        startClearResultadosMap,
+        startLoadTotalActasIngresadasMapa,
+        startLoadTotalJuntasMapa
     };
 };
