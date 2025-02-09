@@ -3,17 +3,17 @@ import { useActaStore } from "../../hooks";
 import { TextSection, TitlePage } from "../../components";
 
 export const ActaCardInfo = () => {
-    const { activateJunta } = useActaStore();
+    const { activateJunta, activateActa } = useActaStore();
 
     return (
         <Card withBorder shadow="sm" radius="md" mb="md">
             <Card.Section withBorder inheritPadding py="xs">
                 <Group justify="space-between">
                     <TitlePage order={5} ta="left">
-                        {activateJunta.recinto}
+                        {activateJunta?.recinto}
                     </TitlePage>
                     <Badge color="indigo.7" radius="sm">
-                        {activateJunta.junta}
+                        {activateJunta?.junta}
                     </Badge>
                 </Group>
             </Card.Section>
@@ -30,8 +30,8 @@ export const ActaCardInfo = () => {
                             ACTA N°
                         </TextSection>
                         <TextSection tt="" fw={700} fz={14} ta="center">
-                            {activateJunta.acta_id !== null
-                                ? activateJunta.acta_id
+                            {activateActa !== null
+                                ? activateActa?.id
                                 : "[AUTO]"}
                         </TextSection>
                     </div>
@@ -46,7 +46,7 @@ export const ActaCardInfo = () => {
                             ZONA
                         </TextSection>
                         <TextSection tt="" fw={700} fz={14} ta="center">
-                            {activateJunta.zona}
+                            {activateJunta?.zona}
                         </TextSection>
                     </div>
                 </SimpleGrid>
@@ -62,7 +62,7 @@ export const ActaCardInfo = () => {
                             PROVINCIA
                         </TextSection>
                         <TextSection tt="uppercase" fw={700} fz={14} ta="center">
-                            {activateJunta.provincia}
+                            {activateJunta?.provincia}
                         </TextSection>
                     </div>
                     <div>
@@ -76,7 +76,7 @@ export const ActaCardInfo = () => {
                             CANTÓN
                         </TextSection>
                         <TextSection tt="" fw={700} fz={14} ta="center">
-                            {activateJunta.canton}
+                            {activateJunta?.canton}
                         </TextSection>
                     </div>
                     <div>
@@ -90,7 +90,7 @@ export const ActaCardInfo = () => {
                             PARROQUIA
                         </TextSection>
                         <TextSection tt="" fw={700} fz={14} ta="center">
-                            {activateJunta.parroquia}
+                            {activateJunta?.parroquia}
                         </TextSection>
                     </div>
                 </SimpleGrid>
