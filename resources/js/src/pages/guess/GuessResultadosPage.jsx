@@ -14,7 +14,7 @@ import Swal from "sweetalert2";
 const initialPoints = {
     longitud: -78.5,
     latitud: 0.6316,
-    zoom: 8.5,
+    zoom: 8.0,
 };
 
 const GuessResultadosPage = () => {
