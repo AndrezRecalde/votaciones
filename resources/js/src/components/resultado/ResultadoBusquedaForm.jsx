@@ -94,7 +94,7 @@ export const ResultadoBusquedaForm = ({ dig }) => {
                         searchable
                         clearable
                         nothingFoundMessage="No options"
-                        disabled
+                        //disabled
                         {...form.getInputProps("dignidad_id")}
                         data={dignidades.map((dignidad) => {
                             return {
