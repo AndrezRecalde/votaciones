@@ -20,7 +20,8 @@ export const ResultadoBusquedaForm = ({ dig }) => {
             dignidad_id: dig.toString(),
             canton_id: null,
             parroquia_id: null,
-            recinto_id: null,
+            //recinto_id: null,
+            zona_id: null,
             cuadrada: "",
             legible: "",
         },
@@ -28,7 +29,8 @@ export const ResultadoBusquedaForm = ({ dig }) => {
             ...values,
             canton_id: Number(values.canton_id) || 0,
             parroquia_id: Number(values.parroquia_id) || 0,
-            recinto_id: Number(values.recinto_id) || 0,
+            //recinto_id: Number(values.recinto_id) || 0,
+            zona_id: Number(values.zona_id) || 0,
         }),
     });
 
@@ -37,10 +39,12 @@ export const ResultadoBusquedaForm = ({ dig }) => {
     const {
         startLoadCantones,
         startLoadParroquias,
-        startLoadRecintos,
+        //startLoadZonas,
+        startLoadZonas,
         cantones,
         parroquias,
         recintos,
+        zonas
     } = useJurisdiccionStore();
     const {
         isLoading,
@@ -66,8 +70,8 @@ export const ResultadoBusquedaForm = ({ dig }) => {
     }, [canton_id]);
 
     useEffect(() => {
-        startLoadRecintos({ parroquia_id });
-        form.setFieldValue("recinto_id", null);
+        startLoadZonas({ parroquia_id });
+        form.setFieldValue("zona_id", null);
     }, [parroquia_id]);
 
     const handleSubmit = (e) => {
@@ -94,7 +98,7 @@ export const ResultadoBusquedaForm = ({ dig }) => {
                         searchable
                         clearable
                         nothingFoundMessage="No options"
-                        //disabled
+                        disabled
                         {...form.getInputProps("dignidad_id")}
                         data={dignidades.map((dignidad) => {
                             return {
@@ -132,6 +136,20 @@ export const ResultadoBusquedaForm = ({ dig }) => {
                         })}
                     />
                     <Select
+                        label="Zona"
+                        placeholder="Seleccione una Zona"
+                        searchable
+                        clearable
+                        nothingFoundMessage="No options"
+                        {...form.getInputProps("zona_id")}
+                        data={zonas.map((zona) => {
+                            return {
+                                label: zona.nombre_zona,
+                                value: zona.id.toString(),
+                            };
+                        })}
+                    />
+                   {/*  <Select
                         label="Recinto"
                         placeholder="Seleccione un Recinto"
                         searchable
@@ -144,7 +162,7 @@ export const ResultadoBusquedaForm = ({ dig }) => {
                                 value: recinto.id.toString(),
                             };
                         })}
-                    />
+                    /> */}
                 </SimpleGrid>
                 <SimpleGrid cols={{ base: 2, xs: 1, sm: 1, md: 2, lg: 2 }}>
                     <Select

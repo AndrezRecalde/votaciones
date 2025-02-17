@@ -102,7 +102,7 @@ const ResultadosPresidencialesPage = () => {
     };
 
     return (
-        <Container size="xl">
+        <Container size={1400}>
             <Group justify="space-between">
                 <TitlePage order={2}>Resultados de Binomios</TitlePage>
                 <ActionIcon

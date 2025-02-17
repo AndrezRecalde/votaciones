@@ -1,12 +1,15 @@
-import { Box, Select, Stack } from "@mantine/core";
+import { Box, Select, SimpleGrid, Stack } from "@mantine/core";
 import { BtnSubmit } from "../../../components";
 import { IconSearch } from "@tabler/icons-react";
-import { useDignidadStore, useJurisdiccionStore, useResultadoStore } from "../../../hooks";
+import {
+    useDignidadStore,
+    useJurisdiccionStore,
+    useResultadoStore,
+} from "../../../hooks";
 
 export const WebsterBusquedaForm = ({ form }) => {
-
     const { dignidades } = useDignidadStore();
-    const { cantones } = useJurisdiccionStore();
+    const { cantones, parroquias, zonas } = useJurisdiccionStore();
     const {
         isLoading,
         startLoadTotalDeVotos,
@@ -23,7 +26,6 @@ export const WebsterBusquedaForm = ({ form }) => {
         startLoadResultadosCandidatos(form.getTransformedValues());
     };
 
-
     return (
         <Box
             component="form"
@@ -34,7 +36,7 @@ export const WebsterBusquedaForm = ({ form }) => {
                     label="Dignidad"
                     placeholder="Seleccione una Dignidad"
                     searchable
-                    clearable
+                    //clearable
                     nothingFoundMessage="No options"
                     {...form.getInputProps("dignidad_id")}
                     data={dignidades.map((dignidad) => {
@@ -58,7 +60,38 @@ export const WebsterBusquedaForm = ({ form }) => {
                         };
                     })}
                 />
-                <Select
+                <SimpleGrid cols={{ base: 2, xs: 1, sm: 1, md: 2, lg: 2 }}>
+                    <Select
+                        label="Parroquia"
+                        placeholder="Seleccione una Parroquia"
+                        searchable
+                        clearable
+                        nothingFoundMessage="No options"
+                        {...form.getInputProps("parroquia_id")}
+                        data={parroquias.map((parroquia) => {
+                            return {
+                                label: parroquia.nombre_parroquia,
+                                value: parroquia.id.toString(),
+                            };
+                        })}
+                    />
+                    <Select
+                        label="Zona"
+                        placeholder="Seleccione una Zona"
+                        searchable
+                        clearable
+                        nothingFoundMessage="No options"
+                        {...form.getInputProps("zona_id")}
+                        data={zonas.map((zona) => {
+                            return {
+                                label: zona.nombre_zona,
+                                value: zona.id.toString(),
+                            };
+                        })}
+                    />
+                </SimpleGrid>
+                <SimpleGrid cols={{ base: 2, xs: 1, sm: 1, md: 2, lg: 2 }}>
+                    <Select
                         label="Actas Cuadradas"
                         placeholder="¿Filtrar actas cuadradas?"
                         nothingFoundMessage="No options"
@@ -82,7 +115,10 @@ export const WebsterBusquedaForm = ({ form }) => {
                         ]}
                         defaultValue="TODAS"
                     />
-                <BtnSubmit IconSection={IconSearch} loading={isLoading}>Realizar Búsqueda</BtnSubmit>
+                </SimpleGrid>
+                <BtnSubmit IconSection={IconSearch} loading={isLoading}>
+                    Realizar Búsqueda
+                </BtnSubmit>
             </Stack>
         </Box>
     );

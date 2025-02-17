@@ -37,6 +37,7 @@ class ResultadoController extends Controller
             ->canton($request->canton_id)
             ->parroquia($request->parroquia_id)
             ->recinto($request->recinto_id)
+            ->zona($request->zona_id)
             ->cuadrada($request->cuadrada)
             ->legible($request->legible)
             ->groupBy('ac.candidato_id', 'd.nombre_dignidad')
@@ -72,6 +73,7 @@ class ResultadoController extends Controller
             ->provincia($request->provincia_id)
             ->canton($request->canton_id)
             ->parroquia($request->parroquia_id)
+            ->zona($request->zona_id)
             ->groupBy('ac.candidato_id')
             ->first();
 

@@ -19,7 +19,7 @@ import {
     WebsterTable,
 } from "../../components";
 import { useFechaStore, useResultadoStore, useTitleHook } from "../../hooks";
-import { IconFileTypePdf } from "@tabler/icons-react";
+//import { IconFileTypePdf } from "@tabler/icons-react";
 import Swal from "sweetalert2";
 
 const DIGNIDAD_CURRENT = 3;
@@ -84,7 +84,7 @@ const ResultadosWebsterPage = () => {
     }, [errores]);
 
     return (
-        <Container size="xl">
+        <Container size={1400}>
             <Group justify="space-between" mb={10}>
                 <TitlePage order={2}>Resultados Webster</TitlePage>
                 {/* {pageLoad && (totalDeVotos !== null || totalDeVotos > 0) ? (
