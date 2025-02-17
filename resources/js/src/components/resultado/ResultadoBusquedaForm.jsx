@@ -96,9 +96,9 @@ export const ResultadoBusquedaForm = ({ dig }) => {
                         label="Dignidad"
                         placeholder="Seleccione una Dignidad"
                         searchable
-                        clearable
+                        //clearable
                         nothingFoundMessage="No options"
-                        disabled
+                        //disabled
                         {...form.getInputProps("dignidad_id")}
                         data={dignidades.map((dignidad) => {
                             return {
