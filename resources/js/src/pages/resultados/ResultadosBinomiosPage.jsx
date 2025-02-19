@@ -22,13 +22,14 @@ import {
     ChartResultado,
     ResultadoBusquedaForm,
     ResultadosExportModal,
+    ResultadosExportModalXLS,
     StatEscrutinio,
     StatVocacion,
     TableResultado,
     TitlePage,
 } from "../../components";
 import Swal from "sweetalert2";
-import { IconFileTypePdf } from "@tabler/icons-react";
+import { IconFileTypePdf, IconFileTypeXls } from "@tabler/icons-react";
 //import useSWR from "swr";
 
 const DIGNIDAD_CURRENT = 1;
@@ -38,7 +39,7 @@ const ResultadosPresidencialesPage = () => {
     const usuario = useMemo(() => {
         return JSON.parse(localStorage.getItem("service_user")) || {};
     }, []);
-    const { modalActionResultadosExport } = useUiResultado();
+    const { modalActionResultadosExport, modalActionResultadosExportXLS } = useUiResultado();
     const { fechaActual } = useFechaStore();
     const {
         isExport,
@@ -96,25 +97,42 @@ const ResultadosPresidencialesPage = () => {
         }
     }, [isExport]);
 
-    const handleOpenExport = (e) => {
+    const handleOpenExportPDF = (e) => {
         e.preventDefault();
         modalActionResultadosExport(true);
+    };
+
+    const handleOpenExportXLS = (e) => {
+        e.preventDefault();
+        modalActionResultadosExportXLS(true);
     };
 
     return (
         <Container size={1400}>
             <Group justify="space-between">
                 <TitlePage order={2}>Resultados de Binomios</TitlePage>
-                <ActionIcon
-                    size={42}
-                    variant="default"
-                    aria-label="download-xls"
-                    onClick={(e) => handleOpenExport(e)}
-                >
-                    <IconFileTypePdf
-                        style={{ width: rem(24), height: rem(24) }}
-                    />
-                </ActionIcon>
+                <Group>
+                    <ActionIcon
+                        size={42}
+                        variant="default"
+                        aria-label="download-xls"
+                        onClick={(e) => handleOpenExportPDF(e)}
+                    >
+                        <IconFileTypePdf
+                            style={{ width: rem(24), height: rem(24) }}
+                        />
+                    </ActionIcon>
+                    <ActionIcon
+                        size={42}
+                        variant="default"
+                        aria-label="download-xls"
+                        onClick={(e) => handleOpenExportXLS(e)}
+                    >
+                        <IconFileTypeXls
+                            style={{ width: rem(24), height: rem(24) }}
+                        />
+                    </ActionIcon>
+                </Group>
             </Group>
             <Divider my="md" />
             <Card withBorder shadow="sm" radius="md" mt={20}>
@@ -153,6 +171,7 @@ const ResultadosPresidencialesPage = () => {
                 </Stack>
             ) : null}
             <ResultadosExportModal />
+            <ResultadosExportModalXLS />
         </Container>
     );
 };

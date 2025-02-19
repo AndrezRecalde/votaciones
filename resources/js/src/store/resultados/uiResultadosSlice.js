@@ -5,6 +5,7 @@ export const uiResultadosSlice = createSlice({
     initialState: {
         isOpenModalWhatsApp: false,
         isOpenModalResultados: false,
+        isOpenModalResultadosXLS: false,
     },
     reducers: {
         onOpenModalWhatsApp: (state, { payload }) => {
@@ -12,8 +13,15 @@ export const uiResultadosSlice = createSlice({
         },
         onOpenModalResultados: (state, { payload }) => {
             state.isOpenModalResultados = payload;
-        }
+        },
+        onOpenModalResultadosXLS: (state, { payload }) => {
+            state.isOpenModalResultadosXLS = payload;
+        },
     },
 });
 
-export const { onOpenModalWhatsApp, onOpenModalResultados } = uiResultadosSlice.actions;
+export const {
+    onOpenModalWhatsApp,
+    onOpenModalResultados,
+    onOpenModalResultadosXLS,
+} = uiResultadosSlice.actions;

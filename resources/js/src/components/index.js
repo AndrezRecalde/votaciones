@@ -88,7 +88,9 @@ import { TableResultado } from "./resultado/TableResultado";
 import { WhatsAppModalResultados } from "./resultado/modal/WhatsAppModalResultados";
 import { WhatsAppForm } from "./resultado/form/WhatsAppForm";
 import { ResultadosExportModal } from "./resultado/modal/ResultadosExportModal";
+import { ResultadosExportModalXLS } from "./resultado/modal/ResultadosExportModalXLS";
 import { ResultadosExportForm } from "./resultado/form/ResultadosExportForm";
+import { ResultadosExportFormXLS } from "./resultado/form/ResultadosExportFormXLS";
 
 /* Webster */
 import { WebsterBusqueda } from "./resultado/webster/WebsterBusqueda";
@@ -199,7 +201,9 @@ export {
     WhatsAppModalResultados,
     WhatsAppForm,
     ResultadosExportModal,
+    ResultadosExportModalXLS,
     ResultadosExportForm,
+    ResultadosExportFormXLS,
 
     /* Webster */
     WebsterBusqueda,

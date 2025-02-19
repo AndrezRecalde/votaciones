@@ -305,6 +305,30 @@ export const useResultadoStore = () => {
         }
     };
 
+    /* Exportacion Excel XLS */
+    const startExportResultadosXLS = async (dignidad_id) => {
+        try {
+            onExport(true);
+            const response = await apiAxios.post(
+                "/admin/resultados/export-xls",
+                {
+                    dignidad_id,
+                },
+                { responseType: "blob" }
+            );
+            const url = window.URL.createObjectURL(
+                new Blob([response.data], {
+                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;",
+                })
+            );
+            window.open(url, "_blank");
+            dispatch(onExport(false));
+        } catch (error) {
+            //console.log(error);
+            ExceptionMessageError(error);
+        }
+    }
+
     return {
         pageLoad,
         isLoading,
@@ -330,6 +354,7 @@ export const useResultadoStore = () => {
         startClearResultados,
         startClearResultadosMap,
         startLoadTotalActasIngresadasMapa,
-        startLoadTotalJuntasMapa
+        startLoadTotalJuntasMapa,
+        startExportResultadosXLS
     };
 };

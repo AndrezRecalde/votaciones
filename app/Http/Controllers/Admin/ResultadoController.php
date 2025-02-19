@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Exports\ResultadosPorZonaExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ResultadoController extends Controller
 {
@@ -282,5 +284,10 @@ class ResultadoController extends Controller
 
         // Configuramos el tamaño y orientación del PDF, y lo descargamos
         return $pdf->setPaper('a4', 'landscape')->download('resultados.pdf');
+    }
+
+    public function exportarResultadosXLS(Request $request)
+    {
+        return Excel::download(new ResultadosPorZonaExport($request->dignidad_id), 'resultados_zonas.xlsx');
     }
 }

@@ -1,19 +1,18 @@
 import { Modal } from "@mantine/core";
-import { ResultadosExportForm, TextSection } from "../../../components";
-import { useDignidadStore, useResultadoStore, useUiResultado } from "../../../hooks";
+import { ResultadosExportFormXLS, TextSection } from "../../../components";
 import { isNotEmpty, useForm } from "@mantine/form";
+import { useDignidadStore, useUiResultado } from "../../../hooks";
 import { useEffect } from "react";
 
-export const ResultadosExportModal = () => {
+export const ResultadosExportModalXLS = () => {
     const { startLoadDignidades, dignidades } = useDignidadStore();
-    const { isOpenModalResultados, modalActionResultadosExport } =
+    const { isOpenModalResultadosXLS, modalActionResultadosExportXLS } =
         useUiResultado();
-    const { startClearResultadosMap } = useResultadoStore();
 
     const form = useForm({
         initialValues: {
             dignidad_id: null,
-            provincia_id: 8,
+            //provincia_id: 8,
         },
         validate: {
             dignidad_id: isNotEmpty("Por favor seleccione una dignidad"),
@@ -24,26 +23,26 @@ export const ResultadosExportModal = () => {
     });
 
     useEffect(() => {
-        if (isOpenModalResultados && dignidades.length === 0) {
+        if (isOpenModalResultadosXLS && dignidades.length === 0) {
             startLoadDignidades({ activo: true });
             return;
         }
-    }, [isOpenModalResultados]);
+    }, [isOpenModalResultadosXLS]);
 
     const handleCloseModal = () => {
         form.reset();
-        modalActionResultadosExport();
-        startClearResultadosMap();
+        modalActionResultadosExportXLS();
+        //startClearResultadosMap();
     };
 
     return (
         <Modal
             centered
-            opened={isOpenModalResultados}
+            opened={isOpenModalResultadosXLS}
             onClose={handleCloseModal}
             title={
                 <TextSection tt="" fw={700} fz={16}>
-                    ¡Exportar Resultados en PDF!
+                    ¡Exportar Resultados en Excel!
                 </TextSection>
             }
             size="md"
@@ -53,7 +52,7 @@ export const ResultadosExportModal = () => {
                 blur: 3,
             }}
         >
-            <ResultadosExportForm form={form} />
+            <ResultadosExportFormXLS form={form} />
         </Modal>
     );
 };

@@ -1,8 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
-import { onOpenModalResultados, onOpenModalWhatsApp } from "../../store/resultados/uiResultadosSlice";
+import {
+    onOpenModalResultados,
+    onOpenModalResultadosXLS,
+    onOpenModalWhatsApp,
+} from "../../store/resultados/uiResultadosSlice";
 
 export const useUiResultado = () => {
-    const { isOpenModalWhatsApp, isOpenModalResultados } = useSelector((state) => state.uiResultados);
+    const {
+        isOpenModalWhatsApp,
+        isOpenModalResultados,
+        isOpenModalResultadosXLS,
+    } = useSelector((state) => state.uiResultados);
     const dispatch = useDispatch();
 
     const modalActionWhatsApp = (behavior = false) => {
@@ -11,14 +19,19 @@ export const useUiResultado = () => {
 
     const modalActionResultadosExport = (behavior = false) => {
         dispatch(onOpenModalResultados(behavior));
-    }
+    };
+
+    const modalActionResultadosExportXLS = (behavior = false) => {
+        dispatch(onOpenModalResultadosXLS(behavior));
+    };
 
     return {
         isOpenModalWhatsApp,
         isOpenModalResultados,
-
+        isOpenModalResultadosXLS,
 
         modalActionWhatsApp,
-        modalActionResultadosExport
+        modalActionResultadosExport,
+        modalActionResultadosExportXLS
     };
 };
