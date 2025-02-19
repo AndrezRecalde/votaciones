@@ -36,9 +36,9 @@ class ResultadosPorZonaExport implements FromCollection, WithHeadings, WithStyle
             ->join('organizaciones', 'candidatos.organizacion_id', '=', 'organizaciones.id')
             ->select(
                 'dignidades.nombre_dignidad',
+                'candidatos.nombre_candidato',
                 'cantones.nombre_canton',
                 'parroquias.nombre_parroquia',
-                'candidatos.nombre_candidato',
                 'zonas.nombre_zona',
                 DB::raw('SUM(acta_candidato.num_votos) as total_votos'),
                 DB::raw('SUM(juntas.num_junta) as total_juntas') // 🔹 Sumamos num_junta en vez de contar
@@ -60,9 +60,9 @@ class ResultadosPorZonaExport implements FromCollection, WithHeadings, WithStyle
     {
         return [
             "Dignidad",
+            "Candidato",
             "Cantón",
             "Parroquia",
-            "Candidato",
             "Nombre Zona",
             "Total Votos",
             "Total Juntas"
