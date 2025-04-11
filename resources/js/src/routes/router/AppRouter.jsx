@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { HeaderMenu } from "../../layouts";
+import { AppHeaderMenu } from "../../layouts";
 import { PublicRoutes } from "../public/PublicRoutes";
 import { authRoutes, guessRoutes, peerLinks, routes } from "./routes";
 import RoutesNotFound from "../not-found/RoutesNotFound";
@@ -26,16 +26,16 @@ export const AppRouter = () => {
         checkAuthToken();
     }, []);
 
-    const renderRoutes = (routeConfig, role) => {
+    const renderRoutes = (routeConfig) => {
         return routeConfig.map(({ path, Component, roles }) => (
             <Route
                 key={path}
                 path={path}
                 element={
-                    <PrivateRoutes
-                        requiredRole={roles}
-                    >
-                        <Component />
+                    <PrivateRoutes requiredRole={roles}>
+                        <AppHeaderMenu>
+                            <Component />
+                        </AppHeaderMenu>
                     </PrivateRoutes>
                 }
             />
@@ -49,7 +49,9 @@ export const AppRouter = () => {
                 path={path}
                 element={
                     <AuthGuard>
-                        <Component />
+                        <AppHeaderMenu>
+                            <Component />
+                        </AppHeaderMenu>
                     </AuthGuard>
                 }
             />
@@ -59,33 +61,34 @@ export const AppRouter = () => {
     return (
         <RoutesNotFound>
             <Route path="/*" element={<AuthRoutes />} />
-            <Route path={guessRoutes.path} element={<guessRoutes.Component />} />
-            <Route element={<HeaderMenu />}>
-                <Route
-                    path="/admin/*"
-                    element={
-                        <RoutesNotFound>
-                            {renderRoutes(routes.admin, "ADMIN")}
-                        </RoutesNotFound>
-                    }
-                />
-                <Route
-                    path="/general/*"
-                    element={
-                        <RoutesNotFound>
-                            {renderRoutes(routes.digitador, "DIGITADOR")}
-                        </RoutesNotFound>
-                    }
-                />
-                <Route
-                    path="/staff/d/*"
-                    element={
-                        <RoutesNotFound>
-                            {renderStaffRoutes(peerLinks.peer)}
-                        </RoutesNotFound>
-                    }
-                />
-            </Route>
+            <Route
+                path={guessRoutes.path}
+                element={<guessRoutes.Component />}
+            />
+            <Route
+                path="/admin/*"
+                element={
+                    <RoutesNotFound>
+                        {renderRoutes(routes.admin)}
+                    </RoutesNotFound>
+                }
+            />
+            <Route
+                path="/general/*"
+                element={
+                    <RoutesNotFound>
+                        {renderRoutes(routes.digitador)}
+                    </RoutesNotFound>
+                }
+            />
+            <Route
+                path="/staff/d/*"
+                element={
+                    <RoutesNotFound>
+                        {renderStaffRoutes(peerLinks.peer)}
+                    </RoutesNotFound>
+                }
+            />
         </RoutesNotFound>
     );
 };

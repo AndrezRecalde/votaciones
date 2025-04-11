@@ -17,7 +17,7 @@ import {
     useMantineTheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import {
     BtnDarkMode,
     BtnSendWhatsapp,
@@ -30,17 +30,16 @@ import {
     navResultados,
     PREFIX_ROUTES,
 } from "../../routes/router/routes";
+import {
+    useResultadoStore,
+    useUiHeaderMenu,
+    useUiResultado,
+} from "../../hooks";
 import classes from "../../assets/styles/modules/layout/HeaderMenu.module.css";
-import { useResultadoStore, useUiResultado } from "../../hooks";
 import Swal from "sweetalert2";
 
-const HeaderMenu = () => {
-    const usuario = useMemo(() => {
-        return JSON.parse(localStorage.getItem("service_user")) || {};
-    }, []);
-
-    const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
-        useDisclosure(false);
+const HeaderMenu = ({ usuario }) => {
+    const { isOpenDrawerMobile, modalActionDrawerMobile } = useUiHeaderMenu();
     const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
     const theme = useMantineTheme();
 
@@ -48,6 +47,7 @@ const HeaderMenu = () => {
         <UnstyledButton
             className={item.disabled ? classes.subLinkDisa : classes.subLink}
             key={item.title}
+            onClick={() => modalActionDrawerMobile(false)}
         >
             <Group wrap="nowrap" align="flex-start">
                 <ThemeIcon size={30} variant="default" radius="md">
@@ -119,10 +119,9 @@ const HeaderMenu = () => {
     };
 
     return (
-        <Box pb={120}>
+        <Box pb={30}>
             <header className={classes.header}>
                 <Group justify="space-between" h="100%">
-                    {/* Logo */}
                     <Logo height={70} width={45} mx={10} />
                     {usuario.role === "ADMIN" ||
                     usuario.role === "RESPONSABLE" ? (
@@ -192,7 +191,8 @@ const HeaderMenu = () => {
                     )}
 
                     <Group visibleFrom="sm">
-                        {usuario.role === "ADMIN" ? (
+                        {usuario.role === "ADMIN" ||
+                        usuario.role === "RESPONSABLE" ? (
                             <BtnSendWhatsapp handleAction={handleOpenModal} />
                         ) : null}
 
@@ -201,28 +201,29 @@ const HeaderMenu = () => {
                     </Group>
 
                     <Burger
-                        opened={drawerOpened}
-                        onClick={toggleDrawer}
+                        opened={isOpenDrawerMobile}
+                        onClick={() => modalActionDrawerMobile(true)}
                         hiddenFrom="sm"
                     />
                 </Group>
             </header>
 
             <Drawer
-                opened={drawerOpened}
-                onClose={closeDrawer}
+                opened={isOpenDrawerMobile}
+                onClose={() => modalActionDrawerMobile(false)}
                 size="100%"
                 padding="md"
                 title="Menú"
                 hiddenFrom="sm"
                 zIndex={1000000}
             >
-                {usuario.role === "ADMIN" ? (
+                {usuario.role === "ADMIN" || usuario.role === "RESPONSABLE" ? (
                     <ScrollArea h="calc(100vh - 80px" mx="-md">
                         <Divider my="sm" />
                         <NavLink
                             to={`${PREFIX_ROUTES.DIGITADOR}/${HEADER_MENU.DIGITACION}`}
                             className={classes.link}
+                            onClick={() => modalActionDrawerMobile(false)}
                         >
                             Digitación
                         </NavLink>
@@ -244,18 +245,21 @@ const HeaderMenu = () => {
                         <NavLink
                             to={`${PREFIX_ROUTES.ADMIN}/${HEADER_MENU.ESCRUTINIO}`}
                             className={classes.link}
+                            onClick={() => modalActionDrawerMobile(false)}
                         >
                             Escrutinio
                         </NavLink>
                         <NavLink
                             to={`${PREFIX_ROUTES.ADMIN}/${HEADER_MENU.TENDENCIA}`}
                             className={classes.link}
+                            onClick={() => modalActionDrawerMobile(false)}
                         >
                             Tendencia
                         </NavLink>
                         <NavLink
                             to={`${PREFIX_ROUTES.ADMIN}/${HEADER_MENU.ACTAS}`}
                             className={classes.link}
+                            onClick={() => modalActionDrawerMobile(false)}
                         >
                             Actas
                         </NavLink>
@@ -271,7 +275,7 @@ const HeaderMenu = () => {
                             <BtnDarkMode classes={classes} />
                             <UserBtnHeader
                                 classes={classes}
-                                toggleMobile={closeDrawer}
+                                toggleMobile={modalActionDrawerMobile}
                             />
                         </Group>
                     </ScrollArea>
@@ -280,13 +284,13 @@ const HeaderMenu = () => {
                         <NavLink
                             to={`${PREFIX_ROUTES.DIGITADOR}/${HEADER_MENU.DIGITACION}`}
                             className={classes.link}
+                            onClick={() => modalActionDrawerMobile(false)}
                         >
                             Digitación
                         </NavLink>
                     </Group>
                 )}
             </Drawer>
-            <Outlet />
             <WhatsAppModalResultados />
         </Box>
     );

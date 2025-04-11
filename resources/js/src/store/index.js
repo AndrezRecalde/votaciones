@@ -1,6 +1,9 @@
 /* Auth */
 import { authSlice } from "./auth/authSlice";
 
+/* Header */
+import { uiHeaderMenuSlice } from "./app/uiHeaderMenuSlice";
+
 /* Usuario */
 import { usuarioSlice } from "./admin/usuario/usuarioSlice";
 import { uiUsuarioSlice } from "./admin/usuario/uiUsuarioSlice";
@@ -58,6 +61,9 @@ import { store } from "./store";
 export {
     /* Auth */
     authSlice,
+
+    /* Header */
+    uiHeaderMenuSlice,
 
     /* Usuarios */
     usuarioSlice,

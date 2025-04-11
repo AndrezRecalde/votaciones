@@ -17,6 +17,7 @@ import {
     uiDignidadSlice,
     uiDistritoSlice,
     uiGuessSlice,
+    uiHeaderMenuSlice,
     uiOrganizacionSlice,
     uiResultadosSlice,
     uiUsuarioSlice,
@@ -26,6 +27,8 @@ import {
 export const store = configureStore({
     reducer: {
         auth: authSlice.reducer,
+
+        uiHeaderMenu: uiHeaderMenuSlice.reducer,
 
         usuario: usuarioSlice.reducer,
         uiUsuario: uiUsuarioSlice.reducer,

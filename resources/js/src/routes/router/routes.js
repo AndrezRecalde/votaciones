@@ -133,14 +133,14 @@ export const navResultados = [
         target: "_blank",
         //description: "This Pokémon’s cry is very loud and distracting",
     },
-    {
+    /* {
         icon: IconUsersGroup,
         title: "Resultados Webster",
         disabled: false,
         to: "/admin/webster/resultados",
         target: "_blank",
         //description: "The fluid of Smeargle’s tail secretions changes",
-    },
+    }, */
     /* {
         icon: IconBuildingSkyscraper,
         title: "Resultados Prefecturas",

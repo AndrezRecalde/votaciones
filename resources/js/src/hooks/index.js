@@ -4,6 +4,9 @@ import { useTitleHook } from "./title/useTitleHook";
 /* Authentication */
 import { useAuthStore } from "./auth/useAuthStore";
 
+/* Header */
+import { useUiHeaderMenu } from "./layout/useUiHeaderMenu";
+
 /* Usuario */
 import { useUsuarioStore } from "./usuario/useUsuarioStore";
 import { useUiUsuario } from "./usuario/useUiUsuario";
@@ -65,6 +68,9 @@ export {
 
     /* Authentication */
     useAuthStore,
+
+    /* Header */
+    useUiHeaderMenu,
 
     /* Usuario */
     useUsuarioStore,

@@ -37,7 +37,7 @@ export const useAuthStore = () => {
             dispatch(onLoadToken(access_token));
             dispatch(onAuthenticate(usuario));
         } catch (error) {
-            //console.log(error);
+            console.log(error);
             error.response.data.errores
                 ? dispatch(onValidate(error.response.data.errores))
                 : dispatch(onLogout(error.response.data.msg));
