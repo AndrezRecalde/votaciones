@@ -15,7 +15,7 @@ export const StatVocacion = () => {
                     {totalDeVotos?.total_votos_validos} de 433136 firmas
                 </TextSection>
                 <TextSection tt="" fw={500} fz={15} ta="left">
-                    {(totalDeVotos?.total_votos_validos / 433136).toFixed(2)} % Electorado votante
+                    {((totalDeVotos?.total_votos_validos / 433136) * 100).toFixed(2)} % Electorado votante
                 </TextSection>
             </Paper>
             <Paper withBorder shadow="md" p="xl">
