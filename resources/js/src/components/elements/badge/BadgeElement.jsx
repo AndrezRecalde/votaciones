@@ -1,8 +1,8 @@
 import { Badge } from "@mantine/core";
 
-export const BadgeElement = ({ children, variant, radius = "md" }) => {
+export const BadgeElement = ({ children, variant, size = "lg", radius = "md" }) => {
     return (
-        <Badge variant={variant} size="lg" radius={radius} color="indigo.7">
+        <Badge variant={variant} size={size} radius={radius} color="indigo.7">
             { children }
         </Badge>
     );

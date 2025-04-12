@@ -8,6 +8,7 @@ import {
 } from "../../hooks";
 import {
     ActionIcon,
+    Avatar,
     Card,
     Container,
     Divider,
@@ -146,27 +147,30 @@ const ResultadosPresidencialesPage = () => {
                 overlayProps={{ radius: "sm", blur: 2 }}
             />
             {pageLoad && totalDeVotos !== null ? (
-                <Stack>
-                    <TitlePage ta="center" order={2} mt={20}>
-                        Resultados
-                    </TitlePage>
-                    <Group justify="center">
-                        <BadgeElement variant="filled">
+                <Stack mt={15}>
+                    <Group>
+                        <TitlePage ta="center" order={2} mt={20}>
+                            Elecciones Presidenciales de Ecuador
+                        </TitlePage>
+                        <Avatar
+                            variant="filled"
+                            radius="sm"
+                            size="md"
+                            src="https://prefecturadeesmeraldas.gob.ec/wp-content/uploads/2025/04/Flag_of_Ecuador.svg_.png"
+                        />
+                    </Group>
+                    <BadgeElement variant="default" >
                             {`Fecha & Hora del reporte: ${fechaActual()}`}
                         </BadgeElement>
-                    </Group>
                     <Grid>
                         <Grid.Col span={{ base: 12, sm: 12, md: 3, lg: 3 }}>
                             <StatVocacion />
                             <StatEscrutinio />
-
                         </Grid.Col>
                         <Grid.Col span={{ base: 12, sm: 12, md: 9, lg: 9 }}>
                             <ChartResultado />
                             <TableResultado />
                         </Grid.Col>
-
-
                     </Grid>
                 </Stack>
             ) : null}
