@@ -63,7 +63,7 @@ export const TableResultado = () => {
         state: { showProgressBars: isLoading },
         renderTopToolbarCustomActions: ({ table }) => (
             <TitlePage order={3} ta="left">
-                Resultados de Candidatos
+                Total de votos por Candidatos
             </TitlePage>
         ),
         mantineTableProps: {

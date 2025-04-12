@@ -17,7 +17,7 @@ export const StatEscrutinio = () => {
             : `Faltan: ${restantes} actas`;
 
     return (
-        <Card withBorder shadow="sm" radius="md" mt={20}>
+        <Card withBorder shadow="sm" radius="md" mt={10}>
             <Card.Section withBorder inheritPadding py="xs">
                 <TitlePage order={4}>Total Escrutado en Actas - {((digitadas / total) * 100).toFixed(2)}%</TitlePage>
             </Card.Section>

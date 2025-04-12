@@ -11,6 +11,7 @@ import {
     Card,
     Container,
     Divider,
+    Grid,
     Group,
     LoadingOverlay,
     rem,
@@ -39,7 +40,8 @@ const ResultadosPresidencialesPage = () => {
     const usuario = useMemo(() => {
         return JSON.parse(localStorage.getItem("service_user")) || {};
     }, []);
-    const { modalActionResultadosExport, modalActionResultadosExportXLS } = useUiResultado();
+    const { modalActionResultadosExport, modalActionResultadosExportXLS } =
+        useUiResultado();
     const { fechaActual } = useFechaStore();
     const {
         isExport,
@@ -108,7 +110,7 @@ const ResultadosPresidencialesPage = () => {
     };
 
     return (
-        <Container size={1400}>
+        <Container size={1600}>
             <Group justify="space-between">
                 <TitlePage order={2}>Resultados de Binomios</TitlePage>
                 <Group>
@@ -148,26 +150,24 @@ const ResultadosPresidencialesPage = () => {
                     <TitlePage ta="center" order={2} mt={20}>
                         Resultados
                     </TitlePage>
+                    <Group justify="center">
+                        <BadgeElement variant="filled">
+                            {`Fecha & Hora del reporte: ${fechaActual()}`}
+                        </BadgeElement>
+                    </Group>
+                    <Grid>
+                        <Grid.Col span={{ base: 12, sm: 12, md: 3, lg: 3 }}>
+                            <StatVocacion />
+                            <StatEscrutinio />
 
-                    <SimpleGrid
-                        cols={{ base: 2, xs: 1, sm: 1, md: 2, lg: 2 }}
-                        mb={50}
-                    >
-                        <StatVocacion />
-                        <StatEscrutinio />
-                    </SimpleGrid>
-                    <SimpleGrid cols={1} mb={30}>
-                        <Group justify="center">
-                            <BadgeElement variant="filled">
-                                {`Fecha & Hora del reporte: ${fechaActual()}`}
-                            </BadgeElement>
-                        </Group>
-                        <ChartResultado />
-                    </SimpleGrid>
-                    <SimpleGrid cols={1} mb={30}>
-                        {" "}
-                        <TableResultado />
-                    </SimpleGrid>
+                        </Grid.Col>
+                        <Grid.Col span={{ base: 12, sm: 12, md: 9, lg: 9 }}>
+                            <ChartResultado />
+                            <TableResultado />
+                        </Grid.Col>
+
+
+                    </Grid>
                 </Stack>
             ) : null}
             <ResultadosExportModal />

@@ -31,6 +31,8 @@
         "chartjs-plugin-datalabels": "^2.2.0",
         "clsx": "^2.1.1",
         "dayjs": "^1.11.13",
+        "highcharts": "^12.2.0",
+        "highcharts-react-official": "^3.2.1",
         "mantine-react-table": "^2.0.0-beta.7",
         "mapbox-gl": "^3.9.0",
         "react-chartjs-2": "^5.2.0",
