@@ -40,7 +40,7 @@ import { ProfileHeader } from "./user/ProfileHeader";
 import { ProfileInformation } from "./user/ProfileInformation";
 import { ProfileProgressActas } from "./user/ProfileProgressActas";
 import { ProfileBtnService } from "./user/ProfileBtnService";
-
+import { ProfileContarActas } from "./user/ProfileContarActas";
 
 /* Usuario: Cambio de contraseña */
 import { ChangePwdForm } from "./user/pwd/ChangePwdForm";
@@ -158,6 +158,7 @@ export {
     ProfileInformation,
     ProfileProgressActas,
     ProfileBtnService,
+    ProfileContarActas,
 
     /* Usuario: Cambio de contraseña */
     ChangePwdForm,

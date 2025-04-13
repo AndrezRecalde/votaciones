@@ -3,19 +3,21 @@ import { Badge, Box, Card, Container, Group, LoadingOverlay } from "@mantine/cor
 import {
     BadgeElement,
     ProfileBtnService,
+    ProfileContarActas,
     ProfileHeader,
     ProfileInformation,
     ProfileProgressActas,
     TextSection,
     TitlePage,
 } from "../../components";
-import { useEscrutinioStore, useTitleHook } from "../../hooks";
+import { useEscrutinioStore, useTitleHook, useUsuarioStore } from "../../hooks";
 
 const ProfilePage = () => {
         useTitleHook("Elecciones | Perfil");
     const usuario = useMemo(() => {
         return JSON.parse(localStorage.getItem("service_user")) || {};
     }, []);
+    const { startContarActas } = useUsuarioStore();
     const {
         isLoading,
         resultadosEscrutinio,
@@ -24,6 +26,7 @@ const ProfilePage = () => {
     } = useEscrutinioStore();
 
     useEffect(() => {
+        startContarActas(usuario?.id);
         startLoadEscrutinioActas();
 
         return () => {
@@ -61,6 +64,9 @@ const ProfilePage = () => {
                 </Card.Section>
                 <Card.Section withBorder inheritPadding py="xs">
                     <ProfileBtnService />
+                </Card.Section>
+                <Card.Section withBorder inheritPadding py="xs">
+                    <ProfileContarActas />
                 </Card.Section>
                 <Card.Section withBorder inheritPadding py="xs">
                     <LoadingOverlay

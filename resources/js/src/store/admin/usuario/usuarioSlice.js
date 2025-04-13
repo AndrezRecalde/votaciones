@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     isLoading: false,
     usuarios: [],
+    numero_actas: null,
     activateUsuario: null,
     message: undefined,
     errores: undefined,
@@ -45,6 +46,9 @@ export const usuarioSlice = createSlice({
                 state.errores = undefined;
             }
         },
+        onSetNumeroActasPerfil: (state, {payload}) => {
+            state.numero_actas = payload;
+        },
         onSetActivateUsuario: (state, { payload }) => {
             state.activateUsuario = payload;
             state.errores = undefined;
@@ -52,6 +56,7 @@ export const usuarioSlice = createSlice({
         },
         onClearUsuarios: (state) => {
             state.usuarios = [];
+            state.numero_actas = null;
             state.activateUsuario = null;
             state.errores = undefined;
         },
@@ -70,6 +75,7 @@ export const {
     onAddUsuario,
     onUpdateUsuario,
     onDeleteUsuario,
+    onSetNumeroActasPerfil,
     onSetActivateUsuario,
     onClearUsuarios,
     onLoadMessage,

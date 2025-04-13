@@ -8,11 +8,12 @@ import {
     onLoadMessage,
     onLoadUsuarios,
     onSetActivateUsuario,
+    onSetNumeroActasPerfil,
 } from "../../store/admin/usuario/usuarioSlice";
 import apiAxios from "../../api/apiAxios";
 
 export const useUsuarioStore = () => {
-    const { isLoading, usuarios, activateUsuario, message, errores } =
+    const { isLoading, usuarios, numero_actas, activateUsuario, message, errores } =
         useSelector((state) => state.usuario);
 
     const dispatch = useDispatch();
@@ -108,6 +109,19 @@ export const useUsuarioStore = () => {
         }
     };
 
+    const startContarActas = async(usuario_id) => {
+        try {
+            const { data } = await apiAxios.post("/contar-actas", {
+                usuario_id
+            });
+            const { resultado } = data;
+            dispatch(onSetNumeroActasPerfil(resultado));
+        } catch (error) {
+            console.log(error);
+            ExceptionMessageError(error);
+        }
+    }
+
     const setActivateUsuario = (usuario) => {
         dispatch(onSetActivateUsuario(usuario));
     };
@@ -119,6 +133,7 @@ export const useUsuarioStore = () => {
     return {
         isLoading,
         usuarios,
+        numero_actas,
         activateUsuario,
         message,
         errores,
@@ -128,6 +143,7 @@ export const useUsuarioStore = () => {
         startDeleteUsuario,
         startChangePwdUser,
         startUpdateActivo,
+        startContarActas,
         setActivateUsuario,
         startClearUsuarios,
     };

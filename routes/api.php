@@ -53,6 +53,8 @@ Route::post('/resultados-cantones', [ResultadoController::class, 'getResultadosP
 
 Route::post('/total/juntas', [JuntaController::class, 'getTotalJuntas']);
 Route::post('/actas/ingresadas', [ActaController::class, 'getTotalActasIngresadas']);
+Route::post('/contar-actas', [UserController::class, 'contarActas']);
+
 
 
 /* WhatsApp: Enviar Mensajes */
