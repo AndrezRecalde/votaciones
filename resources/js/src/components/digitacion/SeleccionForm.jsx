@@ -51,7 +51,7 @@ export const SeleccionForm = () => {
 
     const searchForm = useForm({
         initialValues: {
-            dignidad_id: null,
+            dignidad_id: "1",
             provincia_id: convertToString(INITIAL_PROVINCIA_ID),
             canton_id: convertToString(INITIAL_CANTON_ID),
             parroquia_id: null,
@@ -177,7 +177,7 @@ export const SeleccionForm = () => {
                         {...searchForm.getInputProps("dignidad_id")}
                         nothingFoundMessage="No options"
                         //disabled
-                        disabled={disabledSearch}
+                        disabled //Aqui va disabledSearch
                         data={dignidades.map((dignidad) => {
                             return {
                                 value: dignidad.id.toString(),
