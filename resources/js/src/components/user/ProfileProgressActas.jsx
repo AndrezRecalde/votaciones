@@ -7,13 +7,13 @@ export const ProfileProgressActas = ({ escrutinio }) => {
         {
             label: "Actas Ingresadas",
             count: escrutinio.total_ingresadas || 0,
-            part: escrutinio.porcentaje || 0,
+            part: (escrutinio.porcentaje).toFixed(2) || 0,
             color: "#07d99a",
         },
         {
             label: "Actas No Ingresadas",
             count: 1413 - escrutinio.total_ingresadas,
-            part: 100 - escrutinio.porcentaje,
+            part: (100 - escrutinio.porcentaje).toFixed(2),
             color: "#03141a",
         },
     ];
