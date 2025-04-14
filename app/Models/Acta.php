@@ -45,6 +45,16 @@ class Acta extends Model
         return $acta;
     }
 
+    public function parroquia()
+    {
+        return $this->belongsTo(Parroquia::class);
+    }
+
+    public function canton()
+    {
+        return $this->belongsTo(Canton::class);
+    }
+
     function votos(): HasMany
     {
         return $this->hasMany(ActaCandidato::class, 'acta_id', 'id')

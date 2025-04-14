@@ -18,6 +18,11 @@ class Candidato extends Model
         'activo'
     ];
 
+    public function organizacion()
+    {
+        return $this->belongsTo(Organizacion::class);
+    }
+
     function distritosCandidatos(): BelongsToMany
     {
         return $this->belongsToMany(Distrito::class, 'candidato_distrito')

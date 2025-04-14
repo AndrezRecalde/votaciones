@@ -264,6 +264,72 @@ class ResultadoController extends Controller
         return response()->json(['status' => HTTPStatus::Success, 'resultados' => $resultados], 200);
     }
 
+    public function getResultadosPorZona(Request $request): JsonResponse
+{
+    $dignidadId = $request->dignidad_id; // valor de dignidad_id desde el request
+
+    $cantones = Canton::with('parroquias.zonas.actas.dignidad', 'parroquias.zonas.actas.candidatos.organizacion')->get();
+
+    $resultados = $cantones->map(function ($canton) use ($dignidadId) {
+        return [
+            'id' => $canton->id,
+            'nombre_canton' => $canton->nombre_canton,
+            'zonas' => $canton->parroquias->flatMap(function ($parroquia) use ($dignidadId) {
+                return $parroquia->zonas->map(function ($zona) use ($dignidadId) {
+                    // Calcula el total de votos válidos de todas las actas de la zona
+                    $totalVotosValidos = $zona->actas->sum('votos_validos');
+
+                    // Agrupa candidatos por dignidad
+                    $dignidades = $zona->actas
+                        ->filter(function ($acta) use ($dignidadId) {
+                            return !$dignidadId || $acta->dignidad_id == $dignidadId;
+                        })
+                        ->groupBy('dignidad.nombre_dignidad')
+                        ->map(function ($actas, $nombreDignidad) {
+                            $candidatos = $actas->flatMap(function ($acta) {
+                                return $acta->candidatos->map(function ($candidato) use ($acta) {
+                                    return [
+                                        'id' => $candidato->id,
+                                        'nombre_candidato' => $candidato->nombre_candidato,
+                                        'color' => $candidato->organizacion->color ?? '#000000',
+                                        'total_votos' => $candidato->pivot->num_votos,
+                                    ];
+                                });
+                            })
+                            ->groupBy('id')
+                            ->map(function ($candidatos) {
+                                $candidato = $candidatos->first();
+                                return [
+                                    'id' => $candidato['id'],
+                                    'nombre_candidato' => $candidato['nombre_candidato'],
+                                    'color' => $candidato['color'],
+                                    'total_votos' => $candidatos->sum('total_votos'),
+                                ];
+                            })
+                            ->sortByDesc('total_votos')
+                            ->values();
+
+                            return [
+                                'dignidad' => $nombreDignidad,
+                                'candidatos' => $candidatos,
+                            ];
+                        })
+                        ->values();
+
+                    return [
+                        'nombre_zona' => $zona->nombre_zona,
+                        'total_votos_validos' => $totalVotosValidos,
+                        'dignidades' => $dignidades,
+                    ];
+                });
+            }),
+        ];
+    });
+
+    return response()->json(['status' => HTTPStatus::Success, 'resultados' => $resultados], 200);
+}
+
+
 
     /* Exportaciones PDF */
     function exportResultadosPDF(Request $request)
@@ -287,7 +353,33 @@ class ResultadoController extends Controller
         }
 
         // Configuramos el tamaño y orientación del PDF, y lo descargamos
-        return $pdf->setPaper('a4', 'landscape')->download('resultados.pdf');
+        return $pdf->setPaper('a4', 'portrait')->download('resultados.pdf');
+    }
+
+    function exportResultadosPDFPorZona(Request $request)
+    {
+        $resultados = $request->resultados;
+        $totalDeVotos = $request->totalDeVotos;
+        $dignidad_id = $request->dignidad_id;
+
+        // Datos para la vista del PDF
+        $data = [
+            'title'         => 'RESULTADOS DETALLADO',
+            'fecha'         => Carbon::now()->format('l jS \\of F Y h:i:s A'),
+            'resultados'    => $resultados,
+            'totalDeVotos'  => $totalDeVotos,
+        ];
+
+        /* if ($dignidad_id == 1 || $dignidad_id == 4 || $dignidad_id == 5) {
+            $pdf = Pdf::loadView('resultados.detalle', $data);
+        } else {
+            $pdf = Pdf::loadView('resultados.webster', $data);
+        } */
+        $pdf = Pdf::loadView('resultados.detalle_b', $data);
+
+
+        // Configuramos el tamaño y orientación del PDF, y lo descargamos
+        return $pdf->setPaper('a4', 'portrait')->download('resultados.pdf');
     }
 
     public function exportarResultadosXLS(Request $request)

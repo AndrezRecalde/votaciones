@@ -6,6 +6,7 @@ import {
     rem,
     Select,
     Stack,
+    Switch,
 } from "@mantine/core";
 import { BtnSubmit, TextSection } from "../../../components";
 import {
@@ -17,7 +18,7 @@ import { IconDownload, IconRotate2 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 
 export const ResultadosExportForm = ({ form }) => {
-    const { dignidad_id } = form.values;
+    const { pdf_full, dignidad_id } = form.values;
     const [disabled, setDisabled] = useState(true);
     const { dignidades } = useDignidadStore();
     const { modalActionResultadosExport } = useUiResultado();
@@ -25,19 +26,32 @@ export const ResultadosExportForm = ({ form }) => {
         resultadosForMap,
         totalDeVotos,
         startLoadResultadosForMap,
+        startLoadResultadosForMapZonas,
         startLoadTotalDeVotosGuess,
         startExportResultadosPDF,
-        startClearResultadosMap
+        startExportResultadosPDFZonas,
+        startClearResultadosMap,
     } = useResultadoStore();
 
     const handleSubmit = (e) => {
         e.preventDefault();
         //console.log(form.getTransformedValues());
-        startLoadTotalDeVotosGuess({
-            dignidad_id,
-            provincia_id: 8,
-        });
-        startLoadResultadosForMap(dignidad_id);
+        console.log(pdf_full);
+        if (!pdf_full) {
+            startLoadTotalDeVotosGuess({
+                dignidad_id,
+                provincia_id: 8,
+            });
+            startLoadResultadosForMap(dignidad_id);
+        } else {
+            console.log('clic');
+            startLoadTotalDeVotosGuess({
+                dignidad_id,
+                provincia_id: 8,
+            });
+            startLoadResultadosForMapZonas(dignidad_id);
+        }
+
     };
 
     useEffect(() => {
@@ -50,9 +64,14 @@ export const ResultadosExportForm = ({ form }) => {
     const handleExportPDF = (e) => {
         e.preventDefault();
         //console.log(dignidad_id, resultadosForMap, totalDeVotos);
-        startExportResultadosPDF(dignidad_id, resultadosForMap, totalDeVotos);
+        if (!pdf_full) {
+            startExportResultadosPDF(dignidad_id, resultadosForMap, totalDeVotos);
+        } else {
+            startExportResultadosPDFZonas(dignidad_id, resultadosForMap, totalDeVotos)
+        }
         modalActionResultadosExport(false);
         startClearResultadosMap();
+        form.reset();
     };
 
     return (
@@ -62,6 +81,12 @@ export const ResultadosExportForm = ({ form }) => {
         >
             <Divider my="xs" />
             <Stack>
+                <Switch
+                    color="indigo"
+                    label="¿Necesitas PDF con informacion de zonas?"
+                    size="md"
+                    {...form.getInputProps("pdf_full")}
+                />
                 <Select
                     label="Dignidad"
                     placeholder="Seleccione la dignidad"

@@ -262,6 +262,20 @@ export const useResultadoStore = () => {
         }
     };
 
+    const startLoadResultadosForMapZonas = async (dignidad_id) => {
+        try {
+            dispatch(onLoading(true));
+            const { data } = await apiAxios.post("/resultados-zonas", {
+                dignidad_id,
+            });
+            const { resultados } = data;
+            dispatch(onLoadResultadosForMap(resultados));
+        } catch (error) {
+            //console.log(error);
+            ExceptionMessageError(error);
+        }
+    };
+
     const startSendWhatsApp = async (values) => {
         try {
             dispatch(onSending(true));
@@ -286,6 +300,30 @@ export const useResultadoStore = () => {
             onExport(true);
             const response = await apiAxios.post(
                 "/admin/resultados/export-pdf",
+                {
+                    dignidad_id,
+                    resultados,
+                    totalDeVotos
+                },
+                { responseType: "blob" }
+            );
+            const pdfBlob = new Blob([response.data], {
+                type: "application/pdf",
+            });
+            const url = window.open(URL.createObjectURL(pdfBlob));
+            window.URL.revokeObjectURL(url);
+            dispatch(onExport(false));
+        } catch (error) {
+            //console.log(error);
+            ExceptionMessageError(error);
+        }
+    };
+
+    const startExportResultadosPDFZonas = async (dignidad_id, resultados, totalDeVotos) => {
+        try {
+            onExport(true);
+            const response = await apiAxios.post(
+                "/admin/resultados/export-pdf/zonas",
                 {
                     dignidad_id,
                     resultados,
@@ -349,8 +387,10 @@ export const useResultadoStore = () => {
         startLoadResultadosCandidatos,
         startLoadResultadosCandidatosGuess,
         startLoadResultadosForMap,
+        startLoadResultadosForMapZonas,
         startSendWhatsApp,
         startExportResultadosPDF,
+        startExportResultadosPDFZonas,
         startClearResultados,
         startClearResultadosMap,
         startLoadTotalActasIngresadasMapa,

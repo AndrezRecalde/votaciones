@@ -12,6 +12,11 @@ class Canton extends Model
 
     protected $table = 'cantones';
 
+    public function parroquias()
+    {
+        return $this->hasMany(Parroquia::class);
+    }
+
     function actas() : HasMany {
         return $this->hasMany(Acta::class, 'canton_id');
     }

@@ -50,6 +50,7 @@ Route::post('/cantones', [StateController::class, 'getCantones']);
 Route::post('/resultados/totales', [ResultadoController::class, 'getResultados']);
 Route::post('/resultados/total/votos', [ResultadoController::class, 'getTotalVotos']);
 Route::post('/resultados-cantones', [ResultadoController::class, 'getResultadosPorCanton']);
+Route::post('/resultados-zonas', [ResultadoController::class, 'getResultadosPorZona']);
 
 Route::post('/total/juntas', [JuntaController::class, 'getTotalJuntas']);
 Route::post('/actas/ingresadas', [ActaController::class, 'getTotalActasIngresadas']);
@@ -130,6 +131,7 @@ Route::group(
         Route::post('/resultados/total/votos', [ResultadoController::class, 'getTotalVotos']);
         Route::post('/resultados/tendencia/zonas', [ResultadoController::class, 'getTendencias']);
         Route::post('/resultados/export-pdf', [ResultadoController::class, 'exportResultadosPDF']);
+        Route::post('/resultados/export-pdf/zonas', [ResultadoController::class, 'exportResultadosPDFPorZona']);
         Route::post('/resultados/export-xls', [ResultadoController::class, 'exportarResultadosXLS']);
 
 

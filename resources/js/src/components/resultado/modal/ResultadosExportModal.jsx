@@ -12,6 +12,7 @@ export const ResultadosExportModal = () => {
 
     const form = useForm({
         initialValues: {
+            pdf_full: false,
             dignidad_id: null,
             provincia_id: 8,
         },
@@ -19,6 +20,7 @@ export const ResultadosExportModal = () => {
             dignidad_id: isNotEmpty("Por favor seleccione una dignidad"),
         },
         transformValues: (values) => ({
+            ...values,
             dignidad_id: Number(values.dignidad_id) || null,
         }),
     });
