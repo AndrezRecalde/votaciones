@@ -6,18 +6,17 @@ export const ProfileProgressActas = ({ escrutinio }) => {
     const data = [
         {
             label: "Actas Ingresadas",
-            count: escrutinio.total_ingresadas || 0,
-            part: (escrutinio.porcentaje)?.toFixed(2) || 0,
+            count: Number(escrutinio.total_ingresadas) || 0,
+            part: isFinite(Number(escrutinio.porcentaje)) ? Number(escrutinio.porcentaje).toFixed(2) : "0.00",
             color: "#07d99a",
         },
         {
             label: "Actas No Ingresadas",
-            count: 1413 - escrutinio.total_ingresadas,
-            part: (100 - escrutinio.porcentaje)?.toFixed(2),
+            count: 1413 - (Number(escrutinio.total_ingresadas) || 0),
+            part: isFinite(Number(escrutinio.porcentaje)) ? (100 - Number(escrutinio.porcentaje)).toFixed(2) : "0.00",
             color: "#03141a",
         },
     ];
-
     const segments = data.map((segment) => (
         <Progress.Section
             value={segment.part}
