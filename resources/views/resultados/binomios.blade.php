@@ -98,36 +98,43 @@
             </td>
         </tr>
     </table>
-    <h2>Resultados por Cantón</h2>
-    @foreach ($resultados as $resultado)
-        <div class="canton">
-            <h4>Cantón: {{ $resultado['nombre_canton'] }}</h4>
-            @if (empty($resultado['dignidades']))
-                <p style="text-align: center;"> <strong>Sin resultados</strong></p>
-            @else
-                <table>
-                    <thead>
+    <h3>Resultados por Cantón</h3>
+    @foreach ($resultados as $canton)
+        <h4>Cantón: {{ $canton['nombre_canton'] }}</h4>
+        <p><strong>Total de Votos Válidos:</strong> {{ number_format($canton['total_votos_validos']) }}</p>
+
+        @foreach ($canton['dignidades'] as $dignidad)
+            <h4>{{ $dignidad['dignidad'] }}</h4>
+
+            <table border="1" cellpadding="5" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Nombre del Candidato</th>
+                        <th>Total de Votos</th>
+                        <th>Porcentaje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($dignidad['candidatos'] as $candidato)
+                        @php
+                            // Evitar división por cero
+                            $porcentaje =
+                                $canton['total_votos_validos'] > 0
+                                    ? ($candidato['total_votos'] / $canton['total_votos_validos']) * 100
+                                    : 0;
+                        @endphp
                         <tr>
-                            <th>Candidato</th>
-                            <th>Total Votos</th>
-                            <th>Porcentaje</th>
+                            <td>{{ $candidato['nombre_candidato'] }}</td>
+                            <td>{{ number_format($candidato['total_votos']) }}</td>
+                            <td>{{ number_format($porcentaje, 2) }}%</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($resultado['dignidades'] as $dignidad)
-                            @foreach ($dignidad['candidatos'] as $candidato)
-                                <tr>
-                                    <td>{{ $candidato['nombre_candidato'] }}</td>
-                                    <td>{{ $candidato['total_votos'] }}</td>
-                                    <td>{{ number_format(($candidato['total_votos'] * 100) / $totalDeVotos['total_votos_validos'], 2) }}%
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endforeach
-                    </tbody>
-                </table>
-            @endif
-        </div>
+                    @endforeach
+                </tbody>
+            </table>
+        @endforeach
+
+        <hr>
     @endforeach
 </body>
+
 </html>
