@@ -234,11 +234,15 @@ class ResultadoController extends Controller
 
         // Reorganizamos los datos para el formato solicitado
         $resultados = $cantones->map(function ($canton) {
+            // Sumar los votos_validos de todas las actas del cantón
+            $totalVotosValidos = $canton->actas->sum('votos_validos');
+
             return [
                 'id' => $canton->id,
                 'nombre_canton' => $canton->nombre_canton,
-                'dignidades' => $canton->actas->groupBy('dignidad.nombre_dignidad')->map(function ($actas, $dignidad) use ($canton) {
-                    $candidatos = $actas->flatMap(function ($acta) use ($canton) {
+                'total_votos_validos' => $totalVotosValidos, // <-- aquí lo agregamos
+                'dignidades' => $canton->actas->groupBy('dignidad.nombre_dignidad')->map(function ($actas, $dignidad) {
+                    $candidatos = $actas->flatMap(function ($acta) {
                         return $acta->candidatos->map(function ($candidato) {
                             return [
                                 'id' => $candidato->id,
