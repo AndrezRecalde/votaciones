@@ -24,7 +24,7 @@
             table-layout: auto;
             /* Cambia a 'auto' para ajustar el ancho según el contenido */
             margin-bottom: 25px;
-            margin-top: 25px;
+            margin-top: 15px;
         }
 
         th,
@@ -110,7 +110,6 @@
                 {{-- Aquí validamos que existan dignidades --}}
                 @foreach ($zona['dignidades'] as $dignidad)
                     <h5>Dignidad: {{ $dignidad['nombre_dignidad'] }}</h5>
-
                     <table>
                         <thead>
                             <tr>
