@@ -14,6 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ResultadosPorZonaExport;
+use App\Models\Acta;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ResultadoController extends Controller
@@ -30,7 +31,7 @@ class ResultadoController extends Controller
             ->join('candidato_distrito as cd', 'cd.candidato_id', 'c.id')
             ->join('organizaciones as org', 'org.id', 'c.organizacion_id')
             ->join('juntas as j', 'j.id', 'a.junta_id')
-            ->join('zonas as z', 'z.id', 'a.zona_id')
+            ->leftJoin('zonas as z', 'z.id', 'a.zona_id')
             ->join('parroquias as parr', 'parr.id', 'a.parroquia_id')
             ->join('cantones as cant', 'cant.id', 'parr.canton_id')
             ->join('recintos as re', 're.id', 'j.recinto_id')
@@ -56,27 +57,19 @@ class ResultadoController extends Controller
 
     function getTotalVotos(Request $request): JsonResponse
     {
-        $totalDeVotos = ActaCandidato::from('acta_candidato as ac')
+        $totalDeVotos = Acta::from('actas as a')
             ->selectRaw('
             SUM(a.votos_validos) as total_votos_validos,
             SUM(a.votos_blancos) as total_votos_blancos,
             SUM(a.votos_nulos) as total_votos_nulos
         ')
-            ->join('actas as a', 'a.id', 'ac.acta_id')
-            ->join('dignidades as d', 'd.id', 'a.dignidad_id')
-            ->join('candidatos as c', 'c.id', 'ac.candidato_id')
-            ->join('candidato_distrito as cd', 'cd.candidato_id', 'c.id')
-            ->join('organizaciones as org', 'org.id', 'c.organizacion_id')
-            ->join('juntas as j', 'j.id', 'a.junta_id')
-            ->join('zonas as z', 'z.id', 'a.zona_id')
-            ->join('parroquias as parr', 'parr.id', 'a.parroquia_id')
-            ->join('cantones as cant', 'cant.id', 'parr.canton_id')
             ->dignidad($request->dignidad_id)
             ->provincia($request->provincia_id)
             ->canton($request->canton_id)
             ->parroquia($request->parroquia_id)
             ->zona($request->zona_id)
-            ->groupBy('ac.candidato_id')
+            ->legible($request->legible)
+            ->cuadrada($request->cuadrada)
             ->first();
 
         if ($totalDeVotos) {
@@ -265,69 +258,71 @@ class ResultadoController extends Controller
     }
 
     public function getResultadosPorZona(Request $request): JsonResponse
-{
-    $dignidadId = $request->dignidad_id; // valor de dignidad_id desde el request
+    {
+        $dignidadId = $request->dignidad_id; // valor de dignidad_id desde el request
 
-    $cantones = Canton::with('parroquias.zonas.actas.dignidad', 'parroquias.zonas.actas.candidatos.organizacion')->get();
+        $cantones = Canton::with('parroquias.zonas.actas.dignidad', 'parroquias.zonas.actas.candidatos.organizacion')->get();
 
-    $resultados = $cantones->map(function ($canton) use ($dignidadId) {
-        return [
-            'id' => $canton->id,
-            'nombre_canton' => $canton->nombre_canton,
-            'zonas' => $canton->parroquias->flatMap(function ($parroquia) use ($dignidadId) {
-                return $parroquia->zonas->map(function ($zona) use ($dignidadId) {
-                    // Calcula el total de votos válidos de todas las actas de la zona
-                    $totalVotosValidos = $zona->actas->sum('votos_validos');
+        $resultados = $cantones->map(function ($canton) use ($dignidadId) {
+            return [
+                'id' => $canton->id,
+                'nombre_canton' => $canton->nombre_canton,
+                'zonas' => $canton->parroquias->flatMap(function ($parroquia) use ($dignidadId) {
+                    return $parroquia->zonas->map(function ($zona) use ($dignidadId) {
 
-                    // Agrupa candidatos por dignidad
-                    $dignidades = $zona->actas
-                        ->filter(function ($acta) use ($dignidadId) {
+                        // FILTRAMOS las actas por dignidad_id antes de calcular
+                        $actasFiltradas = $zona->actas->filter(function ($acta) use ($dignidadId) {
                             return !$dignidadId || $acta->dignidad_id == $dignidadId;
-                        })
-                        ->groupBy('dignidad.nombre_dignidad')
-                        ->map(function ($actas, $nombreDignidad) {
-                            $candidatos = $actas->flatMap(function ($acta) {
-                                return $acta->candidatos->map(function ($candidato) use ($acta) {
+                        });
+
+                        // Calcula el total de votos válidos de las actas filtradas
+                        $totalVotosValidos = $actasFiltradas->sum('votos_validos');
+
+                        // Agrupa candidatos por dignidad
+                        $dignidades = $actasFiltradas
+                            ->groupBy('dignidad.nombre_dignidad')
+                            ->map(function ($actas, $nombreDignidad) {
+                                $candidatos = $actas->flatMap(function ($acta) {
+                                    return $acta->candidatos->map(function ($candidato) use ($acta) {
+                                        return [
+                                            'id' => $candidato->id,
+                                            'nombre_candidato' => $candidato->nombre_candidato,
+                                            'color' => $candidato->organizacion->color ?? '#000000',
+                                            'total_votos' => $candidato->pivot->num_votos,
+                                        ];
+                                    });
+                                })
+                                ->groupBy('id')
+                                ->map(function ($candidatos) {
                                     return [
-                                        'id' => $candidato->id,
-                                        'nombre_candidato' => $candidato->nombre_candidato,
-                                        'color' => $candidato->organizacion->color ?? '#000000',
-                                        'total_votos' => $candidato->pivot->num_votos,
+                                        'id' => $candidatos->first()['id'],
+                                        'nombre_candidato' => $candidatos->first()['nombre_candidato'],
+                                        'color' => $candidatos->first()['color'],
+                                        'total_votos' => $candidatos->sum('total_votos'),
                                     ];
-                                });
-                            })
-                            ->groupBy('id')
-                            ->map(function ($candidatos) {
-                                $candidato = $candidatos->first();
+                                })
+                                ->values(); // para resetear las claves
+
                                 return [
-                                    'id' => $candidato['id'],
-                                    'nombre_candidato' => $candidato['nombre_candidato'],
-                                    'color' => $candidato['color'],
-                                    'total_votos' => $candidatos->sum('total_votos'),
+                                    'nombre_dignidad' => $nombreDignidad,
+                                    'candidatos' => $candidatos,
                                 ];
                             })
-                            ->sortByDesc('total_votos')
-                            ->values();
+                            ->values(); // para resetear las claves
 
-                            return [
-                                'dignidad' => $nombreDignidad,
-                                'candidatos' => $candidatos,
-                            ];
-                        })
-                        ->values();
+                        return [
+                            'id' => $zona->id,
+                            'nombre_zona' => $zona->nombre_zona,
+                            'total_votos_validos' => $totalVotosValidos,
+                            'dignidades' => $dignidades,
+                        ];
+                    });
+                }),
+            ];
+        });
 
-                    return [
-                        'nombre_zona' => $zona->nombre_zona,
-                        'total_votos_validos' => $totalVotosValidos,
-                        'dignidades' => $dignidades,
-                    ];
-                });
-            }),
-        ];
-    });
-
-    return response()->json(['status' => HTTPStatus::Success, 'resultados' => $resultados], 200);
-}
+        return response()->json(['status' => HTTPStatus::Success, 'resultados' => $resultados], 200);
+    }
 
 
 

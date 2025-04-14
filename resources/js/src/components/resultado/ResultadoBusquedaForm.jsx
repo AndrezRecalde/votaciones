@@ -27,10 +27,13 @@ export const ResultadoBusquedaForm = ({ dig }) => {
         },
         transformValues: (values) => ({
             ...values,
-            canton_id: Number(values.canton_id) || 0,
-            parroquia_id: Number(values.parroquia_id) || 0,
+            dignidad_id: Number(values.dignidad_id) || null,
+            canton_id: Number(values.canton_id) || null,
+            parroquia_id: Number(values.parroquia_id) || null,
             //recinto_id: Number(values.recinto_id) || 0,
-            zona_id: Number(values.zona_id) || 0,
+            zona_id: Number(values.zona_id) || null,
+            cuadrada: values.cuadrada !== "" ? Number(values.cuadrada) : null,
+            legible: values.legible !== "" ? Number(values.legible) : null,
         }),
     });
 
@@ -43,7 +46,6 @@ export const ResultadoBusquedaForm = ({ dig }) => {
         startLoadZonas,
         cantones,
         parroquias,
-        recintos,
         zonas
     } = useJurisdiccionStore();
     const {
@@ -81,6 +83,7 @@ export const ResultadoBusquedaForm = ({ dig }) => {
         startLoadTotalActasIngresadas(form.getTransformedValues());
         startLoadTotalJuntas(form.getTransformedValues());
         startLoadResultadosCandidatos(form.getTransformedValues());
+        console.log(form.getTransformedValues());
     };
 
     return (

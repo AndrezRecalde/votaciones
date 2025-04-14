@@ -37,9 +37,10 @@ export const useResultadoStore = () => {
 
     const startLoadTotalDeVotos = async ({
         dignidad_id,
-        provincia_id,
+        provincia_id = null,
         canton_id = null,
         parroquia_id = null,
+        zona_id = null
     }) => {
         try {
             const { data } = await apiAxios.post(
@@ -49,6 +50,7 @@ export const useResultadoStore = () => {
                     provincia_id,
                     canton_id,
                     parroquia_id,
+                    zona_id
                 }
             );
             if (data.msg) {
@@ -59,6 +61,7 @@ export const useResultadoStore = () => {
                 }, 40);
             } else {
                 const { totalDeVotos } = data;
+                console.log(totalDeVotos);
                 dispatch(onLoadTotalDeVotos(totalDeVotos));
             }
         } catch (error) {
@@ -73,6 +76,7 @@ export const useResultadoStore = () => {
         provincia_id,
         canton_id = null,
         parroquia_id = null,
+        zona_id = null,
     }) => {
         try {
             const { data } = await apiAxios.post("/admin/actas/ingresadas", {
@@ -80,6 +84,7 @@ export const useResultadoStore = () => {
                 provincia_id,
                 canton_id,
                 parroquia_id,
+                zona_id
             });
             const { totalActasIngresadas } = data;
             dispatch(onLoadTotalIngresadas(totalActasIngresadas));
@@ -114,12 +119,14 @@ export const useResultadoStore = () => {
         provincia_id,
         canton_id = null,
         parroquia_id = null,
+        zona_id = null
     }) => {
         try {
             const { data } = await apiAxios.post("/general/total/juntas", {
                 provincia_id,
                 canton_id,
                 parroquia_id,
+                zona_id
             });
             const { totalJuntas } = data;
             dispatch(onLoadTotalJuntas(totalJuntas));
@@ -154,7 +161,7 @@ export const useResultadoStore = () => {
         provincia_id = null,
         canton_id = null,
         parroquia_id = null,
-        recinto_id = null,
+        zona_id = null,
         cuadrada = null,
         legible = null,
     }) => {
@@ -165,7 +172,7 @@ export const useResultadoStore = () => {
                 provincia_id,
                 canton_id,
                 parroquia_id,
-                recinto_id,
+                zona_id,
                 cuadrada,
                 legible,
             });

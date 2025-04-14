@@ -80,35 +80,35 @@ class Acta extends Model
     function scopeDignidad($query, $dignidad_id)
     {
         if ($dignidad_id) {
-            return $query->where('d.id', $dignidad_id);
+            return $query->where('a.dignidad_id', $dignidad_id);
         }
     }
 
     function scopeProvincia($query, $provincia_id)
     {
         if ($provincia_id) {
-            return $query->where('prov.id', $provincia_id);
+            return $query->where('a.provincia_id', $provincia_id);
         }
     }
 
     function scopeCanton($query, $canton_id)
     {
         if ($canton_id) {
-            return $query->where('cant.id', $canton_id);
+            return $query->where('a.canton_id', $canton_id);
         }
     }
 
     function scopeParroquia($query, $parroquia_id)
     {
         if ($parroquia_id) {
-            return $query->where('parr.id', $parroquia_id);
+            return $query->where('a.parroquia_id', $parroquia_id);
         }
     }
 
     function scopeZona($query, $zona_id)
     {
         if ($zona_id) {
-            return $query->where('z.id', $zona_id);
+            return $query->where('a.zona_id', $zona_id);
         }
     }
 
@@ -118,4 +118,13 @@ class Acta extends Model
             return $query->where('a.cuadrada', $tipo_acta);
         }
     }
+
+    function scopeLegible($query, $legible)
+    {
+        if (!is_null($legible) && $legible !== '') {
+            return $query->where('a.legible', $legible);
+        }
+    }
+
+
 }

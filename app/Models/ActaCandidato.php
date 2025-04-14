@@ -31,7 +31,7 @@ class ActaCandidato extends Model
     function scopeProvincia($query, $provincia_id)
     {
         if ($provincia_id) {
-            return $query->where('cd.provincia_id', $provincia_id);
+            return $query->where('a.provincia_id', $provincia_id);
         }
     }
 
@@ -65,14 +65,14 @@ class ActaCandidato extends Model
 
     function scopeCuadrada($query, $cuadrada)
     {
-        if ($cuadrada) {
+        if (!is_null($cuadrada) && $cuadrada !== '') {
             return $query->where('a.cuadrada', $cuadrada);
         }
     }
 
     function scopeLegible($query, $legible)
     {
-        if ($legible) {
+        if (!is_null($legible) && $legible !== '') {
             return $query->where('a.legible', $legible);
         }
     }

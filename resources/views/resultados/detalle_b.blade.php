@@ -80,71 +80,66 @@
             border-bottom: 2px solid #0056b3;
             padding-bottom: 5px;
         }
-
-        .canton {
-            margin-bottom: 3rem;
-        }
-
-        .zona {
-            background: #fff;
-            padding: 1rem 2rem;
-            margin-bottom: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
     </style>
 </head>
 
 <body>
+
     <table>
         <tr>
             <td class="img-container">
                 <img class="img-fluid" alt="logo" src={{ public_path('/images/LogoMediano.png') }}>
             </td>
             <td colspan="3" class="header">
-                <h3>REPORTE DE RESULTADO POR ZONAS</h3>
+                <h3>REPORTE DE RESULTADOS</h3>
                 <hr>
                 <h3>{{ $fecha }}</h3>
             </td>
         </tr>
     </table>
+
     @foreach ($resultados as $canton)
-        <div class="canton">
-            <h4>Canton: {{ $canton['nombre_canton'] }}</h4>
+        <hr>
+        <h3>{{ $canton['nombre_canton'] }}</h3>
 
-            @foreach ($canton['zonas'] as $zona)
-                <div class="zona">
-                    <h5>{{ $zona['nombre_zona'] }}</h5>
-                    <div class="total-votos"><strong>Total votos válidos:</strong> {{ $zona['total_votos_validos'] }}
-                    </div>
+        @foreach ($canton['zonas'] as $zona)
+            <h4>Zona: {{ $zona['nombre_zona'] }}</h4>
+            <p><strong>Total Votos Válidos:</strong> {{ $zona['total_votos_validos'] }}</p>
 
-                    @foreach ($zona['dignidades'] as $dignidad)
-                        <h4>{{ $dignidad['dignidad'] }}</h4>
+            @if (!empty($zona['dignidades']))
+                {{-- Aquí validamos que existan dignidades --}}
+                @foreach ($zona['dignidades'] as $dignidad)
+                    <h4>Dignidad: {{ $dignidad['nombre_dignidad'] }}</h4>
 
-                        <table>
-                            <thead>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre del Candidato</th>
+                                <th>Votos</th>
+                                <th>Porcentaje</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($dignidad['candidatos'] as $candidato)
                                 <tr>
-                                    <th>Nombre del Candidato</th>
-                                    <th>Total de Votos</th>
-                                    <th>Porcentaje</th>
+                                    <td>{{ $candidato['nombre_candidato'] }}</td>
+                                    <td>{{ $candidato['total_votos'] }}</td>
+                                    <td>
+                                        @if ($zona['total_votos_validos'] > 0)
+                                            {{ number_format(($candidato['total_votos'] / $zona['total_votos_validos']) * 100, 2) }}%
+                                        @else
+                                            0%
+                                        @endif
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($dignidad['candidatos'] as $candidato)
-                                    <tr>
-                                        <td>{{ $candidato['nombre_candidato'] }}</td>
-                                        <td>{{ $candidato['total_votos'] }}</td>
-                                        <td>{{ number_format(($candidato['total_votos'] * 100) / $zona['total_votos_validos'],2) }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    @endforeach
-
-                </div>
-            @endforeach
-
-        </div>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endforeach
+            @else
+                <p><em>No hay resultados para esta zona.</em></p>
+            @endif
+        @endforeach
     @endforeach
 
 </body>
