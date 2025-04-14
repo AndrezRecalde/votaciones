@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { TableContent, TitlePage } from "../../../components";
-import { Table } from "@mantine/core";
+import { Stack, Table } from "@mantine/core";
 import { useActaStore } from "../../../hooks";
 import { useMantineReactTable } from "mantine-react-table";
 
@@ -49,30 +49,49 @@ export const BusquedaActaTable = () => {
             );
         },
         renderDetailPanel: ({ row }) => (
-            <Table horizontalSpacing="lg" withTableBorder withColumnBorders>
-                <Table.Thead>
-                    <Table.Tr>
-                        <Table.Th>Total Huellas</Table.Th>
-                        <Table.Th>Votos Blancos</Table.Th>
-                        <Table.Th>Votos Nulos</Table.Th>
-                        <Table.Th>¿Consistente?</Table.Th>
-                        <Table.Th>Responsable</Table.Th>
-                    </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
-                    <Table.Tr key={row.original.id}>
-                        <Table.Td>{row.original.votos_validos}</Table.Td>
-                        <Table.Td>{row.original.votos_blancos}</Table.Td>
-                        <Table.Td>{row.original.votos_nulos}</Table.Td>
-                        <Table.Td>
-                            {row.original.cuadrada === 0
-                                ? "Inconsistente"
-                                : "Consistente"}
-                        </Table.Td>
-                        <Table.Td>{row.original.nombres_completos}</Table.Td>
-                    </Table.Tr>
-                </Table.Tbody>
-            </Table>
+            <Stack>
+                <Table horizontalSpacing="lg" withTableBorder withColumnBorders>
+                    <Table.Thead>
+                        <Table.Tr>
+                            <Table.Th>Total Huellas</Table.Th>
+                            <Table.Th>Votos Blancos</Table.Th>
+                            <Table.Th>Votos Nulos</Table.Th>
+                            <Table.Th>¿Consistente?</Table.Th>
+                            <Table.Th>Responsable</Table.Th>
+                        </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>
+                        <Table.Tr key={row.original.id}>
+                            <Table.Td>{row.original.votos_validos}</Table.Td>
+                            <Table.Td>{row.original.votos_blancos}</Table.Td>
+                            <Table.Td>{row.original.votos_nulos}</Table.Td>
+                            <Table.Td>
+                                {row.original.cuadrada === 0
+                                    ? "Inconsistente"
+                                    : "Consistente"}
+                            </Table.Td>
+                            <Table.Td>
+                                {row.original.nombres_completos}
+                            </Table.Td>
+                        </Table.Tr>
+                    </Table.Tbody>
+                </Table>
+                <Table variant="vertical" layout="fixed" withTableBorder>
+                    <Table.Tbody>
+                        {row.original.candidatos.map((candidato) => (
+                            <Table.Tr key={candidato.id}>
+                                <Table.Th w={350}>
+                                    {candidato.nombre_candidato}
+                                </Table.Th>
+                                <Table.Td>
+                                    Total votos en acta:{" "}
+                                    {candidato.pivot.num_votos}
+                                </Table.Td>
+                            </Table.Tr>
+                        ))}
+                    </Table.Tbody>
+                </Table>
+            </Stack>
         ),
     });
 

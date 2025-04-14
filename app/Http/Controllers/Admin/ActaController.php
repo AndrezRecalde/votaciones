@@ -156,6 +156,7 @@ class ActaController extends Controller
                         a.cuadrada, a.legible, d.nombre_dignidad,
                         z.nombre_zona, parr.nombre_parroquia, cant.nombre_canton,
                         r.nombre_recinto, u.nombres_completos')
+            ->with(['candidatos'])
             ->join('dignidades as d', 'd.id', 'a.dignidad_id')
             ->join('juntas as j', 'j.id', 'a.junta_id')
             ->join('zonas as z', 'z.id', 'j.zona_id')
