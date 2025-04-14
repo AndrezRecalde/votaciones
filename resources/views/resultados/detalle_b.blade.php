@@ -109,7 +109,7 @@
             @if (!empty($zona['dignidades']))
                 {{-- Aquí validamos que existan dignidades --}}
                 @foreach ($zona['dignidades'] as $dignidad)
-                    <h4>Dignidad: {{ $dignidad['nombre_dignidad'] }}</h4>
+                    <h5>Dignidad: {{ $dignidad['nombre_dignidad'] }}</h5>
 
                     <table>
                         <thead>
