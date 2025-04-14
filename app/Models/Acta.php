@@ -104,7 +104,7 @@ class Acta extends Model
 
     function scopeCuadrada($query, $tipo_acta)
     {
-        if ($tipo_acta) {
+        if (!is_null($tipo_acta) && $tipo_acta !== '') {
             return $query->where('a.cuadrada', $tipo_acta);
         }
     }

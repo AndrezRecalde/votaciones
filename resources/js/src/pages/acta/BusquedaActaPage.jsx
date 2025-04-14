@@ -37,6 +37,7 @@ const BusquedaActaPage = () => {
             dignidad_id: Number(values.dignidad_id) || null,
             canton_id: Number(values.canton_id) || null,
             parroquia_id: Number(values.parroquia_id) || null,
+            tipo_acta: values.tipo_acta !== "" ? Number(values.tipo_acta) : null,
         }),
     });
 
