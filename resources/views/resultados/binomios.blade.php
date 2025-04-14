@@ -101,7 +101,7 @@
     <h3>Resultados por Cantón</h3>
     @foreach ($resultados as $canton)
         <h4>Cantón: {{ $canton['nombre_canton'] }}</h4>
-        <p><strong>Total de Votos Válidos:</strong> {{ number_format($canton['total_votos_validos']) }}</p>
+        <p><strong>Total votos:</strong> {{ number_format($canton['total_votos_validos']) }}</p>
 
         @foreach ($canton['dignidades'] as $dignidad)
             <h4>{{ $dignidad['dignidad'] }}</h4>
