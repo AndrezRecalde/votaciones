@@ -1,4 +1,4 @@
-import { Box, Drawer, LoadingOverlay } from "@mantine/core";
+import { Box, Drawer, Grid, LoadingOverlay } from "@mantine/core";
 import {
     MapBusquedaForm,
     StatEscrutinio,
@@ -48,8 +48,14 @@ export const MapResultadosDrawer = () => {
             {pageLoad && dignidad_id == 1 ? (
                 <Box>
                     <TableResultado />
-                    <StatVocacion />
-                    <StatEscrutinio />
+                    <Grid>
+                        <Grid.Col span={{ base: 1, xs: 1, md: 5, lg: 5, xl: 5 }}>
+                            <StatVocacion />
+                        </Grid.Col>
+                        <Grid.Col span={{ base: 1, xs: 1, md: 7, lg: 7, xl: 7 }}>
+                            <StatEscrutinio />
+                        </Grid.Col>
+                    </Grid>
                 </Box>
             ) : pageLoad && (dignidad_id == 2 || dignidad_id == 3) ? (
                 <Box>
