@@ -163,7 +163,8 @@ const GuessResultadosPage = () => {
                                     <thead>
                                         <tr>
                                             <th style="padding: 8px;">Candidato</th>
-                                            <th style="padding: 8px;">Votos</th>
+                                            <th style="padding: 8px;">Total Votos</th>
+                                            <th style="padding: 8px;">Porcentaje</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -180,6 +181,9 @@ const GuessResultadosPage = () => {
                                                 <td style="padding: 8px;">${
                                                     candidato?.total_votos
                                                 }</td>
+                                                <td style="padding: 8px;">${
+                                                    ((candidato?.total_votos * 100 ) / item.total_votos_validos).toFixed(2)
+                                                }%</td>
                                             </tr>
                                 `;
                             });
