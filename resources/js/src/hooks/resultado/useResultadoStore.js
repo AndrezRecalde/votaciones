@@ -278,7 +278,7 @@ export const useResultadoStore = () => {
             const { resultados } = data;
             dispatch(onLoadResultadosForMap(resultados));
         } catch (error) {
-            //console.log(error);
+            console.log(error);
             ExceptionMessageError(error);
         }
     };
