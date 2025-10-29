@@ -174,10 +174,17 @@ class UserController extends Controller
 
     public function contarActas(Request $request)
     {
-        // Ejecutamos el procedimiento almacenado
-        $resultado = DB::select('CALL sp_contar_actas(?)', [$request->usuario_id]);
+        try {
+            // Ejecutamos el procedimiento almacenado
+            $resultado = DB::select('CALL sp_contar_actas(?)', [$request->usuario_id]);
 
-        // Como `select` devuelve un array de resultados, tomamos el primero
-        return response()->json(['status' => HTTPStatus::Success, 'resultado' => $resultado], 200);
+            // Como `select` devuelve un array de resultados, tomamos el primero
+            return response()->json(['status' => HTTPStatus::Success, 'resultado' => $resultado], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => HTTPStatus::Error,
+                'msg'    => $th->getMessage()
+            ], 500);
+        }
     }
 }
