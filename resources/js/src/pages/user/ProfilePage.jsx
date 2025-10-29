@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { Badge, Box, Card, Container, Group, LoadingOverlay } from "@mantine/core";
+import { Box, Card, Container, Group, LoadingOverlay } from "@mantine/core";
 import {
     BadgeElement,
     ProfileBtnService,
@@ -51,7 +51,7 @@ const ProfilePage = () => {
                         <TextSection fw={700} tt="" fz={18} color="dimmed">
                             Bienvenido
                         </TextSection>
-                        <BadgeElement variant="filled" radiud="lg">
+                        <BadgeElement variant="filled" radius="lg">
                             {usuario?.role || "Sin datos"}
                         </BadgeElement>
                     </Group>
