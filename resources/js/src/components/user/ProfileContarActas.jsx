@@ -6,7 +6,7 @@ export const ProfileContarActas = () => {
 
     const rows = numero_actas?.map((numero, index) => (
         <Table.Tr key={index}>
-          <Table.Td>{numero?.total_ingresadas_add}</Table.Td>
+          <Table.Td>{numero?.total_ingresadas_add }</Table.Td>
           <Table.Td>{numero?.total_ingresadas_update}</Table.Td>
         </Table.Tr>
       ));
