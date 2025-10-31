@@ -1,14 +1,30 @@
-import { Card, NumberInput, SimpleGrid, Stack, TextInput } from "@mantine/core";
-import { TitlePage } from "../../components";
+import {
+    Card,
+    Group,
+    NumberInput,
+    SimpleGrid,
+    Stack,
+    TextInput,
+    ThemeIcon,
+} from "@mantine/core";
+import { IconListCheck } from "@tabler/icons-react";
 import classes from "../../assets/styles/modules/digitacion/LabelsDigitacion.module.css";
+import { TextSection } from "../elements/titles/TextSection";
 
 export const ActaCardForm = ({ actaForm }) => {
     return (
         <Card withBorder shadow="sm" radius="md">
             <Card.Section withBorder inheritPadding py="xs">
-                <TitlePage order={4} ta="left">
-                    Rellena los campos del acta
-                </TitlePage>
+                <Group gap="xs">
+                    <ThemeIcon size="lg" radius="md" variant="default">
+                        <IconListCheck size={20} />
+                    </ThemeIcon>
+                    <div>
+                        <TextSection tt="" fw={700} fz={18}>
+                            Rellena los campos del acta
+                        </TextSection>
+                    </div>
+                </Group>
             </Card.Section>
             <Card.Section withBorder inheritPadding py="xs">
                 <Stack>

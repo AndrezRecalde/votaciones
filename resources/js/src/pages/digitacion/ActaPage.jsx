@@ -1,14 +1,29 @@
-import { Box, Container, Divider, Grid } from "@mantine/core";
+import { useEffect } from "react";
+import {
+    Badge,
+    Box,
+    Card,
+    Container,
+    Divider,
+    Grid,
+    Group,
+    Stack,
+    Text,
+    ThemeIcon,
+} from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import {
     ActaCardDetalleForm,
     ActaCardForm,
     ActaCardInfo,
     ActaNovedadForm,
-    TitlePage,
+    TextSection,
 } from "../../components";
 import { useActaStore, useStorageStore } from "../../hooks";
-import { useEffect } from "react";
+import {
+    IconChecks,
+} from "@tabler/icons-react";
+
 
 const ActaPage = () => {
     const { activateActa, existeActa, startAddActa, startUpdateActa } =
@@ -79,38 +94,61 @@ const ActaPage = () => {
 
     return (
         <Container size="xxl">
-            <TitlePage ta="center" order={3}>
-                {selectedFields.dignidad_id === 1
-                    ? "Presidentes y Vicepresidentes"
-                    : selectedFields.dignidad_id === 2
-                    ? "Asambleistas Nacionales"
-                    : "Asambleistas Provinciales"}
-            </TitlePage>
             <Divider my="md" />
             <Box
                 component="form"
                 onSubmit={actaForm.onSubmit((_, e) => handleSubmit(e))}
                 mt={15}
             >
-                <Grid>
-                    <Grid.Col
-                        span={{ base: 6, xs: 12, sm: 12, md: 6, lg: 6, xl: 6 }}
-                    >
+                {/* Header con indicador visual */}
+                <Card shadow="sm" padding="md" radius="md" withBorder mb="xl">
+                    <Card.Section withBorder inheritPadding py="xs" bg="dark.5">
+                        <Group justify="space-between">
+                            <Group gap="xs">
+                                <ThemeIcon
+                                    size="md"
+                                    radius="md"
+                                    variant="default"
+                                >
+                                    <IconChecks size={16} />
+                                </ThemeIcon>
+                                <div>
+                                    <TextSection color="white" fw={700} fz={18} tt="">
+                                        Detalles del Acta
+                                    </TextSection>
+                                </div>
+                            </Group>
+                            <Badge
+                                leftSection="🗳️"
+                                size="lg"
+                                radius="sm"
+                                variant="default"
+                            >
+                                {activateActa?.dignidad}
+                            </Badge>
+                        </Group>
+                    </Card.Section>
+                    <Card.Section>
                         <ActaCardInfo />
+                    </Card.Section>
+                </Card>
+
+                {/* Grid Responsive Mejorado */}
+                <Grid gutter={{ base: "md", md: "xl" }}>
+                    {/* Sidebar: Formularios */}
+                    <Grid.Col span={{ base: 12, md: 8 }}>
+                        <Stack gap="md">
+                            {/* Card 1: Datos */}
+
+                            <ActaCardForm actaForm={actaForm} />
+
+                            <ActaCardDetalleForm actaForm={actaForm} />
+                        </Stack>
                     </Grid.Col>
-                    <Grid.Col
-                        span={{ base: 6, xs: 12, sm: 12, md: 6, lg: 6, xl: 6 }}
-                    >
-                        <ActaCardForm actaForm={actaForm} />
-                    </Grid.Col>
-                    <Grid.Col
-                        span={{ base: 6, xs: 12, sm: 12, md: 6, lg: 6, xl: 6 }}
-                    >
-                        <ActaCardDetalleForm actaForm={actaForm} />
-                    </Grid.Col>
-                    <Grid.Col
-                        span={{ base: 6, xs: 12, sm: 12, md: 6, lg: 6, xl: 6 }}
-                    >
+
+                    {/* Main Content: Detalle Votos */}
+                    <Grid.Col span={{ base: 12, md: 4 }}>
+                        {/* Card 2: Novedades */}
                         <ActaNovedadForm actaForm={actaForm} />
                     </Grid.Col>
                 </Grid>

@@ -4,17 +4,24 @@ export const uiHeaderMenuSlice = createSlice({
     name: "uiHeaderMenu",
     initialState: {
         isOpenDrawerMobile: false,
-        isOpenMenuLinksTics: false,
+        isOpenMenuLinksAdmin: false,
+        isOpenMenuLinksResultados: false,
     },
     reducers: {
         onOpenDrawerMobile: (state, { payload }) => {
             state.isOpenDrawerMobile = payload;
         },
-        onOpenMenuLinksTics: (state, { payload }) => {
-            state.isOpenMenuLinksTics = payload;
+        onOpenMenuLinksAdmin: (state, { payload }) => {
+            state.isOpenMenuLinksAdmin = payload;
+        },
+        onOpenMenuLinksResultados: (state, { payload }) => {
+            state.isOpenMenuLinksResultados = payload;
         },
     },
 });
 
-export const { onOpenDrawerMobile, onOpenMenuLinksTics } =
-    uiHeaderMenuSlice.actions;
+export const {
+    onOpenDrawerMobile,
+    onOpenMenuLinksAdmin,
+    onOpenMenuLinksResultados,
+} = uiHeaderMenuSlice.actions;

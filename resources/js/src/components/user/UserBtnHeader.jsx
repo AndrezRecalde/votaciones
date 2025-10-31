@@ -1,13 +1,22 @@
 import cx from "clsx";
 import { useMemo, useState } from "react";
-import { Avatar, Divider, Group, Menu, Text, UnstyledButton, rem } from "@mantine/core";
+import {
+    Avatar,
+    Divider,
+    Group,
+    Menu,
+    UnstyledButton,
+    rem,
+} from "@mantine/core";
 import { IconChevronRight, IconLogout } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../hooks";
 import { menuRoutes } from "../../routes/router/routes";
 import { TextSection } from "../elements/titles/TextSection";
+import { capitalizarCadaPalabra } from "../../helpers/fnHelpers";
+import classes from "../../assets/styles/modules/user/UserHeader.module.css";
 
-export const UserBtnHeader = ({ classes, toggleMobile = null }) => {
+export const UserBtnHeader = () => {
     const { startLogout } = useAuthStore();
     const navigate = useNavigate();
     const [userMenuOpened, setUserMenuOpened] = useState(false);
@@ -27,9 +36,6 @@ export const UserBtnHeader = ({ classes, toggleMobile = null }) => {
 
     const handleMenuClick = (linked) => {
         navigate(linked);
-        if (toggleMobile) {
-            toggleMobile(true);
-        }
     };
 
     return (
@@ -50,24 +56,21 @@ export const UserBtnHeader = ({ classes, toggleMobile = null }) => {
                     aria-hidden={false}
                 >
                     <Group gap={20}>
-                        <Avatar
-                            alt={nombres}
-                            variant="light"
-                            radius="xl"
-                            color="indigo.7"
-                        >
+                        <Avatar alt={nombres} variant="default" radius="xl">
                             {nombres}
                         </Avatar>
                         <div style={{ flex: 1 }}>
-                            <Text fw={500} size="sm">
-                                {usuario?.nombres_completos || "Sin datos"}
-                            </Text>
-                            <Text size="xs" c="dimmed">
-                                {usuario?.role || "Sin datos"}
-                            </Text>
+                            <TextSection tt="" fw={600} fz="sm">
+                                {typeof usuario?.nombres_completos === "string"
+                                    ? capitalizarCadaPalabra(usuario.nombres_completos)
+                                    : "Sin datos"}
+                            </TextSection>
+                            <TextSection fs="italic" fz={14} fw={700}>
+                                {usuario?.role ?? "Sin datos"}
+                            </TextSection>
                         </div>
                         <IconChevronRight
-                            style={{ width: rem(12), height: rem(12) }}
+                            style={{ width: rem(20), height: rem(20) }}
                             stroke={1.5}
                         />
                     </Group>
@@ -77,18 +80,23 @@ export const UserBtnHeader = ({ classes, toggleMobile = null }) => {
                 <Group justify="space-between" p={20}>
                     <Avatar
                         alt={nombres}
-                        variant="light"
+                        variant="default"
                         radius="xl"
-                        color="indigo.7"
+                        //color="teal.7"
                         size="lg"
                     >
                         {nombres}
                     </Avatar>
                     <div>
-                        <TextSection tt="" fw={500} size="sm">
-                            {usuario?.nombres_completos || "Sin datos"} <br />
+                        <TextSection tt="" fz={15} fw={500}>
+                            {typeof usuario?.nombres_completos === "string"
+                                ? capitalizarCadaPalabra(
+                                      usuario.nombres_completos
+                                  )
+                                : "Sin datos"}{" "}
+                            <br />
                         </TextSection>
-                        <TextSection tt="" fs="italic" fw={300} size="sm">
+                        <TextSection tt="" fz={15} fs="italic" fw={300}>
                             {usuario?.role || "Sin datos"}
                         </TextSection>
                     </div>

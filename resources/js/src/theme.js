@@ -8,7 +8,7 @@ export const themeOrverride = createTheme({
   //fontFamilyMonospace: 'Monaco, Courier, monospace',
   fontFamily: 'Poppins, Greycliff CF, sans-serif',
   headings: { fontFamily: 'Poppins, Greycliff CF, sans-serif' },
-  primaryColor: 'indigo',
+  primaryColor: 'dark',
   components: {
     Container: Container.extend({
       classNames: (_, { size }) => ({

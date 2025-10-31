@@ -1,76 +1,30 @@
-import { useEffect, useMemo } from "react";
-import { IconChevronDown } from "@tabler/icons-react";
+import { useEffect } from "react";
+import { Box, Burger, Group, useMantineTheme } from "@mantine/core";
 import {
-    Box,
-    Burger,
-    Center,
-    Collapse,
-    Divider,
-    Drawer,
-    Group,
-    HoverCard,
-    ScrollArea,
-    SimpleGrid,
-    Text,
-    ThemeIcon,
-    UnstyledButton,
-    useMantineTheme,
-} from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { Link, NavLink } from "react-router-dom";
-import {
-    BtnDarkMode,
     BtnSendWhatsapp,
     Logo,
     UserBtnHeader,
     WhatsAppModalResultados,
 } from "../../components";
 import {
-    HEADER_MENU,
-    navResultados,
-    PREFIX_ROUTES,
-} from "../../routes/router/routes";
-import {
     useResultadoStore,
     useUiHeaderMenu,
     useUiResultado,
 } from "../../hooks";
+import { Roles } from "../../helpers/dictionary";
+import { GestionMenu } from "../menu/GestionMenu";
+import { NavResultados } from "../menu/data/menuRoutes";
+import { DrawerMenuMobile } from "../menu/DrawerMenuMobile";
 import classes from "../../assets/styles/modules/layout/HeaderMenu.module.css";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { LinkMenu } from "../menu/LinkMenu";
 
 const HeaderMenu = ({ usuario }) => {
     const { isOpenDrawerMobile, modalActionDrawerMobile } = useUiHeaderMenu();
-    const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
     const theme = useMantineTheme();
+    const navigate = useNavigate();
 
-    const links = navResultados.map((item) => (
-        <UnstyledButton
-            className={item.disabled ? classes.subLinkDisa : classes.subLink}
-            key={item.title}
-            onClick={() => modalActionDrawerMobile(false)}
-        >
-            <Group wrap="nowrap" align="flex-start">
-                <ThemeIcon size={30} variant="default" radius="md">
-                    <item.icon
-                        size={22}
-                        color={
-                            item.disabled
-                                ? theme.colors.gray[5]
-                                : theme.colors.indigo[6]
-                        }
-                    />
-                </ThemeIcon>
-                <Link
-                    to={item.to}
-                    className={item.disabled ? classes.linkR : classes.linkA}
-                >
-                    <Text size="sm" fw={500}>
-                        {item.title}
-                    </Text>
-                </Link>
-            </Group>
-        </UnstyledButton>
-    ));
     const { isSendingWhats, message, errores } = useResultadoStore();
     const { modalActionWhatsApp } = useUiResultado();
 
@@ -122,175 +76,82 @@ const HeaderMenu = ({ usuario }) => {
         <Box pb={30}>
             <header className={classes.header}>
                 <Group justify="space-between" h="100%">
-                    <Logo height={70} width={45} mx={10} />
-                    {usuario.role === "ADMIN" ||
-                    usuario.role === "RESPONSABLE" ? (
-                        <Group h="100%" gap={0} visibleFrom="sm">
-                            <NavLink
-                                to={`${PREFIX_ROUTES.DIGITADOR}/${HEADER_MENU.DIGITACION}`}
-                                className={classes.link}
-                            >
-                                Digitación
-                            </NavLink>
-                            <HoverCard
-                                position="bottom"
-                                radius="md"
-                                shadow="md"
-                                withinPortal
-                            >
-                                <HoverCard.Target>
-                                    <a href="#" className={classes.link}>
-                                        <Center inline>
-                                            <Box component="span" mr={5}>
-                                                Resultados
-                                            </Box>
-                                            <IconChevronDown
-                                                size={16}
-                                                color={theme.colors.indigo[6]}
-                                            />
-                                        </Center>
-                                    </a>
-                                </HoverCard.Target>
+                    <Group h="100%">
+                        <Logo height={50} width={200} />
+                        <Group h="100%" gap={0} visibleFrom="lg">
+                            {usuario.role === Roles.DIGITADOR ||
+                            usuario.role === Roles.RESPONSABLE ||
+                            usuario.role === Roles.ADMINISTRADOR ? (
+                                <LinkMenu
+                                    title="Digitación Acta"
+                                    handleNavigation={"/general/digitacion-acta"}
+                                    classes={classes}
+                                    toggleDrawer={modalActionDrawerMobile}
+                                />
+                            ) : null}
 
-                                <HoverCard.Dropdown
-                                    style={{ overflow: "hidden" }}
-                                >
-                                    <SimpleGrid cols={1} spacing={0}>
-                                        {links}
-                                    </SimpleGrid>
-                                </HoverCard.Dropdown>
-                            </HoverCard>
-                            <NavLink
-                                to={`${PREFIX_ROUTES.ADMIN}/${HEADER_MENU.ESCRUTINIO}`}
-                                className={classes.link}
-                            >
-                                Escrutinio
-                            </NavLink>
-                            <NavLink
-                                to={`${PREFIX_ROUTES.ADMIN}/${HEADER_MENU.TENDENCIA}`}
-                                className={classes.link}
-                            >
-                                Tendencia
-                            </NavLink>
-                            <NavLink
-                                to={`${PREFIX_ROUTES.ADMIN}/${HEADER_MENU.ACTAS}`}
-                                className={classes.link}
-                            >
-                                Actas
-                            </NavLink>
-                        </Group>
-                    ) : (
-                        <Group h="100%" gap={0} visibleFrom="sm">
-                            <NavLink
-                                to={`${PREFIX_ROUTES.DIGITADOR}/${HEADER_MENU.DIGITACION}`}
-                                className={classes.link}
-                            >
-                                Digitación
-                            </NavLink>
-                        </Group>
-                    )}
+                            {usuario.role === Roles.ADMINISTRADOR ? (
+                                <GestionMenu
+                                    title="Resultados"
+                                    menuData={NavResultados}
+                                    usuario={usuario}
+                                    classes={classes}
+                                    theme={theme}
+                                />
+                            ) : null}
 
-                    <Group visibleFrom="sm">
-                        {usuario.role === "ADMIN" ||
-                        usuario.role === "RESPONSABLE" ? (
+                            {usuario.role === Roles.ADMINISTRADOR ? (
+                                <LinkMenu
+                                    title="Escrutinio Acta"
+                                    handleNavigation={"/admin/escrutinio"}
+                                    classes={classes}
+                                    toggleDrawer={modalActionDrawerMobile}
+                                />
+                            ) : null}
+
+                            {usuario.role === Roles.ADMINISTRADOR ? (
+                                <LinkMenu
+                                    title="Tendencia Mesas"
+                                    handleNavigation={"/admin/tendencia"}
+                                    classes={classes}
+                                    toggleDrawer={modalActionDrawerMobile}
+                                />
+                            ) : null}
+
+                            {usuario.role === Roles.ADMINISTRADOR ? (
+                                <LinkMenu
+                                    title="Revisar Actas"
+                                    handleNavigation={"/admin/actas"}
+                                    classes={classes}
+                                    toggleDrawer={modalActionDrawerMobile}
+                                />
+                            ) : null}
+                        </Group>
+                    </Group>
+
+                    <Group visibleFrom="lg">
+                        {usuario.role === Roles.ADMINISTRADOR ||
+                        usuario.role === Roles.RESPONSABLE ? (
                             <BtnSendWhatsapp handleAction={handleOpenModal} />
                         ) : null}
 
-                        <BtnDarkMode classes={classes} />
                         <UserBtnHeader classes={classes} />
                     </Group>
 
                     <Burger
                         opened={isOpenDrawerMobile}
                         onClick={() => modalActionDrawerMobile(true)}
-                        hiddenFrom="sm"
+                        hiddenFrom="lg"
                     />
                 </Group>
             </header>
 
-            <Drawer
-                opened={isOpenDrawerMobile}
-                onClose={() => modalActionDrawerMobile(false)}
-                size="100%"
-                padding="md"
-                title="Menú"
-                hiddenFrom="sm"
-                zIndex={1000000}
-            >
-                {usuario.role === "ADMIN" || usuario.role === "RESPONSABLE" ? (
-                    <ScrollArea h="calc(100vh - 80px" mx="-md">
-                        <Divider my="sm" />
-                        <NavLink
-                            to={`${PREFIX_ROUTES.DIGITADOR}/${HEADER_MENU.DIGITACION}`}
-                            className={classes.link}
-                            onClick={() => modalActionDrawerMobile(false)}
-                        >
-                            Digitación
-                        </NavLink>
-                        <UnstyledButton
-                            className={classes.link}
-                            onClick={toggleLinks}
-                        >
-                            <Center inline>
-                                <Box component="span" mr={5}>
-                                    Resultados
-                                </Box>
-                                <IconChevronDown
-                                    size={16}
-                                    color={theme.colors.indigo[6]}
-                                />
-                            </Center>
-                        </UnstyledButton>
-                        <Collapse in={linksOpened}>{links}</Collapse>
-                        <NavLink
-                            to={`${PREFIX_ROUTES.ADMIN}/${HEADER_MENU.ESCRUTINIO}`}
-                            className={classes.link}
-                            onClick={() => modalActionDrawerMobile(false)}
-                        >
-                            Escrutinio
-                        </NavLink>
-                        <NavLink
-                            to={`${PREFIX_ROUTES.ADMIN}/${HEADER_MENU.TENDENCIA}`}
-                            className={classes.link}
-                            onClick={() => modalActionDrawerMobile(false)}
-                        >
-                            Tendencia
-                        </NavLink>
-                        <NavLink
-                            to={`${PREFIX_ROUTES.ADMIN}/${HEADER_MENU.ACTAS}`}
-                            className={classes.link}
-                            onClick={() => modalActionDrawerMobile(false)}
-                        >
-                            Actas
-                        </NavLink>
+            <DrawerMenuMobile
+                usuario={usuario}
+                classes={classes}
+                theme={theme}
+            />
 
-                        <Divider my="sm" />
-
-                        <Group justify="center" grow pb="xl" px="md">
-                            {usuario.role === "ADMIN" ? (
-                                <BtnSendWhatsapp
-                                    handleAction={handleOpenModal}
-                                />
-                            ) : null}
-                            <BtnDarkMode classes={classes} />
-                            <UserBtnHeader
-                                classes={classes}
-                                toggleMobile={modalActionDrawerMobile}
-                            />
-                        </Group>
-                    </ScrollArea>
-                ) : (
-                    <Group h="100%" gap={0} visibleFrom="sm">
-                        <NavLink
-                            to={`${PREFIX_ROUTES.DIGITADOR}/${HEADER_MENU.DIGITACION}`}
-                            className={classes.link}
-                            onClick={() => modalActionDrawerMobile(false)}
-                        >
-                            Digitación
-                        </NavLink>
-                    </Group>
-                )}
-            </Drawer>
             <WhatsAppModalResultados />
         </Box>
     );

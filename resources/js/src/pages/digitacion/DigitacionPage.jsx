@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Container } from "@mantine/core";
+import { Container, Divider } from "@mantine/core";
 import { SeleccionForm, TitlePage } from "../../components";
 import { useActaStore, useTitleHook } from "../../hooks";
 import ActaPage from "./ActaPage";
@@ -42,6 +42,7 @@ const DigitacionPage = () => {
     return (
         <Container size="xxl">
             <TitlePage order={2}>Acta de Escrutinio</TitlePage>
+            <Divider mb={20} />
             <SeleccionForm />
             {pageLoad ? <ActaPage /> : null}
         </Container>

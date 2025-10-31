@@ -1,0 +1,130 @@
+.card {
+    /* Fondo sutil y separación */
+    background: var(--mantine-color-bg, #fff);
+    border: none;
+    box-shadow: 0 6px 18px rgba(20, 20, 43, 0.06);
+}
+
+/* Header */
+.header {
+    border-bottom: 1px solid rgba(99, 102, 241, 0.06);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Contenido principal */
+.content {
+    padding-top: 16px;
+}
+
+/* Cada fila de candidato */
+.item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 12px;
+    border-radius: 12px;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.02),
+        rgba(0, 0, 0, 0.01)
+    );
+    border: 1px solid rgba(99, 102, 241, 0.04);
+}
+
+/* Pequeña barra de acento a la izquierda usando pseudo-elemento */
+.item::before {
+    content: "";
+    display: block;
+    width: 6px;
+    height: 100%;
+    border-radius: 6px;
+    background: linear-gradient(180deg, #6b46ff, #4f46e5);
+    margin-right: 12px;
+}
+
+/* Hover elevación */
+.item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(44, 41, 60, 0.09);
+}
+
+/* Izquierda: avatar + info textual */
+.itemLeft {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+}
+
+/* Forzar tamaño del avatar */
+.avatarWrap {
+    flex: 0 0 auto;
+}
+
+/* Información textual que se expande */
+.info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Organización en texto (más tenue) */
+.org {
+    margin-top: 2px;
+}
+
+/* Controles de input (lado derecho) */
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 160px;
+    flex: 0 0 160px;
+}
+
+/* Asegurar que el NumberInput llene su contenedor */
+.numberInput {
+    width: 100%;
+}
+
+/* Estado vacío */
+.emptyState {
+    border-radius: 10px;
+    background: linear-gradient(
+        180deg,
+        rgba(99, 102, 241, 0.03),
+        rgba(99, 102, 241, 0.01)
+    );
+    border: 1px dashed rgba(99, 102, 241, 0.08);
+}
+
+/* Responsive: en pantallas pequeñas, apilar elementos */
+@media (max-width: 720px) {
+    .item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .item::before {
+        width: 100%;
+        height: 6px;
+        margin: 0 0 10px 0;
+        border-radius: 6px;
+    }
+
+    .controls {
+        width: 100%;
+        flex: 1 1 auto;
+        margin-top: 8px;
+    }
+
+    .avatarWrap {
+        flex: 0 0 auto;
+    }
+}

@@ -46,12 +46,12 @@ export const PREFIX_ROUTES = {
 
 export const HEADER_MENU = {
     DIGITACION: "digitacion-acta",
-    RESULTADO_BINOMIOS: "binomios/resultados",
-    RESULTADO_WEBSTER: "webster/resultados",
+    RESULTADO_BINOMIOS: "binomios-resultados",
+    RESULTADO_WEBSTER: "webster-resultados",
     ESCRUTINIO: "escrutinio",
     TENDENCIA: "tendencia",
     ACTAS: "actas",
-    GUESSES_RESULTADOS: "guesses/resultados",
+    GUESSES_RESULTADOS: "guesses-resultados",
 }
 
 export const authRoutes = {
@@ -122,58 +122,6 @@ export const errorRoutes = [
     },
 ];
 
-
-
-export const navResultados = [
-    {
-        icon: IconBuildingBank,
-        title: "Resultados Binomios",
-        disabled: false,
-        to: "/admin/binomios/resultados",
-        target: "_blank",
-        //description: "This Pokémon’s cry is very loud and distracting",
-    },
-    /* {
-        icon: IconUsersGroup,
-        title: "Resultados Webster",
-        disabled: false,
-        to: "/admin/webster/resultados",
-        target: "_blank",
-        //description: "The fluid of Smeargle’s tail secretions changes",
-    }, */
-    /* {
-        icon: IconBuildingSkyscraper,
-        title: "Resultados Prefecturas",
-        disabled: true,
-        to: "",
-        target: "_blank",
-        //description: "Yanma is capable of seeing 360 degrees without",
-    }, */
-    /* {
-        icon: IconBuilding,
-        title: "Resultados Alcaldías",
-        disabled: true,
-        to: "",
-        target: "_blank",
-        //description: "The shell’s rounded shape and the grooves on its.",
-    }, */
-    /* {
-        icon: IconListNumbers,
-        title: "Resultados Concejales",
-        disabled: true,
-        to: "",
-        target: "_blank",
-        //description: "This Pokémon uses its flying ability to quickly chase",
-    }, */
-   /*  {
-        icon: IconListDetails,
-        title: "Resultados Juntas",
-        disabled: true,
-        to: "",
-        target: "_blank",
-        //description: "This Pokémon uses its flying ability to quickly chase",
-    }, */
-];
 
 export const menuRoutes = [
     /* Menu Header */

@@ -35,14 +35,14 @@
 }
 
 .cardUserInfo {
-    background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
+    background-color: var(--mantine-color-indigo-filled);
     padding: 20px;
     border-radius: 8px;
     color: #fff;
 }
 
 .cardTotales {
-    background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
+    background-color: var(--mantine-color-indigo-filled);
     padding: 20px;
     border-radius: 8px;
     color: #fff;
