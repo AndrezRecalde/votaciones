@@ -26,8 +26,9 @@ class ActaController extends Controller
     function existeJuntaDignidad(Request $request): JsonResponse
     {
         $acta = Acta::from('actas as a')
-            ->selectRaw('a.*, u.nombres_completos as creador, us.nombres_completos as actualizador')
+            ->selectRaw('a.*, u.nombres_completos as creador, us.nombres_completos as actualizador, d.nombre_dignidad as dignidad')
             ->join('users as u', 'u.id', 'a.user_add')
+            ->join('dignidades as d', 'd.id', 'a.dignidad_id')
             ->leftJoin('users as us', 'us.id', 'a.user_update')
             ->where('a.junta_id', $request->junta_id)
             ->where('a.dignidad_id', $request->dignidad_id)

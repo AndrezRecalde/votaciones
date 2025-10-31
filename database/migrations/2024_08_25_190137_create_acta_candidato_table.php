@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('acta_id');
             $table->unsignedBigInteger('candidato_id');
-            $table->unsignedInteger('num_votos')->default('0');
+            $table->unsignedInteger('num_votos')->default(0);
             $table->timestamps();
 
             $table->foreign('acta_id')->references('id')->on('actas')->onDelete('cascade');
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('acta__candidato');
+        Schema::dropIfExists('acta_candidato');
     }
 };
