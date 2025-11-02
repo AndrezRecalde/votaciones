@@ -3,7 +3,8 @@
     display: flex;
     flex-direction: column;
     background-size: cover;
-    background-image: url(https://prefecturadeesmeraldas.gob.ec/wp-content/uploads/2024/10/25101-scaled.jpg);
+    //background-image: url(https://prefecturadeesmeraldas.gob.ec/wp-content/uploads/2024/10/25101-scaled.jpg);
+    background-image: url(https://prefecturadeesmeraldas.gob.ec/wp-content/uploads/2025/11/freepik__talk__21766.png);
 }
 
 .wrapper_paper {

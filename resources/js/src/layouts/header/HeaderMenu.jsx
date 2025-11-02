@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Box, Burger, Group, useMantineTheme } from "@mantine/core";
+import { Box, Burger, Group } from "@mantine/core";
 import {
     BtnSendWhatsapp,
     Logo,
@@ -8,23 +8,22 @@ import {
 } from "../../components";
 import {
     useResultadoStore,
-    useUiHeaderMenu,
     useUiResultado,
 } from "../../hooks";
 import { Roles } from "../../helpers/dictionary";
 import { GestionMenu } from "../menu/GestionMenu";
 import { NavResultados } from "../menu/data/menuRoutes";
 import { DrawerMenuMobile } from "../menu/DrawerMenuMobile";
+import { LinkMenu } from "../menu/LinkMenu";
 import classes from "../../assets/styles/modules/layout/HeaderMenu.module.css";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
-import { LinkMenu } from "../menu/LinkMenu";
 
-const HeaderMenu = ({ usuario }) => {
-    const { isOpenDrawerMobile, modalActionDrawerMobile } = useUiHeaderMenu();
-    const theme = useMantineTheme();
-    const navigate = useNavigate();
-
+const HeaderMenu = ({
+    usuario,
+    isOpenDrawerMobile,
+    modalActionDrawerMobile,
+    theme,
+}) => {
     const { isSendingWhats, message, errores } = useResultadoStore();
     const { modalActionWhatsApp } = useUiResultado();
 
@@ -84,7 +83,9 @@ const HeaderMenu = ({ usuario }) => {
                             usuario.role === Roles.ADMINISTRADOR ? (
                                 <LinkMenu
                                     title="Digitación Acta"
-                                    handleNavigation={"/general/digitacion-acta"}
+                                    handleNavigation={
+                                        "/general/digitacion-acta"
+                                    }
                                     classes={classes}
                                     toggleDrawer={modalActionDrawerMobile}
                                 />
@@ -130,8 +131,7 @@ const HeaderMenu = ({ usuario }) => {
                     </Group>
 
                     <Group visibleFrom="lg">
-                        {usuario.role === Roles.ADMINISTRADOR ||
-                        usuario.role === Roles.RESPONSABLE ? (
+                        {usuario.role === Roles.ADMINISTRADOR ? (
                             <BtnSendWhatsapp handleAction={handleOpenModal} />
                         ) : null}
 

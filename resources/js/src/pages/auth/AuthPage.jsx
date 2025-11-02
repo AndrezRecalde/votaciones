@@ -20,7 +20,10 @@ const AuthPage = () => {
                 radius="md"
                 className={classes.wrapper_paper}
             >
-                <TextSection tt="" color="black" fz={20} fw={500} mb={20}>
+                <TextSection tt="" ta="center" fs="italic" color="black" fz={14} fw={500} mb={10}>
+                    Referemdum / Consulta Popular 2025
+                </TextSection>
+                <TextSection tt="" color="black" fz={20} fw={600} mb={20}>
                     Iniciar sesión
                 </TextSection>
                 <AuthForm />

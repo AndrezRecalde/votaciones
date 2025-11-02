@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { AppShell } from "@mantine/core";
+import { AppShell, useMantineTheme } from "@mantine/core";
+import { useUiHeaderMenu } from "../../hooks";
 import HeaderMenu from "../header/HeaderMenu";
 import classes from "../../assets/styles/modules/layout/AppBody.module.css";
 
@@ -7,14 +8,13 @@ const AppHeaderMenu = ({ children }) => {
     const usuario = useMemo(() => {
         return JSON.parse(localStorage.getItem("service_user")) || {};
     }, []);
+    const { isOpenDrawerMobile, modalActionDrawerMobile } = useUiHeaderMenu();
+    const theme = useMantineTheme();
+
     return (
         <AppShell
-            header={{ height: { base: 48, sm: 60, lg: 60 } }}
-            /* navbar={{
-                width: 200,
-                breakpoint: "sm",
-                collapsed: { mobile: !opened },
-            }} */
+            header={{ height: { base: 48, sm: 65, lg: 65 } }}
+            /* navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !opened } }} */
             /* aside={{
                 width: 300,
                 breakpoint: "md",
@@ -23,7 +23,12 @@ const AppHeaderMenu = ({ children }) => {
             padding={30}
         >
             <AppShell.Header>
-                <HeaderMenu usuario={usuario} />
+                <HeaderMenu
+                    usuario={usuario}
+                    isOpenDrawerMobile={isOpenDrawerMobile}
+                    modalActionDrawerMobile={modalActionDrawerMobile}
+                    theme={theme}
+                />
             </AppShell.Header>
             {/* <AppShell.Navbar p="md">
                 Navbar
