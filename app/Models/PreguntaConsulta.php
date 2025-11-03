@@ -23,11 +23,14 @@ class PreguntaConsulta extends Model
         'activo' => 'boolean',
     ];
 
-    // Relaciones
+    // Relación con actas de consulta
     public function actasConsulta()
     {
-        return $this->hasMany(ActaConsulta::class, 'pregunta_id');
+        return $this->belongsToMany(ActaConsulta::class, 'acta_consulta_preguntas', 'pregunta_id', 'acta_consulta_id')
+            ->withPivot('votos_si', 'votos_no')
+            ->withTimestamps();
     }
+
 
     // Scopes útiles
     public function scopeActivas($query)
@@ -35,8 +38,9 @@ class PreguntaConsulta extends Model
         return $query->where('activo', true);
     }
 
-    public function scopeOrdenadas($query)
+    // Scope para ordenar por número de pregunta
+    public function scopeOrdenadoPorNumero($query)
     {
-        return $query->orderBy('numero_pregunta');
+        return $query->orderBy('numero_pregunta', 'asc');
     }
 }

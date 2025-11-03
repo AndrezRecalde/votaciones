@@ -115,6 +115,11 @@ import { TendenciaChart } from "./tendencia/TendenciaChart";
 import { MapResultadosDrawer } from "./map/drawer/MapResultadosDrawer";
 import { MapBusquedaForm } from "./map/form/MapBusquedaForm";
 
+
+/* Elecciones - Consulta Popular */
+/* Digitacion Consulta popular */
+import { DigitacionFilter } from "./consulta-popular/digitacion/filter/DigitacionFilter";
+
 export {
     /* Logo */
     Logo,
@@ -226,5 +231,9 @@ export {
 
     /* Mapa de Resultados */
     MapResultadosDrawer,
-    MapBusquedaForm
+    MapBusquedaForm,
+
+    /* Elecciones - Consulta Popular */
+    /* Digitacion Consulta popular */
+    DigitacionFilter,
 }

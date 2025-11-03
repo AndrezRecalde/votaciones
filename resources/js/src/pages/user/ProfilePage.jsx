@@ -13,7 +13,7 @@ import {
 import { useEscrutinioStore, useTitleHook, useUsuarioStore } from "../../hooks";
 
 const ProfilePage = () => {
-        useTitleHook("Elecciones | Perfil");
+        useTitleHook("Elecciones - Perfil");
     const usuario = useMemo(() => {
         return JSON.parse(localStorage.getItem("service_user")) || {};
     }, []);

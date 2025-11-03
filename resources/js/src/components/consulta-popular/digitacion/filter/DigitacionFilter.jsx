@@ -1,21 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
-import { Box, Grid, Select, Paper } from "@mantine/core";
-import { BtnSubmit } from "../../components";
+import { useEffect, useState } from "react";
+import { Box, Grid, Paper, Select } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
-import {
-    useActaStore,
-    useDignidadStore,
-    useJurisdiccionStore,
-    useStorageStore,
-} from "../../hooks";
-import { convertToString, isValid } from "../../helpers/fnHelpers";
+import { BtnSubmit } from "../../../../components";
+import { useJurisdiccionStore, useStorageStore } from "../../../../hooks";
+import { convertToString, isValid } from "../../../../helpers/fnHelpers";
+import classes from "../../../../assets/styles/modules/digitacion/LabelsDigitacion.module.css";
 import { IconSearch } from "@tabler/icons-react";
-import classes from "../../assets/styles/modules/digitacion/LabelsDigitacion.module.css";
 
-export const SeleccionForm = () => {
-    const usuario = useMemo(() => {
-        return JSON.parse(localStorage.getItem("service_user")) || {};
-    }, []);
+export const DigitacionFilter = ({ usuario }) => {
+    const INITIAL_PROVINCIA_ID = usuario?.provincia_id;
+    const INITIAL_CANTON_ID = usuario?.canton_id || null;
 
     const {
         provincias,
@@ -23,31 +17,19 @@ export const SeleccionForm = () => {
         parroquias,
         zonas,
         juntas,
-        startLoadProvincias,
         startLoadCantones,
         startLoadParroquias,
         startLoadZonas,
         startLoadJuntas,
     } = useJurisdiccionStore();
-
-    const {
-        isLoading,
-        disabledSearch,
-        startLoadInfoJunta,
-        startLoadActa,
-        startActivateSearch,
-    } = useActaStore();
-
-    const { dignidades, startLoadDignidades } = useDignidadStore();
     const { setStorageFields } = useStorageStore();
     const [disabled, setDisabled] = useState(false);
 
-    const INITIAL_PROVINCIA_ID = usuario?.provincia_id;
-    const INITIAL_CANTON_ID = usuario?.canton_id || null;
+    const isLoading = false;
+    const disabledSearch = false;
 
     const searchForm = useForm({
         initialValues: {
-            dignidad_id: "1",
             provincia_id: convertToString(INITIAL_PROVINCIA_ID),
             canton_id: convertToString(INITIAL_CANTON_ID),
             parroquia_id: null,
@@ -55,7 +37,6 @@ export const SeleccionForm = () => {
             junta_id: null,
         },
         validate: {
-            dignidad_id: isNotEmpty("Por favor ingrese una dignidad"),
             provincia_id: isNotEmpty("Por favor ingrese la provincia del acta"),
             canton_id: isNotEmpty("Por favor ingrese el cantón del acta"),
             parroquia_id: isNotEmpty("Por favor ingresa la parroquia del acta"),
@@ -63,7 +44,6 @@ export const SeleccionForm = () => {
             junta_id: isNotEmpty("Por favor ingrese la junta del acta"),
         },
         transformValues: (values) => ({
-            dignidad_id: Number(values.dignidad_id) || null,
             provincia_id: Number(values.provincia_id) || null,
             canton_id: Number(values.canton_id) || null,
             parroquia_id: Number(values.parroquia_id) || null,
@@ -92,7 +72,8 @@ export const SeleccionForm = () => {
     }, [canton_id]);
 
     useEffect(() => {
-        if (parroquia_id && canton_id) searchForm.setFieldValue("zona_id", null);
+        if (parroquia_id && canton_id)
+            searchForm.setFieldValue("zona_id", null);
         startLoadZonas({ parroquia_id });
     }, [canton_id, parroquia_id]);
 
@@ -102,10 +83,6 @@ export const SeleccionForm = () => {
     }, [canton_id, zona_id]);
 
     useEffect(() => {
-        startLoadProvincias({
-            provincia_id: usuario.provincia_id,
-            activo: true,
-        });
         searchForm.setFieldValue(
             "provincia_id",
             convertToString(usuario.provincia_id)
@@ -118,33 +95,22 @@ export const SeleccionForm = () => {
             );
             setDisabled(true);
         }
-
-        startLoadDignidades({ activo: true });
     }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(searchForm.getTransformedValues());
         setStorageFields(searchForm.getTransformedValues());
-        startLoadInfoJunta(junta_id);
-        startLoadActa(dignidad_id, junta_id);
-        startActivateSearch(true);
     };
 
     return (
-        <Paper
-            shadow="xs"
-            p="md"
-            radius="md"
-            withBorder
-            mb={20}
-        >
+        <Paper shadow="xs" p="md" radius="md" withBorder mb={20}>
             <Box
                 component="form"
                 onSubmit={searchForm.onSubmit((_, e) => handleSubmit(e))}
             >
-
                 <Grid gutter="xs">
-                    <Grid.Col span={{ base: 12, xs: 6, sm: 4, md: 2 }}>
+                    <Grid.Col span={{ base: 12, xs: 6, sm: 4, md: 2.4 }}>
                         <Select
                             radius="sm"
                             size="sm"
@@ -157,7 +123,7 @@ export const SeleccionForm = () => {
                             {...searchForm.getInputProps("provincia_id")}
                             styles={{
                                 label: { fontSize: "0.8rem", fontWeight: 500 },
-                                input: { fontSize: "0.85rem" }
+                                input: { fontSize: "0.85rem" },
                             }}
                             data={provincias.map((provincia) => ({
                                 value: provincia.id.toString(),
@@ -166,30 +132,7 @@ export const SeleccionForm = () => {
                         />
                     </Grid.Col>
 
-                    <Grid.Col span={{ base: 12, xs: 6, sm: 4, md: 2 }}>
-                        <Select
-                            radius="sm"
-                            size="sm"
-                            label="Dignidad"
-                            placeholder="Dignidad"
-                            withAsterisk
-                            searchable
-                            classNames={classes}
-                            {...searchForm.getInputProps("dignidad_id")}
-                            nothingFoundMessage="Sin opciones"
-                            disabled={disabledSearch}
-                            styles={{
-                                label: { fontSize: "0.8rem", fontWeight: 500 },
-                                input: { fontSize: "0.85rem" }
-                            }}
-                            data={dignidades.map((dignidad) => ({
-                                value: dignidad.id.toString(),
-                                label: dignidad.nombre_dignidad,
-                            }))}
-                        />
-                    </Grid.Col>
-
-                    <Grid.Col span={{ base: 12, xs: 6, sm: 4, md: 2 }}>
+                    <Grid.Col span={{ base: 12, xs: 6, sm: 4, md: 2.4 }}>
                         <Select
                             radius="sm"
                             size="sm"
@@ -203,7 +146,7 @@ export const SeleccionForm = () => {
                             {...searchForm.getInputProps("canton_id")}
                             styles={{
                                 label: { fontSize: "0.8rem", fontWeight: 500 },
-                                input: { fontSize: "0.85rem" }
+                                input: { fontSize: "0.85rem" },
                             }}
                             data={cantones.map((canton) => ({
                                 value: canton.id.toString(),
@@ -212,7 +155,7 @@ export const SeleccionForm = () => {
                         />
                     </Grid.Col>
 
-                    <Grid.Col span={{ base: 12, xs: 6, sm: 4, md: 2 }}>
+                    <Grid.Col span={{ base: 12, xs: 6, sm: 4, md: 2.4 }}>
                         <Select
                             radius="sm"
                             size="sm"
@@ -226,7 +169,7 @@ export const SeleccionForm = () => {
                             {...searchForm.getInputProps("parroquia_id")}
                             styles={{
                                 label: { fontSize: "0.8rem", fontWeight: 500 },
-                                input: { fontSize: "0.85rem" }
+                                input: { fontSize: "0.85rem" },
                             }}
                             data={parroquias.map((parroquia) => ({
                                 value: parroquia.id.toString(),
@@ -235,7 +178,7 @@ export const SeleccionForm = () => {
                         />
                     </Grid.Col>
 
-                    <Grid.Col span={{ base: 12, xs: 6, sm: 4, md: 2 }}>
+                    <Grid.Col span={{ base: 12, xs: 6, sm: 4, md: 2.4 }}>
                         <Select
                             radius="sm"
                             size="sm"
@@ -249,7 +192,7 @@ export const SeleccionForm = () => {
                             {...searchForm.getInputProps("zona_id")}
                             styles={{
                                 label: { fontSize: "0.8rem", fontWeight: 500 },
-                                input: { fontSize: "0.85rem" }
+                                input: { fontSize: "0.85rem" },
                             }}
                             data={zonas.map((zona) => ({
                                 value: zona.id.toString(),
@@ -258,7 +201,7 @@ export const SeleccionForm = () => {
                         />
                     </Grid.Col>
 
-                    <Grid.Col span={{ base: 12, xs: 6, sm: 4, md: 2 }}>
+                    <Grid.Col span={{ base: 12, xs: 6, sm: 4, md: 2.4 }}>
                         <Select
                             radius="sm"
                             size="sm"
@@ -272,7 +215,7 @@ export const SeleccionForm = () => {
                             {...searchForm.getInputProps("junta_id")}
                             styles={{
                                 label: { fontSize: "0.8rem", fontWeight: 500 },
-                                input: { fontSize: "0.85rem" }
+                                input: { fontSize: "0.85rem" },
                             }}
                             data={juntas.map((junta) => ({
                                 value: junta.id.toString(),

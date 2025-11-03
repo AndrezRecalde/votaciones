@@ -20,15 +20,10 @@ return new class extends Migration
             $table->unsignedBigInteger('zona_id');
             $table->unsignedBigInteger('junta_id');
 
-            // Relación con pregunta
-            $table->unsignedBigInteger('pregunta_id');
-
             // Código CNE
             $table->string('cod_cne')->nullable()->comment('Código del CNE para identificación');
 
             // Votos
-            $table->unsignedBigInteger('votos_si')->default(0)->comment('Votos a favor (SÍ)');
-            $table->unsignedBigInteger('votos_no')->default(0)->comment('Votos en contra (NO)');
             $table->unsignedBigInteger('votos_validos')->default(0)->comment('Total de votos válidos (SI + NO)');
             $table->unsignedBigInteger('votos_blancos')->default(0)->comment('Votos en blanco');
             $table->unsignedBigInteger('votos_nulos')->default(0)->comment('Votos nulos');
@@ -50,11 +45,10 @@ return new class extends Migration
             $table->index('parroquia_id');
             $table->index('zona_id');
             $table->index('junta_id');
-            $table->index('pregunta_id');
             $table->index('estado');
 
             // Restricción única: una junta no puede tener dos actas para la misma pregunta
-            $table->unique(['junta_id', 'pregunta_id'], 'unique_junta_pregunta');
+            $table->unique(['junta_id'], 'unique_junta_pregunta');
 
             // Claves foráneas con cascade
             $table->foreign('provincia_id')
@@ -80,11 +74,6 @@ return new class extends Migration
             $table->foreign('junta_id')
                 ->references('id')
                 ->on('juntas')
-                ->onDelete('cascade');
-
-            $table->foreign('pregunta_id')
-                ->references('id')
-                ->on('preguntas_consulta')
                 ->onDelete('cascade');
         });
     }

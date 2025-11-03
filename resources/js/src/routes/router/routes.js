@@ -28,6 +28,9 @@ const ProfilePage = lazy(() => import(/* webpackChunkName: "ProfilePage" */ "../
 const DigitacionPage = lazy(() => import(/* webpackChunkName: "DigitacionPage" */ "../../pages/digitacion/DigitacionPage"));
 
 
+/* Consulta Popular */
+const DigitacionConsultaPage = lazy(() => import(/* webpackChunkName: "DigitacionConsultaPage" */ "../../pages/consulta-popular/digitacion/DigitacionConsultaPage"));
+
 const ErrorNotFound = lazy(() => import(/* webpackChunkName: "ErrorNotFound" */ '../../pages/error/ErrorNotFound'));
 
 
@@ -54,6 +57,14 @@ export const HEADER_MENU = {
     GUESSES_RESULTADOS: "guesses-resultados",
 }
 
+export const HEADER_MENU_CONSULTA = {
+    DIGITACION_CONSULTA: "consulta-digitacion",
+    RESULTADO_CONSULTA: "consulta-resultados",
+    ESCRUTINIO_CONSULTA: "consulta-escrutinio",
+    TENDENCIA_CONSULTA: "consulta-tendencia",
+    ACTAS_CONSULTA: "consulta-actas",
+}
+
 export const authRoutes = {
     path: "auth/login/*",
     link: "auth/login",
@@ -74,11 +85,15 @@ const adminRoutes = generateRoutes(
         { path: "candidatos", Component: CandidatosPage },
         { path: "organizaciones", Component: OrganizacionesPage },
         //{ path: HEADER_MENU.DIGITACION, Component: DigitacionPage },
+
+        // Rutas de Elecciones Binomios y Webster
         { path: HEADER_MENU.ESCRUTINIO, Component: EscrutinioPage },
         { path: HEADER_MENU.RESULTADO_BINOMIOS, Component: ResultadosBinomiosPage },
         { path: HEADER_MENU.RESULTADO_WEBSTER, Component: ResultadosWebsterPage },
         { path: HEADER_MENU.TENDENCIA, Component: TendenciaPage },
         { path: HEADER_MENU.ACTAS, Component: BusquedaActaPage },
+
+        // Rutas para Consulta Popular
 
     ],
     ["ADMIN", "RESPONSABLE"]
@@ -87,7 +102,11 @@ const adminRoutes = generateRoutes(
 const digitadorRoutes = generateRoutes(
     "general",
     [
+        // Digitacion de acta para Binomios y Webster
         { path: "digitacion-acta", Component: DigitacionPage },
+
+        // Digitacion de acta para Consulta Popular
+        { path: "digitacion-consulta", Component: DigitacionConsultaPage },
     ],
     ["ADMIN", "DIGITADOR", "RESPONSABLE"]
 );

@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\TwilioController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Consulta\ActaConsultaController;
+use App\Http\Controllers\Consulta\PreguntaConsultaController;
 use App\Http\Controllers\Guess\GuessController;
 use App\Http\Controllers\StateController;
 use App\Http\Middleware\CheckRole;
@@ -137,6 +139,23 @@ Route::group(
 
         /* WhatsApp: Enviar Mensajes */
         Route::post('/resultados/send-whatsapp', [TwilioController::class, 'sendWhatsApp']);
+
+
+        /* Consulta Popular */
+        /* Preguntas de Consulta */
+        Route::get('preguntas-consulta', [PreguntaConsultaController::class, 'getPreguntas']);      // Listado
+        Route::get('preguntas-consulta/{id}', [PreguntaConsultaController::class, 'show']);  // Mostrar
+        Route::post('pregunta-consulta', [PreguntaConsultaController::class, 'store']);     // Crear
+        Route::put('pregunta-consulta/{id}', [PreguntaConsultaController::class, 'update']); // Actualizar
+        Route::delete('pregunta-consulta/{id}', [PreguntaConsultaController::class, 'destroy']); // Desactivar
+        Route::post('pregunta-consulta/{id}/restore', [PreguntaConsultaController::class, 'restore']); // Reactivar
+
+
+        /* Resultados y Estadisticas de la Consulta Popular */
+        // Rutas adicionales
+        Route::get('actas-consulta/{id}/resumen-votos', [ActaConsultaController::class, 'resumenVotos']);
+        Route::get('actas-consulta/estadisticas/general', [ActaConsultaController::class, 'estadisticas']);
+        Route::get('actas-consulta/resultados/por-pregunta', [ActaConsultaController::class, 'resultadosPorPregunta']);
     }
 );
 
@@ -174,7 +193,21 @@ Route::group(
         Route::post('/informacion/junta', [JuntaController::class, 'getInfoJunta']);
         Route::post('/total/juntas', [JuntaController::class, 'getTotalJuntas']);
 
+
+
         /* Escrutinio de actas */
         Route::get('/escrutinio-dignidades', [EscrutinioController::class, 'getEscrutinioPorDignidad']);
+
+
+        /* Consulta Popular */
+        /* Juntas para Consulta Popular */
+        Route::get('actas-consulta/buscar/por-junta', [JuntaController::class, 'buscarPorJunta']);
+
+        /* CRUD Acta Consulta Popular */
+        Route::get('actas-consulta', [ActaConsultaController::class, 'getActasConsulta']); // Listar actas
+        Route::get('actas-consulta/{id}', [ActaConsultaController::class, 'show']); // Mostrar acta
+        Route::post('actas-consulta', [ActaConsultaController::class, 'store']); // Crear acta
+        Route::put('actas-consulta/{id}', [ActaConsultaController::class, 'update']); // Actualizar acta
+        Route::delete('actas-consulta/{id}', [ActaConsultaController::class, 'destroy']); // Eliminar acta
     }
 );
