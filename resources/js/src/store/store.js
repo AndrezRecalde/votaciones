@@ -63,6 +63,12 @@ export const store = configureStore({
 
         tendencia: tendenciaSlice.reducer,
 
+        /* Seccion de Consulta Popular */
+        pregunta: preguntaSlice.reducer,
+        uiPregunta: uiPreguntaSlice.reducer,
+
+        actaConsulta: actaConsultaSlice.reducer,
+
         storage: storageSlice.reducer,
     },
 });

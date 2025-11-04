@@ -52,6 +52,12 @@ import { useEscrutinioStore } from "./escrutinio/useEscrutinioStore";
 import { useTendenciaStore } from "./tendencia/useTendenciaStore";
 import { transformTendencias } from "./tendencia/transformTendencias";
 
+
+/* Consulta Popular */
+/* Pregunta */
+import { usePreguntaStore } from "./consulta/pregunta/usePreguntaStore";
+import { useUiPregunta } from "./consulta/pregunta/useUiPregunta";
+
 /* Storages */
 import { useStorageStore } from "./storage/useStorageStore";
 

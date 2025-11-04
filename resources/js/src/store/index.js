@@ -53,6 +53,11 @@ import { uiGuessSlice } from "./admin/guess/uiGuessSlice";
 /* Tendencia */
 import { tendenciaSlice } from "./admin/tendencia/tendenciaSlice";
 
+/* Seccion de Consulta Popular */
+import { preguntaSlice } from "./consulta/pregunta/preguntaSlice";
+import { uiPreguntaSlice } from "./consulta/pregunta/uiPreguntaSlice";
+import { actaConsultaSlice } from "./consulta/acta-consulta/actaConsultaSlice";
+
 /* Storages */
 import { storageSlice } from "./storage/storageSlice";
 
@@ -113,6 +118,11 @@ export {
 
     /* Tendencia */
     tendenciaSlice,
+
+    /* Seccion de Consulta Popular */
+    preguntaSlice,
+    uiPreguntaSlice,
+    actaConsultaSlice,
 
     /* Storage */
     storageSlice,

@@ -5,6 +5,12 @@ export const preguntaSlice = createSlice({
     initialState: {
         isLoading: false,
         preguntas: [],
+        paginacion: {
+            total: 0,
+            por_pagina: 15,
+            pagina_actual: 1,
+            ultima_pagina: 0,
+        },
         activatePregunta: null,
         message: undefined,
         errores: undefined,
@@ -16,6 +22,9 @@ export const preguntaSlice = createSlice({
         onLoadPreguntas: (state, { payload }) => {
             state.preguntas = payload;
             state.isLoading = false;
+        },
+        onLoadPaginacion: (state, { payload }) => {
+            state.paginacion = payload;
         },
         onAddPregunta: (state, { payload }) => {
             state.preguntas.push(payload);
@@ -60,6 +69,7 @@ export const preguntaSlice = createSlice({
 export const {
     onLoading,
     onLoadPreguntas,
+    onLoadPaginacion,
     onAddPregunta,
     onUpdatePregunta,
     onDeletePregunta,
