@@ -124,7 +124,7 @@ class AuthController extends Controller
             ->join('roles as r', 'r.id', 'mhr.role_id')
             ->join('provincias as p', 'p.id', 'u.provincia_id')
             ->leftJoin('cantones as c', 'c.id', 'u.canton_id')
-            ->where('u.dni', Auth::user()->id)
+            ->where('u.id', Auth::user()->id)
             ->where('u.activo', 1)
             ->first();
 

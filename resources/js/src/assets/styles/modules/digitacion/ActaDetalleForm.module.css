@@ -47,10 +47,10 @@
 }
 
 /* Hover elevación */
-.item:hover {
+/* .item:hover {
     transform: translateY(-6px);
     box-shadow: 0 10px 30px rgba(44, 41, 60, 0.09);
-}
+} */
 
 /* Izquierda: avatar + info textual */
 .itemLeft {

@@ -11,11 +11,11 @@
 }
 
 .responsiveTable tbody td {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
     text-align: center;
-    padding-top: 14px;
-    padding-bottom: 14px;
+    padding-top: 12px;
+    padding-bottom: 12px;
 }
 
 .uppercase {

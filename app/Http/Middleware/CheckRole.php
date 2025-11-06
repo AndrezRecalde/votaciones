@@ -15,10 +15,20 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        if (!$request->user()->hasRole($role)) {
-            abort(403, "Access to this resource on the server is denied");
-            //return response()->json(["message"=> "Access to this resource on the server is denied"], Response::HTTP_FORBIDDEN);
+        // Verificar que el usuario esté autenticado
+        if (!$request->user()) {
+            return response()->json([
+                "message" => "No autenticado"
+            ], Response::HTTP_UNAUTHORIZED);
         }
+
+        // Verificar que tenga el rol adecuado
+        if (!$request->user()->hasRole($role)) {
+            return response()->json([
+                "message" => "Access to this resource on the server is denied"
+            ], Response::HTTP_FORBIDDEN);
+        }
+
         return $next($request);
     }
 }

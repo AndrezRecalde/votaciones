@@ -8,7 +8,6 @@ import {
     Grid,
     Group,
     Stack,
-    Text,
     ThemeIcon,
 } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";

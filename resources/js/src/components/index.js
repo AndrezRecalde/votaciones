@@ -127,7 +127,11 @@ import { PreguntaForm } from "./consulta-popular/pregunta/form/PreguntaForm";
 import { PreguntaModal } from "./consulta-popular/pregunta/modal/PreguntaModal";
 
 /* Acta Consulta Popular */
-import { ActaConsultaSection } from "./consulta-popular/acta/section/ActaConsultaSection";
+import { ActaConsultaSection } from "./consulta-popular/acta/ActaConsultaSection";
+import { ActaConsultaVotosSection } from "./consulta-popular/acta/section/ActaConsultaVotosSection";
+import { ActaValidacionSection } from "./consulta-popular/acta/section/ActaValidacionSection";
+import { ActaResumenTotalVotos } from "./consulta-popular/acta/section/ActaResumenTotalVotos";
+import { ActaAccionesBtnSection } from "./consulta-popular/acta/section/ActaAccionesBtnSection";
 
 export {
     /* Logo */
@@ -257,4 +261,8 @@ export {
 
     /* Acta Consulta Popular */
     ActaConsultaSection,
+    ActaConsultaVotosSection,
+    ActaValidacionSection,
+    ActaResumenTotalVotos,
+    ActaAccionesBtnSection
 }

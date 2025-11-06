@@ -4,15 +4,15 @@ import { JuntaInformacionTable, TextSection } from "../../../components";
 
 export const JuntaInformacionSection = () => {
     return (
-        <Card shadow="sm" padding="md" radius="md" withBorder mb="xl">
-            <Card.Section withBorder inheritPadding py="xs" bg="dark.5">
+        <Card shadow="sm" padding="md" radius="md" withBorder mb={20}>
+            <Card.Section withBorder inheritPadding py="md" bg="dark.5">
                 <Group justify="space-between">
-                    <Group gap="xs">
+                    <Group gap="sm">
                         <ThemeIcon size="md" radius="md" variant="default">
                             <IconChecks size={16} />
                         </ThemeIcon>
                         <div>
-                            <TextSection color="white" fw={700} fz={18} tt="">
+                            <TextSection color="white" fw={500} fz={18} tt="">
                                 Detalles del Acta
                             </TextSection>
                         </div>

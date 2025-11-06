@@ -42,10 +42,10 @@ const DigitacionConsultaPage = () => {
             </TitlePage>
             <Divider mb={20} />
             <Grid>
-                <Grid.Col span={3}>
+                <Grid.Col span={{ base: 12, xs: 12, sm: 12, md: 3, lg: 3 }}>
                     <DigitacionFilter usuario={usuario} />
                 </Grid.Col>
-                <Grid.Col span={9}>
+                <Grid.Col span={{ base: 12, xs: 12, sm: 12, md: 9, lg: 9 }}>
                     {loadingActaConsulta ? <ActaConsultaSection /> : null}
                 </Grid.Col>
             </Grid>

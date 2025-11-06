@@ -50,19 +50,27 @@ export const useAuthStore = () => {
     };
 
     const checkAuthToken = async () => {
-        //const token = localStorage.getItem("auth_token");
-        if (!token) return dispatch(onLogout());
+        const token = localStorage.getItem("auth_token");
+
+        if (!token) {
+            dispatch(onLogout());
+            return;
+        }
 
         try {
             const { data } = await apiAxios.get("/refresh");
             const { usuario, access_token } = data;
+
+            // Actualizar todo en localStorage
             localStorage.setItem("service_user", JSON.stringify(usuario));
             localStorage.setItem("auth_token", access_token);
             localStorage.setItem("token_init_date", new Date().getTime());
+
+            // Actualizar Redux
             dispatch(onAuthenticate(usuario));
             dispatch(onLoadToken(access_token));
         } catch (error) {
-            //console.log(error);
+            console.error("Error al verificar token:", error);
             localStorage.clear();
             dispatch(onLogout());
         }
@@ -110,6 +118,6 @@ export const useAuthStore = () => {
         checkAuthToken,
         startProfile,
         clearProfile,
-        startLogout
+        startLogout,
     };
 };

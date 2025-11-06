@@ -1,7 +1,13 @@
-import { Box, Container, Divider } from "@mantine/core";
+import { Box, Container, SimpleGrid } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { JuntaInformacionSection } from "../../../../components";
-import { useStorageStore } from "../../../../hooks";
+import {
+    ActaAccionesBtnSection,
+    ActaConsultaVotosSection,
+    ActaResumenTotalVotos,
+    ActaValidacionSection,
+    JuntaInformacionSection,
+} from "../../../components";
+import { useStorageStore } from "../../../hooks";
 
 export const ActaConsultaSection = () => {
     const { selectedFields } = useStorageStore();
@@ -60,6 +66,12 @@ export const ActaConsultaSection = () => {
                 onSubmit={actaForm.onSubmit((_, e) => handleSubmit(e))}
             >
                 <JuntaInformacionSection />
+                <ActaConsultaVotosSection actaForm={actaForm} />
+                <SimpleGrid cols={2} mb={20}>
+                    <ActaValidacionSection actaForm={actaForm} />
+                    <ActaResumenTotalVotos />
+                </SimpleGrid>
+                <ActaAccionesBtnSection />
             </Box>
         </Container>
     );

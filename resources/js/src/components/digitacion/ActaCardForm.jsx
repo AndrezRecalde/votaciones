@@ -7,9 +7,9 @@ import {
     TextInput,
     ThemeIcon,
 } from "@mantine/core";
+import { TextSection } from "../../components";
 import { IconListCheck } from "@tabler/icons-react";
 import classes from "../../assets/styles/modules/digitacion/LabelsDigitacion.module.css";
-import { TextSection } from "../elements/titles/TextSection";
 
 export const ActaCardForm = ({ actaForm }) => {
     return (

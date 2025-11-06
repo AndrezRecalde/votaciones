@@ -5,7 +5,6 @@ import {
     Group,
     NumberInput,
     ThemeIcon,
-    Text,
     Badge,
     Stack,
     Box,

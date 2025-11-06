@@ -1,5 +1,5 @@
 import { Badge, Card, Group, Table } from "@mantine/core";
-import { TitlePage } from "../../../components";
+import { TextSection } from "../../../components";
 import { useActaConsultaStore } from "../../../hooks";
 import classes from "../../../assets/styles/modules/digitacion/ActaCardInfo.module.css";
 
@@ -8,13 +8,14 @@ export const JuntaInformacionTable = () => {
 
     return (
         <Card shadow="sm" radius="md" padding={0}>
-            <Card.Section withBorder inheritPadding py="md" px="md" bg="gray.0">
+            <Card.Section withBorder inheritPadding py="sm" px="sm" bg="gray.0">
                 <Group justify="space-between" align="center">
-                    <TitlePage order={6} ta="left" mb={0}>
+                    <TextSection fw={600} fz={14} tt="uppercase">
                         {juntaInfo?.nombres?.recinto}
-                    </TitlePage>
+                    </TextSection>
+
                     <Badge
-                        color="indigo.7"
+                        color="#0ae98a"
                         radius="sm"
                         size="md"
                         variant="filled"
@@ -48,7 +49,10 @@ export const JuntaInformacionTable = () => {
                                     ? pregunta?.id
                                     : "[AUTO]"}
                             </Table.Td>
-                            <Table.Td data-label="Zona">
+                            <Table.Td
+                                data-label="Zona"
+                                className={classes.uppercase}
+                            >
                                 {juntaInfo?.nombres?.zona}
                             </Table.Td>
                             <Table.Td
@@ -57,10 +61,16 @@ export const JuntaInformacionTable = () => {
                             >
                                 {juntaInfo?.nombres?.provincia}
                             </Table.Td>
-                            <Table.Td data-label="Cantón">
+                            <Table.Td
+                                data-label="Cantón"
+                                className={classes.uppercase}
+                            >
                                 {juntaInfo?.nombres?.canton}
                             </Table.Td>
-                            <Table.Td data-label="Parroquia">
+                            <Table.Td
+                                data-label="Parroquia"
+                                className={classes.uppercase}
+                            >
                                 {juntaInfo?.nombres?.parroquia}
                             </Table.Td>
                         </Table.Tr>

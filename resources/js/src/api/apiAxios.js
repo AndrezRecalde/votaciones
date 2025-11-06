@@ -6,48 +6,67 @@ const { VITE_APP_URL } = getEnv();
 // Crear una instancia de Axios
 const apiAxios = axios.create({
     baseURL: VITE_APP_URL,
-    withCredentials: true, // Envía cookies en cada solicitud
+    withCredentials: true,
     headers: {
-        Accept: "application/json", // Encabezado común para todas las solicitudes
+        Accept: "application/json",
         "Content-Type": "application/json",
     },
 });
 
-// Función para obtener el token CSRF si no está presente
+// Variable para controlar si ya se obtuvo el CSRF token
+let csrfTokenInitialized = false;
+
+// Función para obtener el token CSRF solo una vez al iniciar
 const ensureCsrfToken = async () => {
-    if (!document.cookie.includes("XSRF-TOKEN")) {
-        await axios.get(`${VITE_APP_URL}/sanctum/csrf-cookie`, {
-            withCredentials: true,
-        });
+    if (!csrfTokenInitialized) {
+        try {
+            await axios.get(`${VITE_APP_URL}/sanctum/csrf-cookie`, {
+                withCredentials: true,
+            });
+            csrfTokenInitialized = true;
+        } catch (error) {
+            console.error("Error al obtener CSRF token:", error);
+        }
     }
 };
 
-// Interceptor para agregar el token de autorización y asegurar el token CSRF
-apiAxios.interceptors.request.use(async (config) => {
-    await ensureCsrfToken(); // Asegura que el token CSRF esté presente
+// Inicializar CSRF token al cargar la aplicación
+ensureCsrfToken();
 
-    // Agregar el token de autorización si existe
-    const token = localStorage.getItem("auth_token");
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+// Interceptor para agregar el token de autorización
+apiAxios.interceptors.request.use(
+    (config) => {
+        // Agregar el token de autorización si existe
+        const token = localStorage.getItem("auth_token");
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
     }
-
-    return config;
-}, (error) => {
-    return Promise.reject(error);
-});
+);
 
 // Interceptor para manejar errores de respuesta
 apiAxios.interceptors.response.use(
-    (response) => response, // Devuelve la respuesta directamente si es exitosa
+    (response) => response,
     async (error) => {
         const { response } = error;
 
         // Manejar errores 401 (No autorizado)
         if (response && response.status === 401) {
-            //console.log("Error 401: No autorizado, redirigiendo al login...");
-            localStorage.removeItem("auth_token"); // Limpiar el token almacenado
-            window.location.href = "/auth/login"; // Redirigir a la página de inicio de sesión
+            localStorage.clear(); // Limpiar todo el localStorage
+            csrfTokenInitialized = false; // Reset del CSRF token
+            window.location.href = "/auth/login";
+        }
+
+        // Manejar errores 403 (Forbidden - falta de permisos)
+        if (response && response.status === 403) {
+            console.error(
+                "Error 403: No tienes permisos para acceder a este recurso"
+            );
         }
 
         // Manejar otros errores
