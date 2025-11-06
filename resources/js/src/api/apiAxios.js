@@ -9,6 +9,7 @@ const apiAxios = axios.create({
     withCredentials: true, // Envía cookies en cada solicitud
     headers: {
         Accept: "application/json", // Encabezado común para todas las solicitudes
+        "Content-Type": "application/json",
     },
 });
 

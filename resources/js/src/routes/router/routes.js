@@ -1,38 +1,110 @@
-import { Component, lazy } from "react";
-import { IconBuilding, IconBuildingBank, IconBuildingSkyscraper, IconListDetails, IconListNumbers, IconLogout, IconSettings, IconSitemap, IconUserHexagon, IconUserPlus, IconUserScan, IconUsersGroup, IconUserStar } from "@tabler/icons-react";
+import { lazy } from "react";
+import {
+    IconLogout,
+    IconQuestionMark,
+    IconSettings,
+    IconSitemap,
+    IconUserHexagon,
+    IconUserPlus,
+    IconUserScan,
+    IconUserStar,
+} from "@tabler/icons-react";
 
-const AuthPage = lazy(() => import(/* webpackChunkName: "AuthPage" */ "../../pages/auth/AuthPage"));
-const ChangePwdPage = lazy(() => import(/* webpackChunkName: "ChangePwdPage" */ '../../pages/user/ChangePwdPage'));
+const AuthPage = lazy(() =>
+    import(/* webpackChunkName: "AuthPage" */ "../../pages/auth/AuthPage")
+);
+const ChangePwdPage = lazy(() =>
+    import(
+        /* webpackChunkName: "ChangePwdPage" */ "../../pages/user/ChangePwdPage"
+    )
+);
 
-const UsuariosPage = lazy(() => import(/* webpackChunkName: "UsuariosPage" */ '../../pages/user/UsuariosPage'));
-const GuessesPage = lazy(() => import(/* webpackChunkName: "UsuariosPage" */ '../../pages/admin/guesses/GuessesPage'));
-const CandidatosPage = lazy(() => import(/* webpackChunkName: "CandidatosPage" */ '../../pages/admin/candidato/CandidatosPage'));
-const OrganizacionesPage = lazy(() => import(/* webpackChunkName: "OrganizacionesPage" */ '../../pages/admin/organizaciones/OrganizacionesPage'));
+const UsuariosPage = lazy(() =>
+    import(
+        /* webpackChunkName: "UsuariosPage" */ "../../pages/user/UsuariosPage"
+    )
+);
+const GuessesPage = lazy(() =>
+    import(
+        /* webpackChunkName: "UsuariosPage" */ "../../pages/admin/guesses/GuessesPage"
+    )
+);
+const CandidatosPage = lazy(() =>
+    import(
+        /* webpackChunkName: "CandidatosPage" */ "../../pages/admin/candidato/CandidatosPage"
+    )
+);
+const OrganizacionesPage = lazy(() =>
+    import(
+        /* webpackChunkName: "OrganizacionesPage" */ "../../pages/admin/organizaciones/OrganizacionesPage"
+    )
+);
 
-const ResultadosBinomiosPage = lazy(() => import(/* webpackChunkName: "ResultadosBinomiosPage" */ '../../pages/resultados/ResultadosBinomiosPage'));
-const ResultadosWebsterPage = lazy(() => import(/* webpackChunkName: "ResultadosWebsterPage" */ '../../pages/resultados/ResultadosWebsterPage'));
+const ResultadosBinomiosPage = lazy(() =>
+    import(
+        /* webpackChunkName: "ResultadosBinomiosPage" */ "../../pages/resultados/ResultadosBinomiosPage"
+    )
+);
+const ResultadosWebsterPage = lazy(() =>
+    import(
+        /* webpackChunkName: "ResultadosWebsterPage" */ "../../pages/resultados/ResultadosWebsterPage"
+    )
+);
 
-const TendenciaPage = lazy(() => import(/* webpackChunkName: "TendenciaPage" */ '../../pages/tendencia/TendenciaPage'));
+const TendenciaPage = lazy(() =>
+    import(
+        /* webpackChunkName: "TendenciaPage" */ "../../pages/tendencia/TendenciaPage"
+    )
+);
 
+const EscrutinioPage = lazy(() =>
+    import(
+        /* webpackChunkName: "EscrutinioPage" */ "../../pages/escrutinio/EscrutinioPage"
+    )
+);
 
-const EscrutinioPage = lazy(() => import(/* webpackChunkName: "EscrutinioPage" */ '../../pages/escrutinio/EscrutinioPage'));
+const BusquedaActaPage = lazy(() =>
+    import(
+        /* webpackChunkName: "BusquedaActaPage" */ "../../pages/acta/BusquedaActaPage"
+    )
+);
 
-const BusquedaActaPage = lazy(() => import(/* webpackChunkName: "BusquedaActaPage" */ '../../pages/acta/BusquedaActaPage'));
+const GuessesResultadosPage = lazy(() =>
+    import(
+        /* webpackChunkName: "GuessResultadosPage" */ "../../pages/guess/GuessResultadosPage"
+    )
+);
 
-const GuessesResultadosPage = lazy(() => import(/* webpackChunkName: "GuessResultadosPage" */ '../../pages/guess/GuessResultadosPage'));
+const ProfilePage = lazy(() =>
+    import(/* webpackChunkName: "ProfilePage" */ "../../pages/user/ProfilePage")
+);
 
-
-const ProfilePage = lazy(() => import(/* webpackChunkName: "ProfilePage" */ "../../pages/user/ProfilePage"));
-
-
-const DigitacionPage = lazy(() => import(/* webpackChunkName: "DigitacionPage" */ "../../pages/digitacion/DigitacionPage"));
-
+const DigitacionPage = lazy(() =>
+    import(
+        /* webpackChunkName: "DigitacionPage" */ "../../pages/digitacion/DigitacionPage"
+    )
+);
 
 /* Consulta Popular */
-const DigitacionConsultaPage = lazy(() => import(/* webpackChunkName: "DigitacionConsultaPage" */ "../../pages/consulta-popular/digitacion/DigitacionConsultaPage"));
+/* Digitacion Consulta Popular */
+const DigitacionConsultaPage = lazy(() =>
+    import(
+        /* webpackChunkName: "DigitacionConsultaPage" */ "../../pages/consulta-popular/digitacion/DigitacionConsultaPage"
+    )
+);
 
-const ErrorNotFound = lazy(() => import(/* webpackChunkName: "ErrorNotFound" */ '../../pages/error/ErrorNotFound'));
+/* Preguntas Consulta Popular */
+const PreguntasConsultaPage = lazy(() =>
+    import(
+        /* webpackChunkName: "PreguntasConsultaPage" */ "../../pages/consulta-popular/pregunta/PreguntasConsultaPage"
+    )
+);
 
+const ErrorNotFound = lazy(() =>
+    import(
+        /* webpackChunkName: "ErrorNotFound" */ "../../pages/error/ErrorNotFound"
+    )
+);
 
 const generateRoutes = (basePath, components, roles) =>
     components.map(({ path, Component }) => ({
@@ -44,8 +116,8 @@ const generateRoutes = (basePath, components, roles) =>
 
 export const PREFIX_ROUTES = {
     ADMIN: "/admin",
-    DIGITADOR: "/general"
-}
+    DIGITADOR: "/general",
+};
 
 export const HEADER_MENU = {
     DIGITACION: "digitacion-acta",
@@ -55,7 +127,7 @@ export const HEADER_MENU = {
     TENDENCIA: "tendencia",
     ACTAS: "actas",
     GUESSES_RESULTADOS: "guesses-resultados",
-}
+};
 
 export const HEADER_MENU_CONSULTA = {
     DIGITACION_CONSULTA: "consulta-digitacion",
@@ -63,7 +135,7 @@ export const HEADER_MENU_CONSULTA = {
     ESCRUTINIO_CONSULTA: "consulta-escrutinio",
     TENDENCIA_CONSULTA: "consulta-tendencia",
     ACTAS_CONSULTA: "consulta-actas",
-}
+};
 
 export const authRoutes = {
     path: "auth/login/*",
@@ -75,7 +147,7 @@ export const guessRoutes = {
     path: "guesses/resultados",
     link: "guesses/resultados",
     Component: GuessesResultadosPage,
-}
+};
 
 const adminRoutes = generateRoutes(
     "admin",
@@ -84,17 +156,23 @@ const adminRoutes = generateRoutes(
         { path: "guesses", Component: GuessesPage },
         { path: "candidatos", Component: CandidatosPage },
         { path: "organizaciones", Component: OrganizacionesPage },
+        { path: "preguntas", Component: PreguntasConsultaPage },
         //{ path: HEADER_MENU.DIGITACION, Component: DigitacionPage },
 
         // Rutas de Elecciones Binomios y Webster
         { path: HEADER_MENU.ESCRUTINIO, Component: EscrutinioPage },
-        { path: HEADER_MENU.RESULTADO_BINOMIOS, Component: ResultadosBinomiosPage },
-        { path: HEADER_MENU.RESULTADO_WEBSTER, Component: ResultadosWebsterPage },
+        {
+            path: HEADER_MENU.RESULTADO_BINOMIOS,
+            Component: ResultadosBinomiosPage,
+        },
+        {
+            path: HEADER_MENU.RESULTADO_WEBSTER,
+            Component: ResultadosWebsterPage,
+        },
         { path: HEADER_MENU.TENDENCIA, Component: TendenciaPage },
         { path: HEADER_MENU.ACTAS, Component: BusquedaActaPage },
 
         // Rutas para Consulta Popular
-
     ],
     ["ADMIN", "RESPONSABLE"]
 );
@@ -120,7 +198,6 @@ const peerRoutes = generateRoutes(
     [""]
 );
 
-
 export const routes = {
     //auth: authRoutes,
     admin: adminRoutes,
@@ -129,10 +206,9 @@ export const routes = {
     //peer: peerRoutes,
 };
 
-
 export const peerLinks = {
-    peer: peerRoutes
-}
+    peer: peerRoutes,
+};
 
 export const errorRoutes = [
     {
@@ -140,7 +216,6 @@ export const errorRoutes = [
         Component: ErrorNotFound,
     },
 ];
-
 
 export const menuRoutes = [
     /* Menu Header */
@@ -151,7 +226,7 @@ export const menuRoutes = [
         link: "/staff/d/profile",
         icon: IconUserHexagon,
         color: "#12b561",
-        role: ""
+        role: "",
     },
     {
         label: "Cambiar contraseña",
@@ -159,7 +234,7 @@ export const menuRoutes = [
         link: "/staff/d/change-password",
         icon: IconSettings,
         color: "#6d7c85",
-        role: ""
+        role: "",
     },
     {
         label: "Usuarios",
@@ -167,7 +242,7 @@ export const menuRoutes = [
         link: "/admin/usuarios",
         icon: IconUserPlus,
         color: "#1250fc",
-        role: "ADMIN"
+        role: "ADMIN",
     },
     {
         label: "Usuarios",
@@ -175,7 +250,7 @@ export const menuRoutes = [
         link: "/admin/usuarios",
         icon: IconUserPlus,
         color: "#1250fc",
-        role: "RESPONSABLE"
+        role: "RESPONSABLE",
     },
     {
         label: "Organizaciones",
@@ -183,7 +258,7 @@ export const menuRoutes = [
         link: "/admin/organizaciones",
         icon: IconSitemap,
         color: "#f72b72",
-        role: "ADMIN"
+        role: "ADMIN",
     },
     {
         label: "Candidatos",
@@ -191,7 +266,15 @@ export const menuRoutes = [
         link: "/admin/candidatos",
         icon: IconUserScan,
         color: "#0865ce",
-        role: "ADMIN"
+        role: "ADMIN",
+    },
+    {
+        label: "Preguntas",
+        path: "preguntas",
+        link: "/admin/preguntas",
+        icon: IconQuestionMark,
+        color: "#f39c12",
+        role: "ADMIN",
     },
     {
         label: "Invitados",
@@ -199,7 +282,7 @@ export const menuRoutes = [
         link: "/admin/guesses",
         icon: IconUserStar,
         color: "#72d1d7",
-        role: "ADMIN"
+        role: "ADMIN",
     },
     {
         label: "Cerrar sesión",
@@ -207,6 +290,6 @@ export const menuRoutes = [
         link: "",
         icon: IconLogout,
         color: "#cc003d",
-        role: ""
+        role: "",
     },
 ];

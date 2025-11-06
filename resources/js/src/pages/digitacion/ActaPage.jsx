@@ -67,7 +67,7 @@ const ActaPage = () => {
 
             actaForm.setValues({
                 cod_cne: cod_cne ?? "",
-                votos_validos: Number(votos_validos) || "",
+                votos_validos: Number(votos_validos) || 0,
                 votos_blancos: Number(votos_blancos) || 0,
                 votos_nulos: Number(votos_nulos) || 0,
                 cuadrada,

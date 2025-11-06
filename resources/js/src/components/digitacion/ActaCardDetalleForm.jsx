@@ -44,7 +44,7 @@ export const ActaCardDetalleForm = ({ actaForm }) => {
                     `num_votos.${index}`,
                     candidato?.num_votos ??
                         actaForm.values?.num_votos?.[index] ??
-                        0
+                        "" // INFO: OJOOOO
                 );
             });
         }

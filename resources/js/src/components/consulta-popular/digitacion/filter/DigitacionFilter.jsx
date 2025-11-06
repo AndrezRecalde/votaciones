@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { Box, Grid, Paper, Select } from "@mantine/core";
+import { Box, Grid, Paper, Select, Stack } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { BtnSubmit } from "../../../../components";
-import { useJurisdiccionStore, useStorageStore } from "../../../../hooks";
+import { useActaConsultaStore, useJurisdiccionStore, usePreguntaStore, useStorageStore } from "../../../../hooks";
 import { convertToString, isValid } from "../../../../helpers/fnHelpers";
-import classes from "../../../../assets/styles/modules/digitacion/LabelsDigitacion.module.css";
 import { IconSearch } from "@tabler/icons-react";
+import classes from "../../../../assets/styles/modules/digitacion/LabelsDigitacion.module.css";
 
 export const DigitacionFilter = ({ usuario }) => {
+    const { loading, disabledSearch } = useActaConsultaStore();
     const INITIAL_PROVINCIA_ID = usuario?.provincia_id;
     const INITIAL_CANTON_ID = usuario?.canton_id || null;
 
@@ -22,19 +23,19 @@ export const DigitacionFilter = ({ usuario }) => {
         startLoadZonas,
         startLoadJuntas,
     } = useJurisdiccionStore();
+    const { preguntas } = usePreguntaStore();
+    const { startLoadInfoActa, startActivateSearch } = useActaConsultaStore();
     const { setStorageFields } = useStorageStore();
     const [disabled, setDisabled] = useState(false);
-
-    const isLoading = false;
-    const disabledSearch = false;
 
     const searchForm = useForm({
         initialValues: {
             provincia_id: convertToString(INITIAL_PROVINCIA_ID),
             canton_id: convertToString(INITIAL_CANTON_ID),
-            parroquia_id: null,
-            zona_id: null,
-            junta_id: null,
+            parroquia_id: "",
+            zona_id: "",
+            junta_id: "",
+            pregunta_id: "",
         },
         validate: {
             provincia_id: isNotEmpty("Por favor ingrese la provincia del acta"),
@@ -42,6 +43,7 @@ export const DigitacionFilter = ({ usuario }) => {
             parroquia_id: isNotEmpty("Por favor ingresa la parroquia del acta"),
             zona_id: isNotEmpty("Por favor ingrese la zona del acta"),
             junta_id: isNotEmpty("Por favor ingrese la junta del acta"),
+            pregunta_id: isNotEmpty("Por favor ingrese la pregunta de consulta")
         },
         transformValues: (values) => ({
             provincia_id: Number(values.provincia_id) || null,
@@ -49,11 +51,12 @@ export const DigitacionFilter = ({ usuario }) => {
             parroquia_id: Number(values.parroquia_id) || null,
             zona_id: Number(values.zona_id) || null,
             junta_id: Number(values.junta_id) || null,
+            pregunta_id: Number(values.pregunta_id) || null,
         }),
     });
 
     const {
-        dignidad_id,
+        pregunta_id,
         provincia_id,
         canton_id,
         parroquia_id,
@@ -97,10 +100,12 @@ export const DigitacionFilter = ({ usuario }) => {
         }
     }, []);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(searchForm.getTransformedValues());
         setStorageFields(searchForm.getTransformedValues());
+        await startLoadInfoActa(junta_id, pregunta_id);
+        startActivateSearch(true);
     };
 
     return (
@@ -109,132 +114,172 @@ export const DigitacionFilter = ({ usuario }) => {
                 component="form"
                 onSubmit={searchForm.onSubmit((_, e) => handleSubmit(e))}
             >
-                <Grid gutter="xs">
-                    <Grid.Col span={{ base: 12, xs: 6, sm: 4, md: 2.4 }}>
-                        <Select
-                            radius="sm"
-                            size="sm"
-                            label="Provincia"
-                            placeholder="Provincia"
-                            withAsterisk
-                            disabled
-                            nothingFoundMessage="Sin opciones"
-                            classNames={classes}
-                            {...searchForm.getInputProps("provincia_id")}
-                            styles={{
-                                label: { fontSize: "0.8rem", fontWeight: 500 },
-                                input: { fontSize: "0.85rem" },
-                            }}
-                            data={provincias.map((provincia) => ({
-                                value: provincia.id.toString(),
-                                label: provincia.nombre_provincia,
-                            }))}
-                        />
-                    </Grid.Col>
+                <Stack spacing="md">
+                    <Grid gutter="xs">
+                        <Grid.Col span={{ base: 12, xs: 12, sm: 12, md: 12 }}>
+                            <Select
+                                radius="sm"
+                                size="sm"
+                                label="Provincia"
+                                placeholder="Seleccione la provincia"
+                                withAsterisk
+                                disabled
+                                nothingFoundMessage="Sin opciones"
+                                classNames={classes}
+                                {...searchForm.getInputProps("provincia_id")}
+                                styles={{
+                                    label: {
+                                        fontSize: "0.8rem",
+                                        fontWeight: 500,
+                                    },
+                                    input: { fontSize: "0.85rem" },
+                                }}
+                                data={provincias.map((provincia) => ({
+                                    value: provincia.id.toString(),
+                                    label: provincia.nombre_provincia,
+                                }))}
+                            />
+                        </Grid.Col>
 
-                    <Grid.Col span={{ base: 12, xs: 6, sm: 4, md: 2.4 }}>
-                        <Select
-                            radius="sm"
-                            size="sm"
-                            label="Cantón"
-                            placeholder="Cantón"
-                            withAsterisk
-                            searchable
-                            nothingFoundMessage="Sin opciones"
-                            classNames={classes}
-                            disabled={disabled ? disabled : disabledSearch}
-                            {...searchForm.getInputProps("canton_id")}
-                            styles={{
-                                label: { fontSize: "0.8rem", fontWeight: 500 },
-                                input: { fontSize: "0.85rem" },
-                            }}
-                            data={cantones.map((canton) => ({
-                                value: canton.id.toString(),
-                                label: canton.nombre_canton,
-                            }))}
-                        />
-                    </Grid.Col>
+                        <Grid.Col span={{ base: 12, xs: 12, sm: 12, md: 12 }}>
+                            <Select
+                                radius="sm"
+                                size="sm"
+                                label="Cantón"
+                                placeholder="Seleccione el cantón"
+                                withAsterisk
+                                searchable
+                                nothingFoundMessage="Sin opciones"
+                                classNames={classes}
+                                disabled={disabled ? disabled : disabledSearch}
+                                {...searchForm.getInputProps("canton_id")}
+                                styles={{
+                                    label: {
+                                        fontSize: "0.8rem",
+                                        fontWeight: 500,
+                                    },
+                                    input: { fontSize: "0.85rem" },
+                                }}
+                                data={cantones.map((canton) => ({
+                                    value: canton.id.toString(),
+                                    label: canton.nombre_canton,
+                                }))}
+                            />
+                        </Grid.Col>
 
-                    <Grid.Col span={{ base: 12, xs: 6, sm: 4, md: 2.4 }}>
-                        <Select
-                            radius="sm"
-                            size="sm"
-                            label="Parroquia"
-                            placeholder="Parroquia"
-                            withAsterisk
-                            searchable
-                            nothingFoundMessage="Sin opciones"
-                            disabled={disabledSearch}
-                            classNames={classes}
-                            {...searchForm.getInputProps("parroquia_id")}
-                            styles={{
-                                label: { fontSize: "0.8rem", fontWeight: 500 },
-                                input: { fontSize: "0.85rem" },
-                            }}
-                            data={parroquias.map((parroquia) => ({
-                                value: parroquia.id.toString(),
-                                label: parroquia.nombre_parroquia,
-                            }))}
-                        />
-                    </Grid.Col>
+                        <Grid.Col span={{ base: 12, xs: 12, sm: 12, md: 12 }}>
+                            <Select
+                                radius="sm"
+                                size="sm"
+                                label="Parroquia"
+                                placeholder="Seleccione la parroquia"
+                                withAsterisk
+                                searchable
+                                nothingFoundMessage="Sin opciones"
+                                disabled={disabledSearch}
+                                classNames={classes}
+                                {...searchForm.getInputProps("parroquia_id")}
+                                styles={{
+                                    label: {
+                                        fontSize: "0.8rem",
+                                        fontWeight: 500,
+                                    },
+                                    input: { fontSize: "0.85rem" },
+                                }}
+                                data={parroquias.map((parroquia) => ({
+                                    value: parroquia.id.toString(),
+                                    label: parroquia.nombre_parroquia,
+                                }))}
+                            />
+                        </Grid.Col>
 
-                    <Grid.Col span={{ base: 12, xs: 6, sm: 4, md: 2.4 }}>
-                        <Select
-                            radius="sm"
-                            size="sm"
-                            label="Zona"
-                            placeholder="Zona"
-                            withAsterisk
-                            searchable
-                            nothingFoundMessage="Sin opciones"
-                            disabled={disabledSearch}
-                            classNames={classes}
-                            {...searchForm.getInputProps("zona_id")}
-                            styles={{
-                                label: { fontSize: "0.8rem", fontWeight: 500 },
-                                input: { fontSize: "0.85rem" },
-                            }}
-                            data={zonas.map((zona) => ({
-                                value: zona.id.toString(),
-                                label: zona.nombre_zona,
-                            }))}
-                        />
-                    </Grid.Col>
+                        <Grid.Col span={{ base: 12, xs: 12, sm: 12, md: 12 }}>
+                            <Select
+                                radius="sm"
+                                size="sm"
+                                label="Zona"
+                                placeholder="Seleccione la zona"
+                                withAsterisk
+                                searchable
+                                nothingFoundMessage="Sin opciones"
+                                disabled={disabledSearch}
+                                classNames={classes}
+                                {...searchForm.getInputProps("zona_id")}
+                                styles={{
+                                    label: {
+                                        fontSize: "0.8rem",
+                                        fontWeight: 500,
+                                    },
+                                    input: { fontSize: "0.85rem" },
+                                }}
+                                data={zonas.map((zona) => ({
+                                    value: zona.id.toString(),
+                                    label: zona.nombre_zona,
+                                }))}
+                            />
+                        </Grid.Col>
 
-                    <Grid.Col span={{ base: 12, xs: 6, sm: 4, md: 2.4 }}>
-                        <Select
-                            radius="sm"
-                            size="sm"
-                            label="Junta"
-                            placeholder="Junta"
-                            withAsterisk
-                            searchable
-                            nothingFoundMessage="Sin opciones"
-                            disabled={disabledSearch}
-                            classNames={classes}
-                            {...searchForm.getInputProps("junta_id")}
-                            styles={{
-                                label: { fontSize: "0.8rem", fontWeight: 500 },
-                                input: { fontSize: "0.85rem" },
-                            }}
-                            data={juntas.map((junta) => ({
-                                value: junta.id.toString(),
-                                label: junta.junta_nombre,
-                            }))}
-                        />
-                    </Grid.Col>
-                </Grid>
+                        <Grid.Col span={{ base: 12, xs: 12, sm: 12, md: 12 }}>
+                            <Select
+                                radius="sm"
+                                size="sm"
+                                label="Junta"
+                                placeholder="Seleccione la junta"
+                                withAsterisk
+                                searchable
+                                nothingFoundMessage="Sin opciones"
+                                disabled={disabledSearch}
+                                classNames={classes}
+                                {...searchForm.getInputProps("junta_id")}
+                                styles={{
+                                    label: {
+                                        fontSize: "0.8rem",
+                                        fontWeight: 500,
+                                    },
+                                    input: { fontSize: "0.85rem" },
+                                }}
+                                data={juntas.map((junta) => ({
+                                    value: junta.id.toString(),
+                                    label: junta.junta_nombre,
+                                }))}
+                            />
+                        </Grid.Col>
+                        <Grid.Col span={{ base: 12, xs: 12, sm: 12, md: 12 }}>
+                            <Select
+                                radius="sm"
+                                size="sm"
+                                label="Pregunta"
+                                placeholder="Seleccione la pregunta"
+                                withAsterisk
+                                searchable
+                                nothingFoundMessage="Sin opciones"
+                                classNames={classes}
+                                disabled={disabled ? disabled : disabledSearch}
+                                {...searchForm.getInputProps("pregunta_id")}
+                                styles={{
+                                    label: {
+                                        fontSize: "0.8rem",
+                                        fontWeight: 500,
+                                    },
+                                    input: { fontSize: "0.85rem" },
+                                }}
+                                data={preguntas.map((pregunta) => ({
+                                    value: pregunta.id.toString(),
+                                    label: `Consulta Popular - Pregunta ${pregunta.numero_pregunta}`,
+                                }))}
+                            />
+                        </Grid.Col>
+                    </Grid>
 
-                <Box mt="md">
                     <BtnSubmit
                         disabled={disabledSearch}
-                        loading={isLoading}
+                        loading={loading}
                         IconSection={IconSearch}
                         fontSize={16}
                     >
                         Buscar Acta
                     </BtnSubmit>
-                </Box>
+                </Stack>
             </Box>
         </Paper>
     );

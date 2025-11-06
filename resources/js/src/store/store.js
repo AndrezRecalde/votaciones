@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import {
+    actaConsultaSlice,
     actaSlice,
     authSlice,
     candidatoSlice,
@@ -9,6 +10,7 @@ import {
     guessSlice,
     jurisdiccionSlice,
     organizacionSlice,
+    preguntaSlice,
     resultadosSlice,
     roleSlice,
     storageSlice,
@@ -19,6 +21,7 @@ import {
     uiGuessSlice,
     uiHeaderMenuSlice,
     uiOrganizacionSlice,
+    uiPreguntaSlice,
     uiResultadosSlice,
     uiUsuarioSlice,
     usuarioSlice,

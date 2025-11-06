@@ -8,7 +8,7 @@ export const ProfileBtnService = () => {
     return (
         <BtnSection
             fullWidth={true}
-            heigh={60}
+            height={60}
             fontSize={16}
             IconSection={IconFileSymlink}
             handleAction={() => navigate(`${PREFIX_ROUTES.DIGITADOR}/${HEADER_MENU.DIGITACION}`)}

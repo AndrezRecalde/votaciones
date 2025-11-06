@@ -6,6 +6,7 @@ use App\Enums\HTTPStatus;
 use App\Http\Controllers\Controller;
 use App\Models\ActaConsulta;
 use App\Models\Junta;
+use App\Models\PreguntaConsulta;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Exception;
@@ -55,86 +56,140 @@ class JuntaController extends Controller
 
     /* === CONSULTA POPULAR === */
     /**
-     * Buscar acta de consulta por junta
-     * Retorna el acta si existe, o null si no existe
+     * Buscar por junta (flujo digitador)
      */
     public function buscarPorJunta(Request $request): JsonResponse
     {
         try {
             $request->validate([
                 'junta_id' => 'required|integer|exists:juntas,id',
+                'pregunta_id' => 'required|integer|exists:preguntas_consulta,id',
             ]);
 
-            // Buscar si ya existe un acta para esta junta
+            $juntaId = (int) $request->junta_id;
+            $preguntaId = (int) $request->pregunta_id;
+
+            // Buscar acta existente para la combinación junta + pregunta
             $acta = ActaConsulta::with([
-                'actaConsultaPreguntas.pregunta',
+                'pregunta',
                 'provincia',
                 'canton',
                 'parroquia',
                 'zona',
-                'junta.recinto'
+                'junta.recinto', // <-- cargar recinto
             ])
-                ->where('junta_id', $request->junta_id)
-                ->where('estado', true)
+                ->where('junta_id', $juntaId)
+                ->where('pregunta_id', $preguntaId)
+                ->activas()
                 ->first();
 
+            // Construir ubicación con nombres SIEMPRE (incluyendo recinto)
             if ($acta) {
-                return response()->json([
-                    'success' => HTTPStatus::Success,
-                    'existe_acta' => true,
-                    'acta' => $acta,
-                    'mensaje' => 'Ya existe un acta registrada para esta junta. Puede editarla.'
-                ], 200);
+                $ubicacion = [
+                    'provincia_id' => $acta->provincia_id,
+                    'canton_id'    => $acta->canton_id,
+                    'parroquia_id' => $acta->parroquia_id,
+                    'zona_id'      => $acta->zona_id,
+                    'junta_id'     => $juntaId,
+                    'recinto_id'   => $acta->junta->recinto_id ?? null, // <-- id de recinto
+                    'nombres'      => [
+                        'provincia' => $acta->provincia->nombre_provincia ?? null,
+                        'canton'    => $acta->canton->nombre_canton ?? null,
+                        'parroquia' => $acta->parroquia->nombre_parroquia ?? null,
+                        'zona'      => $acta->zona->nombre_zona ?? null,
+                        'junta'     => $acta->junta->junta_nombre ?? null,
+                        'recinto'   => optional($acta->junta->recinto)->nombre_recinto, // <-- nombre de recinto
+                    ],
+                ];
+            } else {
+                // Cuando no hay acta aún, obtener nombres por JOIN usando la junta (incluyendo recinto)
+                $u = DB::table('juntas as j')
+                    ->select(
+                        'j.id as junta_id',
+                        'z.id as zona_id',
+                        'p.id as parroquia_id',
+                        'c.id as canton_id',
+                        'pr.id as provincia_id',
+                        'j.recinto_id',
+                        'j.junta_nombre',
+                        'z.nombre_zona',
+                        'p.nombre_parroquia',
+                        'c.nombre_canton',
+                        'pr.nombre_provincia',
+                        'r.nombre_recinto'
+                    )
+                    ->join('zonas as z', 'j.zona_id', '=', 'z.id')
+                    ->join('parroquias as p', 'z.parroquia_id', '=', 'p.id')
+                    ->join('cantones as c', 'p.canton_id', '=', 'c.id')
+                    ->join('provincias as pr', 'c.provincia_id', '=', 'pr.id')
+                    ->leftJoin('recintos as r', 'j.recinto_id', '=', 'r.id') // <-- incluir recinto
+                    ->where('j.id', $juntaId)
+                    ->first();
+
+                if (!$u) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No se encontró información de ubicación para la junta',
+                    ], 404);
+                }
+
+                $ubicacion = [
+                    'provincia_id' => $u->provincia_id,
+                    'canton_id'    => $u->canton_id,
+                    'parroquia_id' => $u->parroquia_id,
+                    'zona_id'      => $u->zona_id,
+                    'junta_id'     => $juntaId,
+                    'recinto_id'   => $u->recinto_id, // <-- id de recinto
+                    'nombres'      => [
+                        'provincia' => $u->nombre_provincia,
+                        'canton'    => $u->nombre_canton,
+                        'parroquia' => $u->nombre_parroquia,
+                        'zona'      => $u->nombre_zona,
+                        'junta'     => $u->junta_nombre,
+                        'recinto'   => $u->nombre_recinto, // <-- nombre de recinto
+                    ],
+                ];
             }
 
-            // Si no existe acta, obtener información de la junta
-            $junta = DB::table('juntas as j')
-                ->select(
-                    'j.id as junta_id',
-                    'j.num_junta',
-                    'j.genero',
-                    'j.junta_nombre',
-                    'j.num_electores_cne',
-                    'j.cne_cod_junta',
-                    'z.id as zona_id',
-                    'z.nombre_zona',
-                    'p.id as parroquia_id',
-                    'p.nombre_parroquia',
-                    'p.tipo as tipo_parroquia',
-                    'c.id as canton_id',
-                    'c.nombre_canton',
-                    'pr.id as provincia_id',
-                    'pr.nombre_provincia',
-                    'pr.cod_cne_prov',
-                    'r.nombre_recinto',
-                    'r.direccion_recinto'
-                )
-                ->join('zonas as z', 'j.zona_id', '=', 'z.id')
-                ->join('parroquias as p', 'z.parroquia_id', '=', 'p.id')
-                ->join('cantones as c', 'p.canton_id', '=', 'c.id')
-                ->join('provincias as pr', 'c.provincia_id', '=', 'pr.id')
-                ->leftJoin('recintos as r', 'j.recinto_id', '=', 'r.id')
-                ->where('j.id', $request->junta_id)
-                ->first();
+            // Metadatos de la pregunta solicitada
+            $metaPregunta = PreguntaConsulta::select('id', 'numero_pregunta', 'texto_pregunta')
+                ->find($preguntaId);
 
-            if (!$junta) {
-                return response()->json([
-                    'success' => HTTPStatus::Error,
-                    'message' => 'Junta no encontrada'
-                ], 404);
-            }
+            // Objeto único "pregunta"
+            $pregunta = [
+                'id'              => $acta->id ?? null, // id del registro de acta si existe
+                'pregunta_id'     => $preguntaId,
+                'numero_pregunta' => $metaPregunta->numero_pregunta ?? null,
+                'texto_pregunta'  => $metaPregunta->texto_pregunta ?? null,
+
+                // Campos por-pregunta (si no existe acta, van en null)
+                'cod_cne'         => $acta->cod_cne ?? null,
+                'votos_si'        => $acta->votos_si ?? null,
+                'votos_no'        => $acta->votos_no ?? null,
+                'votos_blancos'   => $acta->votos_blancos ?? null,
+                'votos_nulos'     => $acta->votos_nulos ?? null,
+                'votos_validos'   => $acta->votos_validos ?? null,
+                'porcentaje_si'   => $acta?->porcentaje_si ?? null,
+                'porcentaje_no'   => $acta?->porcentaje_no ?? null,
+                'cuadrada'        => isset($acta) ? (bool) $acta->cuadrada : null,
+                'legible'         => isset($acta) ? (bool) $acta->legible : null,
+                'estado'          => isset($acta) ? (bool) $acta->estado : null,
+            ];
 
             return response()->json([
-                'success' => HTTPStatus::Success,
-                'existe_acta' => false,
-                'junta' => $junta,
-                'mensaje' => 'No existe acta para esta junta. Puede crear una nueva.'
+                'success'     => true,
+                'existe_acta' => (bool) $acta,
+                'ubicacion'   => $ubicacion,
+                'pregunta'    => $pregunta,
+                'mensaje'     => $acta
+                    ? 'Se encontró acta para esta junta y pregunta.'
+                    : 'No existe acta para esta junta y pregunta. Puede crearla.',
             ], 200);
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al buscar el acta',
-                'error' => $e->getMessage(),
+                'message' => 'Error al buscar el acta por junta y pregunta',
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }

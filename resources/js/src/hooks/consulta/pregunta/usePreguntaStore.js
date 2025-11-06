@@ -24,24 +24,28 @@ export const usePreguntaStore = () => {
 
     const { ExceptionMessageError } = useErrorException(onLoadErrores);
 
-    const startLoadPreguntas = async ({ page = 1, per_page = 20 } = {}) => {
+    const startLoadPreguntas = async ({ page = 1, per_page = 20, all = false } = {}) => {
         try {
             dispatch(onLoading(true));
             const { data } = await apiAxios.get("/admin/preguntas-consulta", {
-                params: { page, per_page },
+                params: { page, per_page, all },
             });
+            console.log(data);
             const { preguntas, paginacion } = data;
             dispatch(onLoadPreguntas(preguntas));
             dispatch(onLoadPaginacion(paginacion));
         } catch (error) {
             console.log(error);
             ExceptionMessageError(error);
+        } finally {
+            dispatch(onLoading(false));
         }
     };
 
     const startAddPregunta = async (pregunta) => {
         try {
             if (pregunta.id) {
+                dispatch(onLoading(true));
                 const { data } = await apiAxios.put(
                     `/admin/pregunta-consulta/${pregunta.id}`,
                     pregunta
@@ -56,6 +60,7 @@ export const usePreguntaStore = () => {
                 }, 40);
                 return;
             }
+            dispatch(onLoading(true));
             const { data } = await apiAxios.post(
                 "/admin/pregunta-consulta",
                 pregunta
@@ -71,6 +76,8 @@ export const usePreguntaStore = () => {
         } catch (error) {
             console.log(error);
             ExceptionMessageError(error);
+        } finally {
+            dispatch(onLoading(false));
         }
     };
 
@@ -78,6 +85,26 @@ export const usePreguntaStore = () => {
         try {
             const { data } = await apiAxios.delete(
                 `/admin/pregunta-consulta/${pregunta.id}`
+            );
+            startLoadPreguntas({
+                page: paginacion.pagina_actual,
+                per_page: paginacion.por_pagina,
+            });
+            dispatch(onLoadMessage(data));
+            setTimeout(() => {
+                dispatch(onLoadMessage(undefined));
+            }, 40);
+        } catch (error) {
+            console.log(error);
+            ExceptionMessageError(error);
+        }
+    };
+
+    const startUpdateActivo = async (pregunta) => {
+        try {
+            const { data } = await apiAxios.put(
+                `/admin/update/status/pregunta-consulta/${pregunta.id}`,
+                pregunta
             );
             startLoadPreguntas({
                 page: paginacion.pagina_actual,
@@ -112,6 +139,7 @@ export const usePreguntaStore = () => {
         startLoadPreguntas,
         startAddPregunta,
         startDeletePregunta,
+        startUpdateActivo,
         setActivatePregunta,
         startClearPreguntas,
     };

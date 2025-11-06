@@ -58,6 +58,9 @@ import { transformTendencias } from "./tendencia/transformTendencias";
 import { usePreguntaStore } from "./consulta/pregunta/usePreguntaStore";
 import { useUiPregunta } from "./consulta/pregunta/useUiPregunta";
 
+/* Consulta */
+import { useActaConsultaStore } from "./consulta/acta-consulta/useActaConsultaStore";
+
 /* Storages */
 import { useStorageStore } from "./storage/useStorageStore";
 
@@ -121,6 +124,14 @@ export {
     /* Tendencias */
     useTendenciaStore,
     transformTendencias,
+
+    /* Consulta Popular */
+    /** Pregunta */
+    usePreguntaStore,
+    useUiPregunta,
+
+    /** Acta Consulta */
+    useActaConsultaStore,
 
     /* Fecha */
     useFechaStore,

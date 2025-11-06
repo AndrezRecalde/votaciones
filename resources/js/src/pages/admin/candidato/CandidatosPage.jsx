@@ -71,7 +71,7 @@ const CandidatosPage = () => {
             <Group justify="space-between">
                 <TitlePage order={1}>Candidatos</TitlePage>
                 <BtnSection
-                    heigh={45}
+                    height={45}
                     handleAction={handleOpenModal}
                     IconSection={IconPencilPlus}
                 >

@@ -56,7 +56,9 @@ import { GuessTable } from "./guess/table/GuessTable";
 import { GuessModal } from "./guess/modal/GuessModal";
 import { GuessForm } from "./guess/form/GuessForm";
 
-
+/* Juntas */
+import { JuntaInformacionSection } from "./junta/section/JuntaInformacionSection";
+import { JuntaInformacionTable } from "./junta/table/JuntaInformacionTable";
 
 /* Candidatos */
 import { CandidatoTable } from "./candidato/table/CandidatoTable";
@@ -115,10 +117,17 @@ import { TendenciaChart } from "./tendencia/TendenciaChart";
 import { MapResultadosDrawer } from "./map/drawer/MapResultadosDrawer";
 import { MapBusquedaForm } from "./map/form/MapBusquedaForm";
 
-
 /* Elecciones - Consulta Popular */
 /* Digitacion Consulta popular */
 import { DigitacionFilter } from "./consulta-popular/digitacion/filter/DigitacionFilter";
+
+/* Preguntas */
+import { PreguntasTable } from "./consulta-popular/pregunta/table/PreguntasTable";
+import { PreguntaForm } from "./consulta-popular/pregunta/form/PreguntaForm";
+import { PreguntaModal } from "./consulta-popular/pregunta/modal/PreguntaModal";
+
+/* Acta Consulta Popular */
+import { ActaConsultaSection } from "./consulta-popular/acta/section/ActaConsultaSection";
 
 export {
     /* Logo */
@@ -178,6 +187,10 @@ export {
     GuessModal,
     GuessForm,
 
+    /* Juntas */
+    JuntaInformacionSection,
+    JuntaInformacionTable,
+
     /* Candidatos */
     CandidatoTable,
     CandidatoModal,
@@ -236,4 +249,12 @@ export {
     /* Elecciones - Consulta Popular */
     /* Digitacion Consulta popular */
     DigitacionFilter,
+
+    /* Preguntas */
+    PreguntasTable,
+    PreguntaForm,
+    PreguntaModal,
+
+    /* Acta Consulta Popular */
+    ActaConsultaSection,
 }

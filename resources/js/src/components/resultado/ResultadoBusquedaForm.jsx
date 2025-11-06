@@ -194,7 +194,7 @@ export const ResultadoBusquedaForm = ({ dig }) => {
                     />
                 </SimpleGrid>
                 <BtnSubmit
-                    heigh={50}
+                    height={50}
                     IconSection={IconSearch}
                     loading={isLoading}
                 >

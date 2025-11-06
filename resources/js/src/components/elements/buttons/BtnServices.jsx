@@ -16,7 +16,7 @@ import {
 export const BtnSubmit = ({
     children,
     fullwidth = true,
-    heigh = 45,
+    height = 45,
     fontSize = 18,
     IconSection = IconChecks,
     loading = false,
@@ -35,7 +35,7 @@ export const BtnSubmit = ({
             loaderProps={{ type: "dots" }}
             styles={{
                 root: {
-                    "--button-height": rem(heigh),
+                    "--button-height": rem(height),
                 },
                 inner: {
                     fontSize: fontSize,
@@ -50,7 +50,7 @@ export const BtnSubmit = ({
 export const BtnSection = ({
     disabled = false,
     fullWidth = false,
-    heigh = 40,
+    height = 40,
     fontSize = 14,
     mb = 0,
     mt = 0,
@@ -68,7 +68,7 @@ export const BtnSection = ({
             leftSection={<IconSection color={"#6d79f7"} />}
             styles={{
                 root: {
-                    "--button-height": rem(heigh),
+                    "--button-height": rem(height),
                 },
                 inner: {
                     fontSize: fontSize,
@@ -116,12 +116,12 @@ export const BtnDarkMode = ({ classes }) => {
 export const BtnSendWhatsapp = ({ handleAction }) => {
     return (
         <ActionIcon
-        variant="light"
-        color="#25D366"
-        onClick={handleAction}
-        size={35}
-        radius="lg"
-        aria-label="Btn send whatsapp"
+            variant="light"
+            color="#25D366"
+            onClick={handleAction}
+            size={35}
+            radius="lg"
+            aria-label="Btn send whatsapp"
         >
             <IconBrandWhatsapp
                 stroke={1.8}

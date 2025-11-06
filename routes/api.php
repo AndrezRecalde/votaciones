@@ -143,19 +143,20 @@ Route::group(
 
         /* Consulta Popular */
         /* Preguntas de Consulta */
-        Route::get('preguntas-consulta', [PreguntaConsultaController::class, 'getPreguntas']);      // Listado
-        Route::get('preguntas-consulta/{id}', [PreguntaConsultaController::class, 'show']);  // Mostrar
-        Route::post('pregunta-consulta', [PreguntaConsultaController::class, 'store']);     // Crear
-        Route::put('pregunta-consulta/{id}', [PreguntaConsultaController::class, 'update']); // Actualizar
-        Route::delete('pregunta-consulta/{id}', [PreguntaConsultaController::class, 'destroy']); // Desactivar
-        Route::post('pregunta-consulta/{id}/restore', [PreguntaConsultaController::class, 'restore']); // Reactivar
+        Route::get('/preguntas-consulta', [PreguntaConsultaController::class, 'getPreguntas']);      // Listado
+        Route::get('/preguntas-consulta/{id}', [PreguntaConsultaController::class, 'show']);  // Mostrar
+        Route::post('/pregunta-consulta', [PreguntaConsultaController::class, 'store']);     // Crear
+        Route::put('/pregunta-consulta/{id}', [PreguntaConsultaController::class, 'update']); // Actualizar
+        Route::delete('/pregunta-consulta/{id}', [PreguntaConsultaController::class, 'destroy']); // Desactivar
+        Route::post('/pregunta-consulta/{id}/restore', [PreguntaConsultaController::class, 'restore']); // Reactivar
+        Route::put('/update/status/pregunta-consulta/{id}', [PreguntaConsultaController::class, 'updateActivo']);
 
 
         /* Resultados y Estadisticas de la Consulta Popular */
         // Rutas adicionales
-        Route::get('actas-consulta/{id}/resumen-votos', [ActaConsultaController::class, 'resumenVotos']);
-        Route::get('actas-consulta/estadisticas/general', [ActaConsultaController::class, 'estadisticas']);
-        Route::get('actas-consulta/resultados/por-pregunta', [ActaConsultaController::class, 'resultadosPorPregunta']);
+        Route::get('/actas-consulta/{id}/resumen-votos', [ActaConsultaController::class, 'resumenVotos']);
+        Route::get('/actas-consulta/estadisticas/general', [ActaConsultaController::class, 'estadisticas']);
+        Route::get('/actas-consulta/resultados/por-pregunta', [ActaConsultaController::class, 'resultadosPorPregunta']);
     }
 );
 
@@ -201,13 +202,13 @@ Route::group(
 
         /* Consulta Popular */
         /* Juntas para Consulta Popular */
-        Route::get('actas-consulta/buscar/por-junta', [JuntaController::class, 'buscarPorJunta']);
+        Route::get('/actas-consulta/buscar/por-junta', [JuntaController::class, 'buscarPorJunta']);
 
         /* CRUD Acta Consulta Popular */
-        Route::get('actas-consulta', [ActaConsultaController::class, 'getActasConsulta']); // Listar actas
-        Route::get('actas-consulta/{id}', [ActaConsultaController::class, 'show']); // Mostrar acta
-        Route::post('actas-consulta', [ActaConsultaController::class, 'store']); // Crear acta
-        Route::put('actas-consulta/{id}', [ActaConsultaController::class, 'update']); // Actualizar acta
-        Route::delete('actas-consulta/{id}', [ActaConsultaController::class, 'destroy']); // Eliminar acta
+        Route::get('/actas-consulta', [ActaConsultaController::class, 'getActasConsulta']); // Listar actas
+        Route::get('/acta-consulta/{id}', [ActaConsultaController::class, 'show']); // Mostrar acta
+        Route::post('/acta-consulta', [ActaConsultaController::class, 'store']); // Crear acta
+        Route::put('/acta-consulta/{id}', [ActaConsultaController::class, 'update']); // Actualizar acta
+        Route::delete('/acta-consulta/{id}', [ActaConsultaController::class, 'destroy']); // Eliminar acta
     }
 );

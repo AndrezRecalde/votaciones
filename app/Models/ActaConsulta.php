@@ -17,7 +17,10 @@ class ActaConsulta extends Model
         'parroquia_id',
         'zona_id',
         'junta_id',
+        'pregunta_id',
         'cod_cne',
+        'votos_si',
+        'votos_no',
         'votos_validos',
         'votos_blancos',
         'votos_nulos',
@@ -34,6 +37,9 @@ class ActaConsulta extends Model
         'parroquia_id'   => 'integer',
         'zona_id'        => 'integer',
         'junta_id'       => 'integer',
+        'pregunta_id'    => 'integer',
+        'votos_si'       => 'integer',
+        'votos_no'       => 'integer',
         'votos_validos'  => 'integer',
         'votos_blancos'  => 'integer',
         'votos_nulos'    => 'integer',
@@ -44,19 +50,12 @@ class ActaConsulta extends Model
         'user_update'    => 'integer',
     ];
 
+    protected $appends = [
+        'porcentaje_si',
+        'porcentaje_no',
+    ];
 
-    public function preguntas()
-    {
-        return $this->belongsToMany(PreguntaConsulta::class, 'acta_consulta_preguntas', 'acta_consulta_id', 'pregunta_id')
-            ->withPivot('votos_si', 'votos_no')
-            ->withTimestamps();
-    }
-
-    public function actaConsultaPreguntas()
-    {
-        return $this->hasMany(ActaConsultaPregunta::class, 'acta_consulta_id');
-    }
-
+    // Relaciones
     public function provincia()
     {
         return $this->belongsTo(Provincia::class);
@@ -82,6 +81,11 @@ class ActaConsulta extends Model
         return $this->belongsTo(Junta::class);
     }
 
+    public function pregunta()
+    {
+        return $this->belongsTo(PreguntaConsulta::class, 'pregunta_id');
+    }
+
     public function userAdd()
     {
         return $this->belongsTo(User::class, 'user_add');
@@ -92,40 +96,7 @@ class ActaConsulta extends Model
         return $this->belongsTo(User::class, 'user_update');
     }
 
-    /**
-     * Obtener resumen de votos por pregunta con porcentajes
-     */
-    public function getResumenVotosPorPregunta()
-    {
-        return $this->actaConsultaPreguntas()
-            ->with('pregunta')
-            ->get()
-            ->map(function ($actaPregunta) {
-                return [
-                    'pregunta_id' => $actaPregunta->pregunta_id,
-                    'numero_pregunta' => $actaPregunta->pregunta->numero_pregunta ?? null,
-                    'texto_pregunta' => $actaPregunta->pregunta->texto_pregunta ?? null,
-                    'votos_si' => $actaPregunta->votos_si,
-                    'votos_no' => $actaPregunta->votos_no,
-                    'total_votos' => $actaPregunta->total_votos,
-                    'porcentaje_si' => $actaPregunta->porcentaje_si,
-                    'porcentaje_no' => $actaPregunta->porcentaje_no,
-                ];
-            });
-    }
-
-    /**
-     * Obtener el total de votos emitidos (válidos + blancos + nulos)
-     */
-    public function getTotalVotosEmitidosAttribute(): int
-    {
-        return $this->votos_validos + $this->votos_blancos + $this->votos_nulos;
-    }
-
-    // ========================================
-    // SCOPES
-    // ========================================
-
+    // Scopes
     public function scopeActivas($query)
     {
         return $query->where('estado', true);
@@ -159,5 +130,26 @@ class ActaConsulta extends Model
     public function scopeLegible($query)
     {
         return $query->where('legible', true);
+    }
+
+    // Accessors
+    public function getPorcentajeSiAttribute(): float
+    {
+        $validos = (int) $this->votos_validos;
+        $den = $validos > 0 ? $validos : ($this->votos_si + $this->votos_no);
+        if ($den <= 0) {
+            return 0.0;
+        }
+        return round(($this->votos_si / $den) * 100, 2);
+    }
+
+    public function getPorcentajeNoAttribute(): float
+    {
+        $validos = (int) $this->votos_validos;
+        $den = $validos > 0 ? $validos : ($this->votos_si + $this->votos_no);
+        if ($den <= 0) {
+            return 0.0;
+        }
+        return round(($this->votos_no / $den) * 100, 2);
     }
 }

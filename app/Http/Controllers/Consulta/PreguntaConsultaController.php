@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Consulta;
 use App\Enums\HTTPStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PreguntaConsultaRequest;
+use App\Http\Requests\StatusRequest;
 use App\Models\PreguntaConsulta;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,37 +19,34 @@ class PreguntaConsultaController extends Controller
      */
     public function getPreguntas(Request $request): JsonResponse
     {
-        $q = $request->query('q');
-        $activo = $request->query('activo');
+        $preguntas = PreguntaConsulta::query();
+
+        $all = $request->boolean('all', false);
+
+        if ($all) {
+            $preguntas = PreguntaConsulta::activas()->get();
+            return response()->json([
+                'status' => HTTPStatus::Success,
+                'preguntas' => $preguntas,
+            ], 200);
+        }
+
+        // Si no, aplica paginación normal
         $perPage = intval($request->input('per_page', 20));
         $page = intval($request->input('page', 1));
 
-        $query = PreguntaConsulta::query();
-
-        if (!is_null($activo) && in_array($activo, ['0', '1', 0, 1], true)) {
-            $query->where('activo', (bool) $activo);
-        }
-
-        if ($q) {
-            $query->where(function ($sub) use ($q) {
-                $sub->where('texto_pregunta', 'like', "%{$q}%")
-                    ->orWhere('descripcion', 'like', "%{$q}%")
-                    ->orWhere('numero_pregunta', 'like', "%{$q}%");
-            });
-        }
-
-        $preguntas = $query->orderBy('numero_pregunta')->paginate($perPage, ['*'], 'page', $page);
+        $preguntasPaginadas = $preguntas->orderBy('numero_pregunta', 'ASC')->paginate($perPage, ['*'], 'page', $page);
 
         return response()->json([
             'status' => HTTPStatus::Success,
-            'preguntas' => $preguntas,
+            'preguntas' => $preguntasPaginadas->items(),
             'paginacion' => [
-                'total' => $preguntas->total(),
-                'por_pagina' => $preguntas->perPage(),
-                'pagina_actual' => $preguntas->currentPage(),
-                'ultima_pagina' => $preguntas->lastPage(),
-                'desde' => $preguntas->firstItem(),
-                'hasta' => $preguntas->lastItem(),
+                'total' => $preguntasPaginadas->total(),
+                'por_pagina' => $preguntasPaginadas->perPage(),
+                'pagina_actual' => $preguntasPaginadas->currentPage(),
+                'ultima_pagina' => $preguntasPaginadas->lastPage(),
+                'desde' => $preguntasPaginadas->firstItem(),
+                'hasta' => $preguntasPaginadas->lastItem(),
             ],
         ], 200);
     }
@@ -160,6 +158,17 @@ class PreguntaConsultaController extends Controller
         }
     }
 
+    function updateActivo(StatusRequest $request, int $id): JsonResponse
+    {
+        $pregunta = PreguntaConsulta::find($id);
+        if ($pregunta) {
+            $pregunta->update($request->validated());
+            return response()->json(['status' => HTTPStatus::Success, 'msg' => HTTPStatus::Actualizado], 201);
+        } else {
+            return response()->json(['status' => HTTPStatus::Error, 'msg' => HTTPStatus::NotFound], 404);
+        }
+    }
+
     /**
      * Restaurar una pregunta (marcar como activa).
      */
@@ -189,17 +198,13 @@ class PreguntaConsultaController extends Controller
 
 
     /**
-     * Obtener todas las preguntas activas de la consulta
-     * Para mostrar el formulario de ingreso
+     * Obtener preguntas activas
      */
     public function obtenerPreguntas(): JsonResponse
     {
         try {
-            $preguntas = DB::table('preguntas_consulta')
-                ->select('id', 'numero_pregunta', 'texto_pregunta', 'descripcion')
-                ->where('activo', true)
-                ->orderBy('numero_pregunta', 'asc')
-                ->get();
+            $preguntas = PreguntaConsulta::activas()->ordenadoPorNumero()
+                ->get(['id', 'numero_pregunta', 'texto_pregunta', 'descripcion']);
 
             return response()->json([
                 'success' => true,
@@ -207,7 +212,7 @@ class PreguntaConsultaController extends Controller
             ], 200);
         } catch (\Throwable $e) {
             return response()->json([
-                'success' => false,
+                'success' => HTTPStatus::Error,
                 'msg' => $e->getMessage(),
             ], 500);
         }

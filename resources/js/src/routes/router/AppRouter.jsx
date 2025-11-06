@@ -23,8 +23,12 @@ export const AppRouter = () => {
     const { checkAuthToken } = useAuthStore();
 
     useEffect(() => {
-        checkAuthToken();
+        fnRecargarToken();
     }, []);
+
+    const fnRecargarToken = async () => {
+        await checkAuthToken();
+    };
 
     const renderRoutes = (routeConfig) => {
         return routeConfig.map(({ path, Component, roles }) => (

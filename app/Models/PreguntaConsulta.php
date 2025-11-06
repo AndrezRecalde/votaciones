@@ -20,17 +20,14 @@ class PreguntaConsulta extends Model
 
     protected $casts = [
         'numero_pregunta' => 'integer',
-        'activo' => 'boolean',
+        //'activo' => 'boolean',
     ];
 
     // Relación con actas de consulta
     public function actasConsulta()
     {
-        return $this->belongsToMany(ActaConsulta::class, 'acta_consulta_preguntas', 'pregunta_id', 'acta_consulta_id')
-            ->withPivot('votos_si', 'votos_no')
-            ->withTimestamps();
+        return $this->hasMany(ActaConsulta::class, 'pregunta_id');
     }
-
 
     // Scopes útiles
     public function scopeActivas($query)

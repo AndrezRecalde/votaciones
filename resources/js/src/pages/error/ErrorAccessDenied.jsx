@@ -23,7 +23,7 @@ const ErrorAccessDenied = () => {
                 </Text>
                 <Group justify="center">
                     <BtnSection
-                        heigh={50}
+                        height={50}
                         fontSize={18}
                         handleAction={handleAction}
                         IconSection={IconUserCircle}

@@ -61,7 +61,7 @@ const OrganizacionesPage = () => {
             <Group justify="space-between">
                 <TitlePage order={1}>Organizaciones</TitlePage>
                 <BtnSection
-                    heigh={45}
+                    height={45}
                     handleAction={handleOpenModal}
                     IconSection={IconPencilPlus}
                 >

@@ -1,6 +1,15 @@
-import { Container, Divider } from "@mantine/core";
-import { DigitacionFilter, TitlePage } from "../../../components";
-import { useJurisdiccionStore, useTitleHook } from "../../../hooks";
+import { Container, Divider, Grid } from "@mantine/core";
+import {
+    ActaConsultaSection,
+    DigitacionFilter,
+    TitlePage,
+} from "../../../components";
+import {
+    useActaConsultaStore,
+    useJurisdiccionStore,
+    usePreguntaStore,
+    useTitleHook,
+} from "../../../hooks";
 import { useEffect, useMemo } from "react";
 
 const DigitacionConsultaPage = () => {
@@ -10,19 +19,36 @@ const DigitacionConsultaPage = () => {
     }, []);
 
     const { startLoadProvincias } = useJurisdiccionStore();
+    const { startLoadPreguntas, startClearPreguntas } = usePreguntaStore();
+    const { loadingActaConsulta } = useActaConsultaStore();
 
     useEffect(() => {
         startLoadProvincias({
             provincia_id: usuario.provincia_id,
             activo: true,
         });
+
+        startLoadPreguntas({ all: true });
+
+        return () => {
+            startClearPreguntas();
+        };
     }, []);
 
     return (
         <Container size="xxl">
-            <TitlePage order={2}>Acta de Escrutinio - Consulta Popular</TitlePage>
+            <TitlePage order={2}>
+                Acta de Escrutinio - Consulta Popular
+            </TitlePage>
             <Divider mb={20} />
-            <DigitacionFilter usuario={usuario} />
+            <Grid>
+                <Grid.Col span={3}>
+                    <DigitacionFilter usuario={usuario} />
+                </Grid.Col>
+                <Grid.Col span={9}>
+                    {loadingActaConsulta ? <ActaConsultaSection /> : null}
+                </Grid.Col>
+            </Grid>
         </Container>
     );
 };

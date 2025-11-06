@@ -414,7 +414,7 @@ export const ActaNovedadForm = ({ actaForm }) => {
                         </Tooltip>
                     </Grid.Col>
                     <Grid.Col span={9}>
-                        <BtnSubmit heigh={50}>Ingresar Acta</BtnSubmit>
+                        <BtnSubmit height={50}>Ingresar Acta</BtnSubmit>
                     </Grid.Col>
                 </Grid>
             </Card>
