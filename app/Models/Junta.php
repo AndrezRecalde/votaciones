@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Junta extends Model
@@ -13,6 +14,21 @@ class Junta extends Model
     function actas(): HasMany
     {
         return $this->hasMany(Acta::class)->with('votos');
+    }
+
+    public function zona()
+    {
+        return $this->belongsTo(Zona::class, 'zona_id');
+    }
+
+    public function recinto()
+    {
+        return $this->belongsTo(Recinto::class, 'recinto_id');
+    }
+
+    public function actasConsulta()
+    {
+        return $this->hasMany(ActaConsulta::class, 'junta_id');
     }
 
     function scopeProvincia($query, $provincia_id)
@@ -49,5 +65,4 @@ class Junta extends Model
             return $query->where('z.id', $zona_id);
         }
     }
-
 }

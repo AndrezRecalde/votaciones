@@ -42,7 +42,7 @@ class UpdateActaConsultaRequest extends FormRequest
             'votos_nulos' => 'required|integer|min:0',
             'cuadrada' => 'required|boolean',
             'legible' => 'required|boolean',
-            'estado' => 'required|boolean',
+            //'estado' => 'required|boolean',
         ];
     }
 
@@ -62,7 +62,7 @@ class UpdateActaConsultaRequest extends FormRequest
             'votos_nulos.required' => 'Los votos nulos son requeridos.',
             'cuadrada.required' => 'Debe indicar si el acta está cuadrada.',
             'legible.required' => 'Debe indicar si el acta es legible.',
-            'estado.required' => 'Debe indicar el estado del acta.',
+            //'estado.required' => 'Debe indicar el estado del acta.',
         ];
     }
 
@@ -83,7 +83,7 @@ class UpdateActaConsultaRequest extends FormRequest
             'votos_nulos' => 'votos nulos',
             'cuadrada' => 'cuadrada',
             'legible' => 'legible',
-            'estado' => 'estado',
+            //'estado' => 'estado',
         ];
     }
 }

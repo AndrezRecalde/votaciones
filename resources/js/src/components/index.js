@@ -132,6 +132,10 @@ import { ActaConsultaVotosSection } from "./consulta-popular/acta/section/ActaCo
 import { ActaValidacionSection } from "./consulta-popular/acta/section/ActaValidacionSection";
 import { ActaResumenTotalVotos } from "./consulta-popular/acta/section/ActaResumenTotalVotos";
 import { ActaAccionesBtnSection } from "./consulta-popular/acta/section/ActaAccionesBtnSection";
+import { ActaInformacionUsuario } from "./consulta-popular/acta/section/ActaInformacionUsuario";
+
+/* Resultados Consulta Popular */
+import { ResultadosConsultaFilter } from "./consulta-popular/resultados/filter/ResultadosConsultaFilter";
 
 export {
     /* Logo */
@@ -264,5 +268,9 @@ export {
     ActaConsultaVotosSection,
     ActaValidacionSection,
     ActaResumenTotalVotos,
-    ActaAccionesBtnSection
+    ActaAccionesBtnSection,
+    ActaInformacionUsuario,
+
+    /* Resultados Consulta Popular */
+    ResultadosConsultaFilter,
 }

@@ -74,26 +74,26 @@ export const useActaConsultaStore = () => {
             if (acta.id) {
                 //actualizando
                 const { data } = await apiAxios.put(
-                    `/general/actas-consulta/${acta.id}`,
+                    `/general/acta-consulta/${acta.id}`,
                     acta
                 );
-                dispatch(onLoadMessage(data.message));
+                dispatch(onLoadMessage(data));
                 setTimeout(() => {
                     dispatch(onLoadMessage(undefined));
-                    dispatch(startClearActaConsulta());
+                    startClearActaConsulta();
                 }, 2000);
                 return;
             }
 
             //creando
             const { data } = await apiAxios.post(
-                "/general/actas-consulta",
+                "/general/acta-consulta",
                 acta
             );
-            dispatch(onLoadMessage(data.message));
+            dispatch(onLoadMessage(data));
             setTimeout(() => {
                 dispatch(onLoadMessage(undefined));
-                dispatch(startClearActaConsulta());
+                startClearActaConsulta();
             }, 2000);
         } catch (error) {
             console.log(error);

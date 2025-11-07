@@ -100,6 +100,13 @@ const PreguntasConsultaPage = lazy(() =>
     )
 );
 
+/* Resultados Consulta Popular */
+const ResultadosConsultaPage = lazy(() =>
+    import(
+        /* webpackChunkName: "ResultadosConsultaPage" */ "../../pages/consulta-popular/resultados/ResultadosConsultaPage"
+    )
+);
+
 const ErrorNotFound = lazy(() =>
     import(
         /* webpackChunkName: "ErrorNotFound" */ "../../pages/error/ErrorNotFound"
@@ -156,7 +163,6 @@ const adminRoutes = generateRoutes(
         { path: "guesses", Component: GuessesPage },
         { path: "candidatos", Component: CandidatosPage },
         { path: "organizaciones", Component: OrganizacionesPage },
-        { path: "preguntas", Component: PreguntasConsultaPage },
         //{ path: HEADER_MENU.DIGITACION, Component: DigitacionPage },
 
         // Rutas de Elecciones Binomios y Webster
@@ -173,6 +179,9 @@ const adminRoutes = generateRoutes(
         { path: HEADER_MENU.ACTAS, Component: BusquedaActaPage },
 
         // Rutas para Consulta Popular
+        { path: "preguntas", Component: PreguntasConsultaPage },
+        { path: "resultados-consulta", Component: ResultadosConsultaPage },
+
     ],
     ["ADMIN", "RESPONSABLE"]
 );

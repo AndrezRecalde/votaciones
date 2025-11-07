@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
     Card,
     Checkbox,
@@ -10,9 +11,7 @@ import {
 } from "@mantine/core";
 import { IconAlertCircle, IconCheck, IconX } from "@tabler/icons-react";
 
-export const ActaValidacionSection = ({ actaForm }) => {
-    const legible = true; // Placeholder value
-    const esCuadrada = false; // Placeholder value
+export const ActaValidacionSection = ({ actaForm, esCuadrada, legible }) => {
     return (
         <Card shadow="md" padding="lg" radius="md" withBorder>
             <Group mb="sm" gap="xs">
@@ -43,10 +42,10 @@ export const ActaValidacionSection = ({ actaForm }) => {
                     withBorder
                     style={{
                         backgroundColor: legible
-                            ? "var(--mantine-color-green-0)"
+                            ? "var(--mantine-color-teal-0)"
                             : "var(--mantine-color-red-0)",
                         borderColor: legible
-                            ? "var(--mantine-color-green-3)"
+                            ? "var(--mantine-color-teal-3)"
                             : "var(--mantine-color-red-3)",
                         transition: "all 0.2s ease",
                     }}
@@ -74,7 +73,7 @@ export const ActaValidacionSection = ({ actaForm }) => {
                             size="md"
                             radius="xl"
                             variant="filled"
-                            color={legible ? "green" : "red"}
+                            color={legible ? "teal" : "red"}
                         >
                             {legible ? (
                                 <IconCheck size={16} />
@@ -91,10 +90,10 @@ export const ActaValidacionSection = ({ actaForm }) => {
                     withBorder
                     style={{
                         backgroundColor: esCuadrada
-                            ? "var(--mantine-color-green-0)"
+                            ? "var(--mantine-color-teal-0)"
                             : "var(--mantine-color-yellow-0)",
                         borderColor: esCuadrada
-                            ? "var(--mantine-color-green-3)"
+                            ? "var(--mantine-color-teal-3)"
                             : "var(--mantine-color-yellow-3)",
                         transition: "all 0.2s ease",
                     }}
@@ -116,7 +115,7 @@ export const ActaValidacionSection = ({ actaForm }) => {
                             size="md"
                             radius="xl"
                             variant="filled"
-                            color={esCuadrada ? "green" : "yellow"}
+                            color={esCuadrada ? "teal" : "yellow"}
                         >
                             {esCuadrada ? (
                                 <IconCheck size={16} />

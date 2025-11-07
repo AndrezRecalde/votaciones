@@ -1,11 +1,17 @@
 import { ActionIcon, Card, Grid, Tooltip } from "@mantine/core";
 import { IconRotate2 } from "@tabler/icons-react";
 import { BtnSubmit } from "../../../../components";
+import { useActaConsultaStore } from "../../../../hooks";
 
-export const ActaAccionesBtnSection = () => {
+export const ActaAccionesBtnSection = ({ actaForm }) => {
+    const { startClearActaConsulta, startActivateSearch } =
+        useActaConsultaStore();
+
 
     const handleResetSearch = () => {
-        console.log('clic');
+        startClearActaConsulta();
+        startActivateSearch();
+        actaForm.reset();
     };
 
     return (

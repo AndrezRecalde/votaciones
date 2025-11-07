@@ -1,8 +1,6 @@
-import { useState } from "react";
 import {
     Card,
     Divider,
-    Grid,
     Group,
     Paper,
     Stack,
@@ -15,13 +13,11 @@ import {
     IconCheck,
 } from "@tabler/icons-react";
 
-export const ActaResumenTotalVotos = () => {
-    const [totales, setTotales] = useState(0);
-    const esCuadrada = true; // Placeholder value
-    const votos_validos = 100;
-    const votos_blancos = 5;
-    const votos_nulos = 3;
-
+export const ActaResumenTotalVotos = ({
+    esCuadrada,
+    votos_validos,
+    totales,
+}) => {
     return (
         <Card shadow="md" padding="lg" radius="md" withBorder>
             <Group mb="sm" gap="xs">
@@ -47,11 +43,11 @@ export const ActaResumenTotalVotos = () => {
                     withBorder
                     style={{
                         backgroundColor: esCuadrada
-                            ? "var(--mantine-color-green-0)"
-                            : "var(--mantine-color-gray-0)",
+                            ? "var(--mantine-color-teal-0)"
+                            : "var(--mantine-color-teal-0)",
                         borderColor: esCuadrada
-                            ? "var(--mantine-color-green-3)"
-                            : "var(--mantine-color-gray-3)",
+                            ? "var(--mantine-color-teal-3)"
+                            : "var(--mantine-color-teal-3)",
                         transition: "all 0.2s ease",
                     }}
                 >
@@ -64,7 +60,7 @@ export const ActaResumenTotalVotos = () => {
                                 size="xs"
                                 radius="xl"
                                 variant="filled"
-                                color="green"
+                                color="teal"
                             >
                                 <IconCheck size={10} />
                             </ThemeIcon>
@@ -73,9 +69,9 @@ export const ActaResumenTotalVotos = () => {
                     <Text
                         size="xl"
                         fw={700}
-                        c={esCuadrada ? "green.7" : "dark"}
+                        c={esCuadrada ? "teal.7" : "dark"}
                     >
-                        {votos_validos.toString()}
+                        {votos_validos.toString() || "0"}
                     </Text>
                 </Paper>
 
@@ -85,11 +81,11 @@ export const ActaResumenTotalVotos = () => {
                     withBorder
                     style={{
                         backgroundColor: esCuadrada
-                            ? "var(--mantine-color-green-0)"
-                            : "var(--mantine-color-gray-0)",
+                            ? "var(--mantine-color-teal-0)"
+                            : "var(--mantine-color-teal-0)",
                         borderColor: esCuadrada
-                            ? "var(--mantine-color-green-3)"
-                            : "var(--mantine-color-gray-3)",
+                            ? "var(--mantine-color-teal-3)"
+                            : "var(--mantine-color-teal-3)",
                         transition: "all 0.2s ease",
                     }}
                 >
@@ -102,7 +98,7 @@ export const ActaResumenTotalVotos = () => {
                                 size="xs"
                                 radius="xl"
                                 variant="filled"
-                                color="green"
+                                color="teal"
                             >
                                 <IconCheck size={10} />
                             </ThemeIcon>
@@ -111,13 +107,9 @@ export const ActaResumenTotalVotos = () => {
                     <Text
                         size="xl"
                         fw={700}
-                        c={esCuadrada ? "green.7" : "dark"}
+                        c={esCuadrada ? "teal.7" : "dark"}
                     >
-                        {(
-                            votos_blancos +
-                            votos_nulos +
-                            parseInt(totales * 1)
-                        ).toString()}
+                        {totales.toString() || "0"}
                     </Text>
                 </Paper>
             </Stack>

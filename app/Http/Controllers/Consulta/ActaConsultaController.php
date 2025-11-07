@@ -57,14 +57,13 @@ class ActaConsultaController extends Controller
             $actas = $query->orderByDesc('created_at')->paginate($perPage);
 
             return response()->json([
-                'success' => true,
-                'data' => $actas,
+                'status' => true,
+                'actas' => $actas,
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'success' => false,
-                'message' => 'Error al obtener las actas de consulta',
-                'error' => $e->getMessage(),
+                'status' => HTTPStatus::Error,
+                'msg' => $e->getMessage(),
             ], 500);
         }
     }
@@ -81,8 +80,8 @@ class ActaConsultaController extends Controller
 
             if ($exists) {
                 return response()->json([
-                    'success' => false,
-                    'message' => 'Ya existe un acta para esta junta y pregunta.',
+                    'status' => HTTPStatus::Error,
+                    'msg' => 'Ya existe un acta para esta junta y pregunta.',
                 ], 422);
             }
 
@@ -104,7 +103,7 @@ class ActaConsultaController extends Controller
                 'votos_nulos'   => (int) $request->votos_nulos,
                 'cuadrada'      => (bool) $request->cuadrada,
                 'legible'       => (bool) $request->legible,
-                'estado'        => (bool) $request->estado,
+                //'estado'        => (bool) $request->estado,
                 'user_add'      => Auth::id(),
             ];
 
@@ -113,16 +112,15 @@ class ActaConsultaController extends Controller
             DB::commit();
 
             return response()->json([
-                'success' => true,
-                'message' => 'Acta creada exitosamente.',
+                'status' => HTTPStatus::Success,
+                'msg' => 'Acta creada exitosamente.',
                 'data'    => $acta,
             ], 201);
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json([
-                'success' => false,
-                'message' => 'Error al crear el acta de consulta.',
-                'error'   => $e->getMessage(),
+                'status' => HTTPStatus::Error,
+                'msg'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -145,14 +143,13 @@ class ActaConsultaController extends Controller
             ])->findOrFail($id);
 
             return response()->json([
-                'success' => true,
+                'status' => true,
                 'data' => $acta,
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'success' => false,
-                'message' => 'Acta no encontrada',
-                'error' => $e->getMessage(),
+                'status' => false,
+                'msg' => $e->getMessage(),
             ], 404);
         }
     }
@@ -175,8 +172,8 @@ class ActaConsultaController extends Controller
 
             if ($exists) {
                 return response()->json([
-                    'success' => false,
-                    'message' => 'Ya existe un acta para esa combinación de junta y pregunta.',
+                    'status' => HTTPStatus::Error,
+                    'msg' => 'Ya existe un acta para esa combinación de junta y pregunta.',
                 ], 422);
             }
 
@@ -198,7 +195,7 @@ class ActaConsultaController extends Controller
                 'votos_nulos'   => (int) $request->votos_nulos,
                 'cuadrada'      => (bool) $request->cuadrada,
                 'legible'       => (bool) $request->legible,
-                'estado'        => (bool) $request->estado,
+                //'estado'        => (bool) $request->estado,
                 'user_update'   => Auth::id(),
             ];
 
@@ -207,16 +204,15 @@ class ActaConsultaController extends Controller
             DB::commit();
 
             return response()->json([
-                'success' => true,
-                'message' => 'Acta actualizada exitosamente.',
+                'status' => HTTPStatus::Success,
+                'msg' => 'Acta actualizada exitosamente.',
                 'data'    => $acta->fresh(['pregunta', 'junta']),
             ], 200);
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json([
-                'success' => false,
-                'message' => 'Error al actualizar el acta de consulta.',
-                'error'   => $e->getMessage(),
+                'status' => HTTPStatus::Error,
+                'msg'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -231,12 +227,12 @@ class ActaConsultaController extends Controller
             $acta->delete();
 
             return response()->json([
-                'success' => HTTPStatus::Success,
+                'status' => HTTPStatus::Success,
                 'msg' => 'Acta eliminada exitosamente',
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'success' => HTTPStatus::Error,
+                'status' => HTTPStatus::Error,
                 'msg' => $e->getMessage(),
             ], 500);
         }
@@ -287,7 +283,7 @@ class ActaConsultaController extends Controller
             ];
 
             return response()->json([
-                'success' => true,
+                'status' => HTTPStatus::Success,
                 'data' => [
                     'junta_id' => $juntaId,
                     'ubicacion' => [
@@ -302,9 +298,8 @@ class ActaConsultaController extends Controller
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'success' => false,
-                'message' => 'Error al obtener el resumen de votos',
-                'error' => $e->getMessage(),
+                'status' => HTTPStatus::Error,
+                'msg' => $e->getMessage(),
             ], 404);
         }
     }
@@ -386,7 +381,7 @@ class ActaConsultaController extends Controller
                     DB::raw('SUM(actas_consulta.votos_validos) as total_votos_validos')
                 )
                     ->join('provincias', 'actas_consulta.provincia_id', '=', 'provincias.id')
-                    ->where('actas_consulta.estado', true)
+                    //->where('actas_consulta.estado', true)
                     ->groupBy('provincias.id', 'provincias.nombre_provincia')
                     ->get();
 
@@ -420,7 +415,7 @@ class ActaConsultaController extends Controller
                     DB::raw('SUM(actas_consulta.votos_validos) as total_votos_validos')
                 )
                     ->join('cantones', 'actas_consulta.canton_id', '=', 'cantones.id')
-                    ->where('actas_consulta.estado', true)
+                    //->where('actas_consulta.estado', true)
                     ->where('actas_consulta.provincia_id', $request->provincia_id)
                     ->groupBy('cantones.id', 'cantones.nombre_canton')
                     ->get();
@@ -455,7 +450,7 @@ class ActaConsultaController extends Controller
                     DB::raw('SUM(actas_consulta.votos_validos) as total_votos_validos')
                 )
                     ->join('parroquias', 'actas_consulta.parroquia_id', '=', 'parroquias.id')
-                    ->where('actas_consulta.estado', true)
+                    //->where('actas_consulta.estado', true)
                     ->where('actas_consulta.canton_id', $request->canton_id)
                     ->groupBy('parroquias.id', 'parroquias.nombre_parroquia', 'parroquias.tipo')
                     ->get();
@@ -488,7 +483,7 @@ class ActaConsultaController extends Controller
                     DB::raw('SUM(actas_consulta.votos_validos) as total_votos_validos')
                 )
                     ->join('zonas', 'actas_consulta.zona_id', '=', 'zonas.id')
-                    ->where('actas_consulta.estado', true)
+                    //->where('actas_consulta.estado', true)
                     ->where('actas_consulta.parroquia_id', $request->parroquia_id)
                     ->groupBy('zonas.id', 'zonas.nombre_zona')
                     ->get();
@@ -510,7 +505,7 @@ class ActaConsultaController extends Controller
             }
 
             return response()->json([
-                'success' => true,
+                'status' => HTTPStatus::Success,
                 'data' => [
                     'filtros_aplicados' => [
                         'provincia_id' => $request->provincia_id,
@@ -543,9 +538,8 @@ class ActaConsultaController extends Controller
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'success' => false,
-                'message' => 'Error al obtener las estadísticas',
-                'error' => $e->getMessage(),
+                'status' => false,
+                'msg' => $e->getMessage(),
             ], 500);
         }
     }
@@ -563,7 +557,8 @@ class ActaConsultaController extends Controller
                 'zona_id' => 'nullable|integer|exists:zonas,id',
             ]);
 
-            $query = ActaConsulta::query()->from('actas_consulta')->where('estado', true);
+            $query = ActaConsulta::query()->from('actas_consulta');
+            //->where('estado', true);
 
             if ($request->filled('provincia_id')) {
                 $query->where('provincia_id', (int) $request->provincia_id);
@@ -614,7 +609,7 @@ class ActaConsultaController extends Controller
                 });
 
             return response()->json([
-                'success' => true,
+                'status' => HTTPStatus::Success,
                 'data' => [
                     'filtros_aplicados' => [
                         'provincia_id' => $request->provincia_id,
@@ -627,9 +622,8 @@ class ActaConsultaController extends Controller
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'success' => false,
-                'message' => 'Error al obtener los resultados por pregunta',
-                'error' => $e->getMessage(),
+                'status' => HTTPStatus::Error,
+                'msg' => $e->getMessage(),
             ], 500);
         }
     }

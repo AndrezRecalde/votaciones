@@ -77,6 +77,8 @@ class JuntaController extends Controller
                 'parroquia',
                 'zona',
                 'junta.recinto', // <-- cargar recinto
+                'userAdd',
+                'userUpdate',
             ])
                 ->where('junta_id', $juntaId)
                 ->where('pregunta_id', $preguntaId)
@@ -174,6 +176,8 @@ class JuntaController extends Controller
                 'cuadrada'        => isset($acta) ? (bool) $acta->cuadrada : null,
                 'legible'         => isset($acta) ? (bool) $acta->legible : null,
                 'estado'          => isset($acta) ? (bool) $acta->estado : null,
+                'user_add'        => $acta->userAdd->nombres_completos ?? null,
+                'user_update'     => $acta->userUpdate->nombres_completos ?? null,
             ];
 
             return response()->json([

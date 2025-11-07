@@ -11,6 +11,7 @@ import {
     useTitleHook,
 } from "../../../hooks";
 import { useEffect, useMemo } from "react";
+import Swal from "sweetalert2";
 
 const DigitacionConsultaPage = () => {
     useTitleHook("Elecciones - Digitación Consulta Popular");
@@ -20,7 +21,7 @@ const DigitacionConsultaPage = () => {
 
     const { startLoadProvincias } = useJurisdiccionStore();
     const { startLoadPreguntas, startClearPreguntas } = usePreguntaStore();
-    const { loadingActaConsulta } = useActaConsultaStore();
+    const { loadingActaConsulta, message, errores } = useActaConsultaStore();
 
     useEffect(() => {
         startLoadProvincias({
@@ -34,6 +35,30 @@ const DigitacionConsultaPage = () => {
             startClearPreguntas();
         };
     }, []);
+
+    useEffect(() => {
+        if (message !== undefined) {
+            Swal.fire({
+                icon: message.status,
+                text: message.msg,
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            return;
+        }
+    }, [message]);
+
+    useEffect(() => {
+        if (errores !== undefined) {
+            Swal.fire({
+                icon: "error",
+                title: "Opps...",
+                text: errores,
+                confirmButtonColor: "#094293",
+            });
+            return;
+        }
+    }, [errores]);
 
     return (
         <Container size="xxl">
