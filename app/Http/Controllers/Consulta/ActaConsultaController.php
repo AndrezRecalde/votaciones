@@ -307,6 +307,7 @@ class ActaConsultaController extends Controller
     /**
      * Estadísticas generales y filtradas
      * - porcentaje_validos se calcula sobre totalNumElectores (suma de recintos.num_electores)
+     * Para mostrarlo en la vista de Perfil de Consulta Popular
      */
     public function estadisticas(Request $request): JsonResponse
     {
@@ -546,6 +547,7 @@ class ActaConsultaController extends Controller
 
     /**
      * Resultados consolidados por pregunta (suma nacional o filtrada)
+     *  Utilizarlo para mostrar en la vista de ResultadosActaConsultaPage
      */
     public function resultadosPorPregunta(Request $request): JsonResponse
     {
@@ -558,7 +560,7 @@ class ActaConsultaController extends Controller
             ]);
 
             $query = ActaConsulta::query()->from('actas_consulta');
-            //->where('estado', true);
+            // ->where('estado', true);
 
             if ($request->filled('provincia_id')) {
                 $query->where('provincia_id', (int) $request->provincia_id);
@@ -573,7 +575,8 @@ class ActaConsultaController extends Controller
                 $query->where('zona_id', (int) $request->zona_id);
             }
 
-            $resultados = $query
+            // Resultados agregados por pregunta
+            $resultados = (clone $query)
                 ->join('preguntas_consulta', 'actas_consulta.pregunta_id', '=', 'preguntas_consulta.id')
                 ->select(
                     'preguntas_consulta.id as pregunta_id',
@@ -608,6 +611,38 @@ class ActaConsultaController extends Controller
                     ];
                 });
 
+            // Acumulado global del ámbito (sumatorias simples)
+            $acumGlobal = (clone $query)
+                ->selectRaw('
+                SUM(votos_blancos) as total_votos_blancos,
+                SUM(votos_nulos) as total_votos_nulos,
+                SUM(votos_validos) as total_votos_validos
+            ')
+                ->first();
+
+            // Total de electores en el ámbito (recintos.num_electores)
+            $electoresQuery = DB::table('juntas as j')
+                ->join('recintos as r', 'r.id', '=', 'j.recinto_id')
+                ->join('zonas as z', 'z.id', '=', 'j.zona_id')
+                ->join('parroquias as p', 'p.id', '=', 'z.parroquia_id')
+                ->join('cantones as c', 'c.id', '=', 'p.canton_id')
+                ->join('provincias as pr', 'pr.id', '=', 'c.provincia_id');
+
+            if ($request->filled('provincia_id')) {
+                $electoresQuery->where('pr.id', (int) $request->provincia_id);
+            }
+            if ($request->filled('canton_id')) {
+                $electoresQuery->where('c.id', (int) $request->canton_id);
+            }
+            if ($request->filled('parroquia_id')) {
+                $electoresQuery->where('p.id', (int) $request->parroquia_id);
+            }
+            if ($request->filled('zona_id')) {
+                $electoresQuery->where('z.id', (int) $request->zona_id);
+            }
+
+            $totalNumElectores = (int) $electoresQuery->sum('r.num_electores');
+
             return response()->json([
                 'status' => HTTPStatus::Success,
                 'data' => [
@@ -618,6 +653,14 @@ class ActaConsultaController extends Controller
                         'zona_id' => $request->zona_id,
                     ],
                     'resultados' => $resultados,
+                    'acumulado_simple' => [
+                        'total_votos_blancos' => (int) ($acumGlobal->total_votos_blancos ?? 0),
+                        'total_votos_nulos' => (int) ($acumGlobal->total_votos_nulos ?? 0),
+                        'total_votos_validos' => (int) ($acumGlobal->total_votos_validos ?? 0),
+                    ],
+                    'poblacion_electoral' => [
+                        'total_num_electores' => $totalNumElectores,
+                    ],
                 ],
             ], 200);
         } catch (Exception $e) {

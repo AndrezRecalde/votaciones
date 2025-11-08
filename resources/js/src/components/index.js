@@ -32,6 +32,9 @@ import { TableMenu } from "./elements/tables/TableMenu";
 /* Elements: Auth */
 import { AuthForm } from "./auth/form/AuthForm";
 
+/* Elements: Fecha */
+import { FechaActual } from "./elements/fecha/FechaActual";
+
 /* Usuario */
 import { UserBtnHeader } from "./user/UserBtnHeader";
 
@@ -136,6 +139,8 @@ import { ActaInformacionUsuario } from "./consulta-popular/acta/section/ActaInfo
 
 /* Resultados Consulta Popular */
 import { ResultadosConsultaFilter } from "./consulta-popular/resultados/filter/ResultadosConsultaFilter";
+import { ResultadosConsultaChart } from "./consulta-popular/resultados/section/ResultadosConsultaChart";
+import { ResultadosConsultaTable } from "./consulta-popular/resultados/section/ResultadosConsultaTable";
 
 export {
     /* Logo */
@@ -171,6 +176,9 @@ export {
 
     /* Elements: Auth */
     AuthForm,
+
+    /* Elements: Fecha */
+    FechaActual,
 
     /* Usuario */
     UserBtnHeader,
@@ -273,4 +281,6 @@ export {
 
     /* Resultados Consulta Popular */
     ResultadosConsultaFilter,
+    ResultadosConsultaChart,
+    ResultadosConsultaTable,
 }

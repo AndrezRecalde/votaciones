@@ -21,14 +21,16 @@ export const BtnSubmit = ({
     IconSection = IconChecks,
     loading = false,
     disabled = false,
+    mt = "md",
+    mb = "md",
 }) => {
     return (
         <Button
             //color="dark.7"
             type="submit"
             fullWidth={fullwidth}
-            mt="md"
-            mb="md"
+            mt={mt}
+            mb={mb}
             rightSection={<IconSection />}
             disabled={disabled}
             loading={loading}

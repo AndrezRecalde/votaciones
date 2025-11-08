@@ -159,9 +159,9 @@ const ResultadosPresidencialesPage = () => {
                             src="https://prefecturadeesmeraldas.gob.ec/wp-content/uploads/2025/04/Flag_of_Ecuador.svg_.png"
                         />
                     </Group>
-                    <BadgeElement variant="default" >
-                            {`Fecha & Hora del reporte: ${fechaActual()}`}
-                        </BadgeElement>
+                    <BadgeElement variant="default">
+                        {`Fecha & Hora del reporte: ${fechaActual()}`}
+                    </BadgeElement>
                     <Grid>
                         <Grid.Col span={{ base: 12, sm: 12, md: 3, lg: 3 }}>
                             <StatVocacion />

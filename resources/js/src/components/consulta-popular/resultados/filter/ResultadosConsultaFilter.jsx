@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { Box, Paper, Select, Stack } from "@mantine/core";
+import { ActionIcon, Box, Group, Paper, rem, Select, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { BtnSubmit } from "../../../../components";
 import { useActaConsultaStore, useJurisdiccionStore } from "../../../../hooks";
-import { IconSearch } from "@tabler/icons-react";
-import classes from "../../../../assets/styles/modules/digitacion/LabelsDigitacion.module.css"
+import { IconFileTypePdf, IconFileTypeXls, IconSearch } from "@tabler/icons-react";
+import classes from "../../../../assets/styles/modules/digitacion/LabelsDigitacion.module.css";
 
 export const ResultadosConsultaFilter = ({ usuario }) => {
     const {
@@ -57,6 +57,16 @@ export const ResultadosConsultaFilter = ({ usuario }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         //Realizar la búsqueda con los filtros seleccionados
+    };
+
+    const handleOpenExportXLS = (e) => {
+        e.preventDefault();
+        //Lógica para exportar a XLS
+    };
+
+    const handleOpenExportPDF = (e) => {
+        e.preventDefault();
+        //Lógica para exportar a PDF
     };
 
     return (
@@ -155,9 +165,32 @@ export const ResultadosConsultaFilter = ({ usuario }) => {
                         height={50}
                         IconSection={IconSearch}
                         loading={isLoading}
+                        mb={0}
                     >
                         Realizar Búsqueda
                     </BtnSubmit>
+                    <Group grow>
+                        <ActionIcon
+                            size={42}
+                            variant="default"
+                            aria-label="download-xls"
+                            onClick={(e) => handleOpenExportPDF(e)}
+                        >
+                            <IconFileTypePdf
+                                style={{ width: rem(24), height: rem(24) }}
+                            />
+                        </ActionIcon>
+                        <ActionIcon
+                            size={42}
+                            variant="default"
+                            aria-label="download-xls"
+                            onClick={(e) => handleOpenExportXLS(e)}
+                        >
+                            <IconFileTypeXls
+                                style={{ width: rem(24), height: rem(24) }}
+                            />
+                        </ActionIcon>
+                    </Group>
                 </Stack>
             </Box>
         </Paper>

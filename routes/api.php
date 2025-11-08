@@ -155,8 +155,8 @@ Route::group(
         /* Resultados y Estadisticas de la Consulta Popular */
         // Rutas adicionales
         Route::get('/actas-consulta/{id}/resumen-votos', [ActaConsultaController::class, 'resumenVotos']);
-        Route::get('/actas-consulta/estadisticas/general', [ActaConsultaController::class, 'estadisticas']);
-        Route::get('/actas-consulta/resultados/por-pregunta', [ActaConsultaController::class, 'resultadosPorPregunta']);
+        Route::get('/actas-consulta/estadisticas-general', [ActaConsultaController::class, 'estadisticas']);
+        Route::get('/actas-consulta/resultados-por-pregunta', [ActaConsultaController::class, 'resultadosPorPregunta']);
     }
 );
 
