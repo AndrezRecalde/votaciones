@@ -6,7 +6,6 @@ export const actaConsultaSlice = createSlice({
         loading: false,
         loadingActaConsulta: false,
         disabledSearch: false,
-        existeActaConsulta: false,
 
         actasConsulta: [],
         actasPaginacion: {
@@ -15,9 +14,12 @@ export const actaConsultaSlice = createSlice({
             pagina_actual: 1,
             ultima_pagina: 0,
         },
+
+
         juntaInfo: null,
-        //actaExistente: null,
-        pregunta: {},
+        info_acta: null,
+        preguntas: [],
+
         message: undefined,
         errores: undefined,
     },
@@ -41,22 +43,21 @@ export const actaConsultaSlice = createSlice({
             state.loadingActaConsulta = true;
             state.loading = false;
         },
-        onSetActaExistente: (state, { payload }) => {
-            //state.actaExistente = payload;
-            state.existeActaConsulta = payload;
+        onActivateInfoActa: (state, { payload }) => {
+            state.info_acta = payload;
             state.loading = false;
         },
-        onActivatePregunta: (state, { payload }) => {
-            state.pregunta = payload;
+        onActivatePreguntas: (state, { payload }) => {
+            state.preguntas = payload;
             state.loading = false;
         },
         onClearActaConsulta: (state) => {
             state.loadingActaConsulta = false;
             state.disabledSearch = false;
-            state.existeActaConsulta = false;
             state.juntaInfo = null;
+            state.info_acta = null;
             //state.actaExistente = null;
-            state.pregunta = {};
+            state.preguntas = [];
             state.message = undefined;
             state.errores = undefined;
         },
@@ -75,8 +76,8 @@ export const {
     onLoadActasConsulta,
     onLoadPaginacionActasConsulta,
     onActivateJunta,
-    onSetActaExistente,
-    onActivatePregunta,
+    onActivateInfoActa,
+    onActivatePreguntas,
     onClearActaConsulta,
     onLoadMessage,
     onLoadErrores,

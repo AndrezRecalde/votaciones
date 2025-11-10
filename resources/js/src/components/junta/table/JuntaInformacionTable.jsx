@@ -4,7 +4,7 @@ import { useActaConsultaStore } from "../../../hooks";
 import classes from "../../../assets/styles/modules/digitacion/ActaCardInfo.module.css";
 
 export const JuntaInformacionTable = () => {
-    const { juntaInfo, pregunta } = useActaConsultaStore();
+    const { juntaInfo, info_acta } = useActaConsultaStore();
 
     return (
         <Card shadow="sm" radius="md" padding={0}>
@@ -45,8 +45,8 @@ export const JuntaInformacionTable = () => {
                     <Table.Tbody>
                         <Table.Tr>
                             <Table.Td data-label="Acta N°">
-                                {pregunta?.id !== null
-                                    ? pregunta?.id
+                                {info_acta?.acta_id !== null
+                                    ? info_acta?.acta_id
                                     : "[AUTO]"}
                             </Table.Td>
                             <Table.Td

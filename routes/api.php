@@ -154,7 +154,7 @@ Route::group(
 
         /* Resultados y Estadisticas de la Consulta Popular */
         // Rutas adicionales
-        Route::get('/actas-consulta/{id}/resumen-votos', [ActaConsultaController::class, 'resumenVotos']);
+        Route::get('/actas-consulta/resumen-votos', [ActaConsultaController::class, 'resumenVotos']);
         Route::get('/actas-consulta/estadisticas-general', [ActaConsultaController::class, 'estadisticas']);
         Route::get('/actas-consulta/resultados-por-pregunta', [ActaConsultaController::class, 'resultadosPorPregunta']);
     }
@@ -206,7 +206,6 @@ Route::group(
 
         /* CRUD Acta Consulta Popular */
         Route::get('/actas-consulta', [ActaConsultaController::class, 'getActasConsulta']); // Listar actas
-        Route::get('/acta-consulta/{id}', [ActaConsultaController::class, 'show']); // Mostrar acta
         Route::post('/acta-consulta', [ActaConsultaController::class, 'store']); // Crear acta
         Route::put('/acta-consulta/{id}', [ActaConsultaController::class, 'update']); // Actualizar acta
         Route::delete('/acta-consulta/{id}', [ActaConsultaController::class, 'destroy']); // Eliminar acta

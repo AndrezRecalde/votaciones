@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import { IconCheckbox, IconFileCheck, IconUser } from "@tabler/icons-react";
 
-export const ActaInformacionUsuario = ({ existeActaConsulta, pregunta }) => {
+export const ActaInformacionUsuario = ({ existeActaConsulta, info_acta }) => {
     return (
         <Card shadow="sm" padding="lg" radius="md" withBorder>
             <Group gap="xs" mb="sm">
@@ -49,15 +49,15 @@ export const ActaInformacionUsuario = ({ existeActaConsulta, pregunta }) => {
                             mb={6}
                             leftSection={<IconFileCheck size={12} />}
                         >
-                            {pregunta?.user_update
+                            {info_acta?.user_update
                                 ? "Actualizado"
-                                : pregunta?.user_add
+                                : info_acta?.user_add
                                 ? "Creado"
                                 : "Acta sin registrar"}
                         </Badge>
                         <Text size="sm" fw={600} c="teal.9">
-                            {pregunta?.user_update ||
-                                pregunta?.user_add ||
+                            {info_acta?.user_update ||
+                                info_acta?.user_add ||
                                 "Acta sin registrar"}
                         </Text>
                     </Box>

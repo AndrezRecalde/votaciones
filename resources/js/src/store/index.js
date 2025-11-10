@@ -54,9 +54,16 @@ import { uiGuessSlice } from "./admin/guess/uiGuessSlice";
 import { tendenciaSlice } from "./admin/tendencia/tendenciaSlice";
 
 /* Seccion de Consulta Popular */
+/* Preguntas consulta popular */
 import { preguntaSlice } from "./consulta/pregunta/preguntaSlice";
 import { uiPreguntaSlice } from "./consulta/pregunta/uiPreguntaSlice";
+
+/* Actas consulta popular */
 import { actaConsultaSlice } from "./consulta/acta-consulta/actaConsultaSlice";
+
+/* Resultados Consulta Popular */
+import { resultadoConsultaSlice } from "./consulta/resultado/resultadoConsultaSlice";
+import { uiResultadoConsultaSlice } from "./consulta/resultado/uiResultadoConsultaSlice";
 
 /* Storages */
 import { storageSlice } from "./storage/storageSlice";
@@ -120,9 +127,16 @@ export {
     tendenciaSlice,
 
     /* Seccion de Consulta Popular */
+    /* Preguntas Consulta Popular */
     preguntaSlice,
     uiPreguntaSlice,
+
+    /* Actas Consulta Popular */
     actaConsultaSlice,
+
+    /* Resultados Consulta Popular */
+    resultadoConsultaSlice,
+    uiResultadoConsultaSlice,
 
     /* Storage */
     storageSlice,

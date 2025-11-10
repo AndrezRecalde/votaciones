@@ -16,17 +16,17 @@ class Junta extends Model
         return $this->hasMany(Acta::class)->with('votos');
     }
 
-    public function zona()
+    public function zona(): BelongsTo
     {
         return $this->belongsTo(Zona::class, 'zona_id');
     }
 
-    public function recinto()
+    public function recinto(): BelongsTo
     {
         return $this->belongsTo(Recinto::class, 'recinto_id');
     }
 
-    public function actasConsulta()
+    public function actasConsulta(): HasMany
     {
         return $this->hasMany(ActaConsulta::class, 'junta_id');
     }

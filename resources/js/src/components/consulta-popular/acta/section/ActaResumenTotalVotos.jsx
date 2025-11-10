@@ -18,6 +18,7 @@ export const ActaResumenTotalVotos = ({
     votos_validos,
     totales,
 }) => {
+    console.log(esCuadrada);
     return (
         <Card shadow="md" padding="lg" radius="md" withBorder>
             <Group mb="sm" gap="xs">
@@ -44,10 +45,10 @@ export const ActaResumenTotalVotos = ({
                     style={{
                         backgroundColor: esCuadrada
                             ? "var(--mantine-color-teal-0)"
-                            : "var(--mantine-color-teal-0)",
+                            : "var(--mantine-color-yellow-0)",
                         borderColor: esCuadrada
                             ? "var(--mantine-color-teal-3)"
-                            : "var(--mantine-color-teal-3)",
+                            : "var(--mantine-color-yellow-3)",
                         transition: "all 0.2s ease",
                     }}
                 >
@@ -67,7 +68,7 @@ export const ActaResumenTotalVotos = ({
                         )}
                     </Group>
                     <Text
-                        size="xl"
+                        size="lg"
                         fw={700}
                         c={esCuadrada ? "teal.7" : "dark"}
                     >
@@ -82,10 +83,10 @@ export const ActaResumenTotalVotos = ({
                     style={{
                         backgroundColor: esCuadrada
                             ? "var(--mantine-color-teal-0)"
-                            : "var(--mantine-color-teal-0)",
+                            : "var(--mantine-color-yellow-0)",
                         borderColor: esCuadrada
                             ? "var(--mantine-color-teal-3)"
-                            : "var(--mantine-color-teal-3)",
+                            : "var(--mantine-color-yellow-3)",
                         transition: "all 0.2s ease",
                     }}
                 >
@@ -105,11 +106,11 @@ export const ActaResumenTotalVotos = ({
                         )}
                     </Group>
                     <Text
-                        size="xl"
+                        size="lg"
                         fw={700}
                         c={esCuadrada ? "teal.7" : "dark"}
                     >
-                        {totales.toString() || "0"}
+                        {totales.total.toString() || "0"}
                     </Text>
                 </Paper>
             </Stack>

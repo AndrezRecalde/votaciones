@@ -1,11 +1,12 @@
 import { useEffect, useMemo } from "react";
+import { Container, Divider, Grid, Group } from "@mantine/core";
 import {
-    Container,
-    Divider,
-    Grid,
-    Group
-} from "@mantine/core";
-import { FechaActual, ResultadosConsultaChart, ResultadosConsultaFilter, ResultadosConsultaTable, TitlePage } from "../../../components";
+    FechaActual,
+    ResultadosConsultaChart,
+    ResultadosConsultaFilter,
+    ResultadosConsultaTable,
+    TitlePage,
+} from "../../../components";
 import { useActaConsultaStore, useTitleHook } from "../../../hooks";
 import Swal from "sweetalert2";
 
@@ -34,10 +35,9 @@ const ResultadosConsultaPage = () => {
                 <TitlePage order={2}>
                     Resultados de Consulta Popular - 2025
                 </TitlePage>
-
             </Group>
             <Divider my="md" />
-            <Grid >
+            <Grid>
                 <Grid.Col span={{ base: 12, xs: 12, sm: 12, md: 3, lg: 3 }}>
                     <ResultadosConsultaFilter usuario={usuario} />
                 </Grid.Col>

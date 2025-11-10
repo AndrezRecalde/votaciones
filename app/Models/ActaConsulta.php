@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ActaConsulta extends Model
 {
@@ -17,139 +20,97 @@ class ActaConsulta extends Model
         'parroquia_id',
         'zona_id',
         'junta_id',
-        'pregunta_id',
         'cod_cne',
-        'votos_si',
-        'votos_no',
         'votos_validos',
-        'votos_blancos',
-        'votos_nulos',
         'cuadrada',
         'legible',
+        'estado',
         'user_add',
         'user_update',
-        'estado',
     ];
 
     protected $casts = [
-        'provincia_id'   => 'integer',
-        'canton_id'      => 'integer',
-        'parroquia_id'   => 'integer',
-        'zona_id'        => 'integer',
-        'junta_id'       => 'integer',
-        'pregunta_id'    => 'integer',
-        'votos_si'       => 'integer',
-        'votos_no'       => 'integer',
-        'votos_validos'  => 'integer',
-        'votos_blancos'  => 'integer',
-        'votos_nulos'    => 'integer',
-        'cuadrada'       => 'boolean',
-        'legible'        => 'boolean',
-        'estado'         => 'boolean',
-        'user_add'       => 'integer',
-        'user_update'    => 'integer',
+        'votos_validos' => 'integer',
+        'cuadrada'      => 'boolean',
+        'legible'       => 'boolean',
+        'estado'        => 'boolean',
     ];
 
-    protected $appends = [
-        'porcentaje_si',
-        'porcentaje_no',
-    ];
-
-    // Relaciones
-    public function provincia()
+    // Relaciones geográficas
+    public function provincia(): BelongsTo
     {
-        return $this->belongsTo(Provincia::class);
+        return $this->belongsTo(Provincia::class, 'provincia_id');
     }
 
-    public function canton()
+    public function canton(): BelongsTo
     {
-        return $this->belongsTo(Canton::class);
+        return $this->belongsTo(Canton::class, 'canton_id');
     }
 
-    public function parroquia()
+    public function parroquia(): BelongsTo
     {
-        return $this->belongsTo(Parroquia::class);
+        return $this->belongsTo(Parroquia::class, 'parroquia_id');
     }
 
-    public function zona()
+    public function zona(): BelongsTo
     {
-        return $this->belongsTo(Zona::class);
+        return $this->belongsTo(Zona::class, 'zona_id');
     }
 
-    public function junta()
+    public function junta(): BelongsTo
     {
-        return $this->belongsTo(Junta::class);
+        return $this->belongsTo(Junta::class, 'junta_id');
     }
 
-    public function pregunta()
+    public function preguntas(): HasMany
     {
-        return $this->belongsTo(PreguntaConsulta::class, 'pregunta_id');
+        return $this->hasMany(ActaConsultaPregunta::class, 'acta_consulta_id');
     }
 
-    public function userAdd()
+    // Auditoría
+    public function userAdd(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_add');
     }
 
-    public function userUpdate()
+    public function userUpdate(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_update');
     }
 
     // Scopes
-    public function scopeActivas($query)
+    public function scopeActivas(Builder $query): Builder
     {
         return $query->where('estado', true);
     }
 
-    public function scopePorProvincia($query, int $provinciaId)
-    {
-        return $query->where('provincia_id', $provinciaId);
-    }
-
-    public function scopePorCanton($query, int $cantonId)
-    {
-        return $query->where('canton_id', $cantonId);
-    }
-
-    public function scopePorParroquia($query, int $parroquiaId)
-    {
-        return $query->where('parroquia_id', $parroquiaId);
-    }
-
-    public function scopePorZona($query, int $zonaId)
-    {
-        return $query->where('zona_id', $zonaId);
-    }
-
-    public function scopeCuadrada($query)
+    public function scopeCuadrada(Builder $query): Builder
     {
         return $query->where('cuadrada', true);
     }
 
-    public function scopeLegible($query)
+    public function scopeLegible(Builder $query): Builder
     {
         return $query->where('legible', true);
     }
 
-    // Accessors
-    public function getPorcentajeSiAttribute(): float
+    public function scopePorProvincia(Builder $query, int $provinciaId): Builder
     {
-        $validos = (int) $this->votos_validos;
-        $den = $validos > 0 ? $validos : ($this->votos_si + $this->votos_no);
-        if ($den <= 0) {
-            return 0.0;
-        }
-        return round(($this->votos_si / $den) * 100, 2);
+        return $query->where('provincia_id', $provinciaId);
     }
 
-    public function getPorcentajeNoAttribute(): float
+    public function scopePorCanton(Builder $query, int $cantonId): Builder
     {
-        $validos = (int) $this->votos_validos;
-        $den = $validos > 0 ? $validos : ($this->votos_si + $this->votos_no);
-        if ($den <= 0) {
-            return 0.0;
-        }
-        return round(($this->votos_no / $den) * 100, 2);
+        return $query->where('canton_id', $cantonId);
+    }
+
+    public function scopePorParroquia(Builder $query, int $parroquiaId): Builder
+    {
+        return $query->where('parroquia_id', $parroquiaId);
+    }
+
+    public function scopePorZona(Builder $query, int $zonaId): Builder
+    {
+        return $query->where('zona_id', $zonaId);
     }
 }

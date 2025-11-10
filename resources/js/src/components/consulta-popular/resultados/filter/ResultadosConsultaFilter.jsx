@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { ActionIcon, Box, Group, Paper, rem, Select, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { BtnSubmit } from "../../../../components";
-import { useActaConsultaStore, useJurisdiccionStore } from "../../../../hooks";
+import { useActaConsultaStore, useJurisdiccionStore, useResultadoConsultaStore } from "../../../../hooks";
 import { IconFileTypePdf, IconFileTypeXls, IconSearch } from "@tabler/icons-react";
 import classes from "../../../../assets/styles/modules/digitacion/LabelsDigitacion.module.css";
 
@@ -17,18 +17,21 @@ export const ResultadosConsultaFilter = ({ usuario }) => {
         zonas,
     } = useJurisdiccionStore();
     const { isLoading } = useActaConsultaStore();
+    const { startLoadResultadosPorPregunta } = useResultadoConsultaStore();
 
     const form = useForm({
         initialValues: {
-            canton_id: null,
-            parroquia_id: null,
+            provincia_id: "",
+            canton_id: "",
+            parroquia_id: "",
             //recinto_id: null,
-            zona_id: null,
+            zona_id: "",
             cuadrada: "",
             legible: "",
         },
         transformValues: (values) => ({
             ...values,
+            provincia_id: Number(usuario?.provincia_id) || null,
             canton_id: Number(values.canton_id) || null,
             parroquia_id: Number(values.parroquia_id) || null,
             //recinto_id: Number(values.recinto_id) || 0,
@@ -56,6 +59,8 @@ export const ResultadosConsultaFilter = ({ usuario }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(form.getTransformedValues());
+        startLoadResultadosPorPregunta(form.getTransformedValues());
         //Realizar la búsqueda con los filtros seleccionados
     };
 

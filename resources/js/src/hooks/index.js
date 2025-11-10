@@ -61,6 +61,9 @@ import { useUiPregunta } from "./consulta/pregunta/useUiPregunta";
 /* Consulta */
 import { useActaConsultaStore } from "./consulta/acta-consulta/useActaConsultaStore";
 
+/* Resultados de Consulta Popular */
+import { useResultadoConsultaStore } from "./consulta/resultado/useResultadoConsultaStore";
+
 /* Storages */
 import { useStorageStore } from "./storage/useStorageStore";
 
@@ -132,6 +135,9 @@ export {
 
     /** Acta Consulta */
     useActaConsultaStore,
+
+    /** Resultados Consulta */
+    useResultadoConsultaStore,
 
     /* Fecha */
     useFechaStore,

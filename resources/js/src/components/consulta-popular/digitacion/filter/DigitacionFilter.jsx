@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { Box, Grid, Paper, Select, Stack } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { BtnSubmit } from "../../../../components";
-import { useActaConsultaStore, useJurisdiccionStore, usePreguntaStore, useStorageStore } from "../../../../hooks";
+import {
+    useActaConsultaStore,
+    useJurisdiccionStore,
+    useStorageStore,
+} from "../../../../hooks";
 import { convertToString, isValid } from "../../../../helpers/fnHelpers";
 import { IconSearch } from "@tabler/icons-react";
 import classes from "../../../../assets/styles/modules/digitacion/LabelsDigitacion.module.css";
@@ -23,7 +27,6 @@ export const DigitacionFilter = ({ usuario }) => {
         startLoadZonas,
         startLoadJuntas,
     } = useJurisdiccionStore();
-    const { preguntas } = usePreguntaStore();
     const { startLoadInfoActa, startActivateSearch } = useActaConsultaStore();
     const { setStorageFields } = useStorageStore();
     const [disabled, setDisabled] = useState(false);
@@ -35,7 +38,6 @@ export const DigitacionFilter = ({ usuario }) => {
             parroquia_id: "",
             zona_id: "",
             junta_id: "",
-            pregunta_id: "",
         },
         validate: {
             provincia_id: isNotEmpty("Por favor ingrese la provincia del acta"),
@@ -43,7 +45,6 @@ export const DigitacionFilter = ({ usuario }) => {
             parroquia_id: isNotEmpty("Por favor ingresa la parroquia del acta"),
             zona_id: isNotEmpty("Por favor ingrese la zona del acta"),
             junta_id: isNotEmpty("Por favor ingrese la junta del acta"),
-            pregunta_id: isNotEmpty("Por favor ingrese la pregunta de consulta")
         },
         transformValues: (values) => ({
             provincia_id: Number(values.provincia_id) || null,
@@ -51,18 +52,11 @@ export const DigitacionFilter = ({ usuario }) => {
             parroquia_id: Number(values.parroquia_id) || null,
             zona_id: Number(values.zona_id) || null,
             junta_id: Number(values.junta_id) || null,
-            pregunta_id: Number(values.pregunta_id) || null,
         }),
     });
 
-    const {
-        pregunta_id,
-        provincia_id,
-        canton_id,
-        parroquia_id,
-        zona_id,
-        junta_id,
-    } = searchForm.values;
+    const { provincia_id, canton_id, parroquia_id, zona_id, junta_id } =
+        searchForm.values;
 
     useEffect(() => {
         if (provincia_id) searchForm.setFieldValue("canton_id", null);
@@ -104,7 +98,7 @@ export const DigitacionFilter = ({ usuario }) => {
         e.preventDefault();
         console.log(searchForm.getTransformedValues());
         setStorageFields(searchForm.getTransformedValues());
-        await startLoadInfoActa(junta_id, pregunta_id);
+        await startLoadInfoActa(junta_id);
         startActivateSearch(true);
     };
 
@@ -241,31 +235,6 @@ export const DigitacionFilter = ({ usuario }) => {
                                 data={juntas.map((junta) => ({
                                     value: junta.id.toString(),
                                     label: junta.junta_nombre,
-                                }))}
-                            />
-                        </Grid.Col>
-                        <Grid.Col span={{ base: 12, xs: 12, sm: 12, md: 12 }}>
-                            <Select
-                                radius="sm"
-                                size="sm"
-                                label="Pregunta"
-                                placeholder="Seleccione la pregunta"
-                                withAsterisk
-                                searchable
-                                nothingFoundMessage="Sin opciones"
-                                classNames={classes}
-                                disabled={disabled ? disabled : disabledSearch}
-                                {...searchForm.getInputProps("pregunta_id")}
-                                styles={{
-                                    label: {
-                                        fontSize: "0.8rem",
-                                        fontWeight: 500,
-                                    },
-                                    input: { fontSize: "0.85rem" },
-                                }}
-                                data={preguntas.map((pregunta) => ({
-                                    value: pregunta.id.toString(),
-                                    label: `Consulta Popular - Pregunta ${pregunta.numero_pregunta}`,
                                 }))}
                             />
                         </Grid.Col>

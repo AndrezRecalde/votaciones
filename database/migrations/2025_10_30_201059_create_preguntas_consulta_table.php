@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('preguntas_consulta', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('numero_pregunta')->unique()->comment('Número correlativo de la pregunta');
+            $table->string('casillero_pregunta', 5)->unique()->comment('Número o Letra correlativo de la pregunta');
             $table->text('texto_pregunta')->comment('Texto completo de la pregunta');
             $table->text('descripcion')->nullable()->comment('Descripción adicional de la pregunta');
             $table->boolean('activo')->default(true)->comment('Estado activo/inactivo de la pregunta');

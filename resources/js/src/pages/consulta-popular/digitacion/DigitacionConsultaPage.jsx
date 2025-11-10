@@ -7,7 +7,6 @@ import {
 import {
     useActaConsultaStore,
     useJurisdiccionStore,
-    usePreguntaStore,
     useTitleHook,
 } from "../../../hooks";
 import { useEffect, useMemo } from "react";
@@ -20,7 +19,6 @@ const DigitacionConsultaPage = () => {
     }, []);
 
     const { startLoadProvincias } = useJurisdiccionStore();
-    const { startLoadPreguntas, startClearPreguntas } = usePreguntaStore();
     const { loadingActaConsulta, message, errores } = useActaConsultaStore();
 
     useEffect(() => {
@@ -29,11 +27,7 @@ const DigitacionConsultaPage = () => {
             activo: true,
         });
 
-        startLoadPreguntas({ all: true });
-
-        return () => {
-            startClearPreguntas();
-        };
+        return () => {};
     }, []);
 
     useEffect(() => {

@@ -11,6 +11,7 @@ import {
     jurisdiccionSlice,
     organizacionSlice,
     preguntaSlice,
+    resultadoConsultaSlice,
     resultadosSlice,
     roleSlice,
     storageSlice,
@@ -22,6 +23,7 @@ import {
     uiHeaderMenuSlice,
     uiOrganizacionSlice,
     uiPreguntaSlice,
+    uiResultadoConsultaSlice,
     uiResultadosSlice,
     uiUsuarioSlice,
     usuarioSlice,
@@ -66,11 +68,13 @@ export const store = configureStore({
 
         tendencia: tendenciaSlice.reducer,
 
-        /* Seccion de Consulta Popular */
         pregunta: preguntaSlice.reducer,
         uiPregunta: uiPreguntaSlice.reducer,
 
         actaConsulta: actaConsultaSlice.reducer,
+
+        resultadoConsulta: resultadoConsultaSlice.reducer,
+        uiResultadoConsulta: uiResultadoConsultaSlice.reducer,
 
         storage: storageSlice.reducer,
     },

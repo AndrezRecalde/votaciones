@@ -63,29 +63,26 @@ class JuntaController extends Controller
         try {
             $request->validate([
                 'junta_id' => 'required|integer|exists:juntas,id',
-                'pregunta_id' => 'required|integer|exists:preguntas_consulta,id',
             ]);
 
             $juntaId = (int) $request->junta_id;
-            $preguntaId = (int) $request->pregunta_id;
 
-            // Buscar acta existente para la combinación junta + pregunta
+            // Intentar obtener el acta activa con sus relaciones
             $acta = ActaConsulta::with([
-                'pregunta',
                 'provincia',
                 'canton',
                 'parroquia',
                 'zona',
-                'junta.recinto', // <-- cargar recinto
+                'junta.recinto',
+                'preguntas.pregunta',
                 'userAdd',
                 'userUpdate',
             ])
                 ->where('junta_id', $juntaId)
-                ->where('pregunta_id', $preguntaId)
                 ->activas()
                 ->first();
 
-            // Construir ubicación con nombres SIEMPRE (incluyendo recinto)
+            // Ubicación (si existe acta tomamos de ella, caso contrario derivamos de la junta)
             if ($acta) {
                 $ubicacion = [
                     'provincia_id' => $acta->provincia_id,
@@ -93,18 +90,17 @@ class JuntaController extends Controller
                     'parroquia_id' => $acta->parroquia_id,
                     'zona_id'      => $acta->zona_id,
                     'junta_id'     => $juntaId,
-                    'recinto_id'   => $acta->junta->recinto_id ?? null, // <-- id de recinto
+                    'recinto_id'   => $acta->junta->recinto_id ?? null,
                     'nombres'      => [
                         'provincia' => $acta->provincia->nombre_provincia ?? null,
                         'canton'    => $acta->canton->nombre_canton ?? null,
                         'parroquia' => $acta->parroquia->nombre_parroquia ?? null,
                         'zona'      => $acta->zona->nombre_zona ?? null,
                         'junta'     => $acta->junta->junta_nombre ?? null,
-                        'recinto'   => optional($acta->junta->recinto)->nombre_recinto, // <-- nombre de recinto
+                        'recinto'   => optional($acta->junta->recinto)->nombre_recinto,
                     ],
                 ];
             } else {
-                // Cuando no hay acta aún, obtener nombres por JOIN usando la junta (incluyendo recinto)
                 $u = DB::table('juntas as j')
                     ->select(
                         'j.id as junta_id',
@@ -124,14 +120,14 @@ class JuntaController extends Controller
                     ->join('parroquias as p', 'z.parroquia_id', '=', 'p.id')
                     ->join('cantones as c', 'p.canton_id', '=', 'c.id')
                     ->join('provincias as pr', 'c.provincia_id', '=', 'pr.id')
-                    ->leftJoin('recintos as r', 'j.recinto_id', '=', 'r.id') // <-- incluir recinto
+                    ->leftJoin('recintos as r', 'j.recinto_id', '=', 'r.id')
                     ->where('j.id', $juntaId)
                     ->first();
 
                 if (!$u) {
                     return response()->json([
-                        'success' => false,
-                        'message' => 'No se encontró información de ubicación para la junta',
+                        'status' => HTTPStatus::Error,
+                        'msg' => 'No se encontró información de ubicación para la junta',
                     ], 404);
                 }
 
@@ -141,59 +137,84 @@ class JuntaController extends Controller
                     'parroquia_id' => $u->parroquia_id,
                     'zona_id'      => $u->zona_id,
                     'junta_id'     => $juntaId,
-                    'recinto_id'   => $u->recinto_id, // <-- id de recinto
+                    'recinto_id'   => $u->recinto_id,
                     'nombres'      => [
                         'provincia' => $u->nombre_provincia,
                         'canton'    => $u->nombre_canton,
                         'parroquia' => $u->nombre_parroquia,
                         'zona'      => $u->nombre_zona,
                         'junta'     => $u->junta_nombre,
-                        'recinto'   => $u->nombre_recinto, // <-- nombre de recinto
+                        'recinto'   => $u->nombre_recinto,
                     ],
                 ];
             }
 
-            // Metadatos de la pregunta solicitada
-            $metaPregunta = PreguntaConsulta::select('id', 'numero_pregunta', 'texto_pregunta')
-                ->find($preguntaId);
+            // Catálogo completo de preguntas activas
+            $catalogoPreguntas = PreguntaConsulta::select('id', 'casillero_pregunta', 'texto_pregunta')
+                ->where('activo', true)
+                ->orderBy('casillero_pregunta')
+                ->get();
 
-            // Objeto único "pregunta"
-            $pregunta = [
-                'id'              => $acta->id ?? null, // id del registro de acta si existe
-                'pregunta_id'     => $preguntaId,
-                'numero_pregunta' => $metaPregunta->numero_pregunta ?? null,
-                'texto_pregunta'  => $metaPregunta->texto_pregunta ?? null,
+            // Indexar preguntas existentes del acta (si hay)
+            $preguntasExistentes = [];
+            if ($acta) {
+                foreach ($acta->preguntas as $p) {
+                    $preguntasExistentes[$p->pregunta_id] = $p;
+                }
+            }
 
-                // Campos por-pregunta (si no existe acta, van en null)
-                'cod_cne'         => $acta->cod_cne ?? null,
-                'votos_si'        => $acta->votos_si ?? null,
-                'votos_no'        => $acta->votos_no ?? null,
-                'votos_blancos'   => $acta->votos_blancos ?? null,
-                'votos_nulos'     => $acta->votos_nulos ?? null,
-                'votos_validos'   => $acta->votos_validos ?? null,
-                'porcentaje_si'   => $acta?->porcentaje_si ?? null,
-                'porcentaje_no'   => $acta?->porcentaje_no ?? null,
-                'cuadrada'        => isset($acta) ? (bool) $acta->cuadrada : null,
-                'legible'         => isset($acta) ? (bool) $acta->legible : null,
-                'estado'          => isset($acta) ? (bool) $acta->estado : null,
-                'user_add'        => $acta->userAdd->nombres_completos ?? null,
-                'user_update'     => $acta->userUpdate->nombres_completos ?? null,
+            // Votos válidos global del acta (ahora solo está en encabezado)
+            $votosValidosActa = $acta?->votos_validos;
+
+            // Construir array final de preguntas
+            $preguntas = $catalogoPreguntas->map(function ($row) use ($preguntasExistentes, $votosValidosActa) {
+                /** @var \App\Models\ActaConsultaPregunta|null $reg */
+                $reg = $preguntasExistentes[$row->id] ?? null;
+
+                // Como ya no hay votos_validos en el detalle, se replica el valor global (o null)
+                $validos = $votosValidosActa;
+
+                return [
+                    'acta_consulta_pregunta_id' => $reg->id ?? null,
+                    'pregunta_id'     => $row->id,
+                    'casillero_pregunta' => $row->casillero_pregunta,
+                    'texto_pregunta'  => $row->texto_pregunta,
+                    'votos_si'        => $reg?->votos_si ?? null,
+                    'votos_no'        => $reg?->votos_no ?? null,
+                    'votos_blancos'   => $reg?->votos_blancos ?? null,
+                    'votos_nulos'     => $reg?->votos_nulos ?? null,
+                    'votos_validos'   => $validos ?? null,
+                    'porcentaje_si'   => ($validos && $validos > 0 && $reg) ? round(($reg->votos_si / $validos) * 100, 2) : null,
+                    'porcentaje_no'   => ($validos && $validos > 0 && $reg) ? round(($reg->votos_no / $validos) * 100, 2) : null,
+                ];
+            });
+
+            // Agrupar la información del acta en info_acta (solicitado)
+            $infoActa = [
+                'existe_acta'   => (bool) $acta,
+                'acta_id'       => $acta->id ?? null,
+                'cod_cne'       => $acta->cod_cne ?? null,
+                'votos_validos' => $acta?->votos_validos ?? null,
+                'cuadrada'      => $acta?->cuadrada ?? null,
+                'legible'       => $acta?->legible ?? null,
+                'estado'        => $acta?->estado ?? null,
+                'user_add'      => $acta?->userAdd->nombres_completos ?? null,
+                'user_update'   => $acta?->userUpdate->nombres_completos ?? null,
             ];
 
             return response()->json([
-                'success'     => true,
-                'existe_acta' => (bool) $acta,
-                'ubicacion'   => $ubicacion,
-                'pregunta'    => $pregunta,
-                'mensaje'     => $acta
-                    ? 'Se encontró acta para esta junta y pregunta.'
-                    : 'No existe acta para esta junta y pregunta. Puede crearla.',
+                'status'     => HTTPStatus::Success,
+                'info_acta'  => $infoActa,
+                'ubicacion'  => $ubicacion,
+                'preguntas'  => $preguntas,
+                'msg'        => $acta
+                    ? 'Se encontró acta para la junta y se listan sus preguntas (con o sin votos).'
+                    : 'No existe acta para esta junta. Todas las preguntas aparecen sin votos.',
             ], 200);
         } catch (Exception $e) {
             return response()->json([
-                'success' => false,
-                'message' => 'Error al buscar el acta por junta y pregunta',
-                'error'   => $e->getMessage(),
+                'status' => HTTPStatus::Error,
+                'msg'    => $e->getMessage(),
             ], 500);
         }
     }

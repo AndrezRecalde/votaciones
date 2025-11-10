@@ -1,14 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useErrorException } from "../../error/useErrorException";
 import {
+    onActivateInfoActa,
     onActivateJunta,
-    onActivatePregunta,
+    onActivatePreguntas,
     onActiveSearch,
     onClearActaConsulta,
     onLoadErrores,
     onLoading,
     onLoadMessage,
-    onSetActaExistente,
 } from "../../../store/consulta/acta-consulta/actaConsultaSlice";
 import apiAxios from "../../../api/apiAxios";
 
@@ -17,12 +17,14 @@ export const useActaConsultaStore = () => {
         loading,
         loadingActaConsulta,
         disabledSearch,
-        existeActaConsulta,
+
         actasConsulta,
         actasPaginacion,
+
         juntaInfo,
-        actaExistente,
-        pregunta,
+        info_acta,
+        preguntas,
+
         message,
         errores,
     } = useSelector((state) => state.actaConsulta);
@@ -35,29 +37,22 @@ export const useActaConsultaStore = () => {
         dispatch(onActiveSearch(behavior));
     };
 
-    const startLoadInfoActa = async (junta_id, pregunta_id) => {
-        if (!junta_id || !pregunta_id) return;
+    const startLoadInfoActa = async (junta_id) => {
+        if (!junta_id) return;
 
         try {
             dispatch(onLoading(true));
 
-            const { data: res } = await apiAxios.get(
+            const { data } = await apiAxios.get(
                 "/general/actas-consulta/buscar/por-junta",
-                { params: { junta_id, pregunta_id } }
+                { params: { junta_id } }
             );
 
-            if (!res?.success) {
-                if (res?.message) ExceptionMessageError(res.message);
-                return;
-            }
-
-            const { existe_acta, ubicacion, pregunta, mensaje } = res;
+            const { info_acta, ubicacion, preguntas } = data;
 
             dispatch(onActivateJunta(ubicacion));
-            dispatch(onSetActaExistente(existe_acta));
-
-            // Si tu store espera un único objeto:
-            dispatch(onActivatePregunta(pregunta));
+            dispatch(onActivateInfoActa(info_acta));
+            dispatch(onActivatePreguntas(preguntas));
 
             // opcional: mostrar mensaje informativo
             // if (mensaje) toast.info(mensaje);
@@ -72,11 +67,13 @@ export const useActaConsultaStore = () => {
     const startAddActa = async (acta) => {
         try {
             if (acta.id) {
+                console.log("actualiza");
                 //actualizando
                 const { data } = await apiAxios.put(
                     `/general/acta-consulta/${acta.id}`,
                     acta
                 );
+                console.log("actualizo");
                 dispatch(onLoadMessage(data));
                 setTimeout(() => {
                     dispatch(onLoadMessage(undefined));
@@ -86,10 +83,12 @@ export const useActaConsultaStore = () => {
             }
 
             //creando
+            console.log("creando");
             const { data } = await apiAxios.post(
                 "/general/acta-consulta",
                 acta
             );
+            console.log('creo');
             dispatch(onLoadMessage(data));
             setTimeout(() => {
                 dispatch(onLoadMessage(undefined));
@@ -111,18 +110,20 @@ export const useActaConsultaStore = () => {
         loading,
         loadingActaConsulta,
         disabledSearch,
-        existeActaConsulta,
+
         actasConsulta,
         actasPaginacion,
+
         juntaInfo,
-        actaExistente,
-        pregunta,
+        info_acta,
+        preguntas,
+
         message,
         errores,
 
         startActivateSearch,
         startLoadInfoActa,
         startAddActa,
-        startClearActaConsulta
+        startClearActaConsulta,
     };
 };
