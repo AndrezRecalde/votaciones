@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\TwilioController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Consulta\ActaConsultaController;
+use App\Http\Controllers\Consulta\EscrutinioConsultaController;
 use App\Http\Controllers\Consulta\PreguntaConsultaController;
 use App\Http\Controllers\Guess\GuessController;
 use App\Http\Controllers\StateController;
@@ -157,6 +158,9 @@ Route::group(
         Route::get('/actas-consulta/resumen-votos', [ActaConsultaController::class, 'resumenVotos']);
         Route::get('/actas-consulta/estadisticas-general', [ActaConsultaController::class, 'estadisticas']);
         Route::get('/actas-consulta/resultados-por-pregunta', [ActaConsultaController::class, 'resultadosPorPregunta']);
+
+        /* Escrutinio de Consulta Popular */
+        Route::get('/escrutinio/drill', [EscrutinioConsultaController::class, 'drill']);
     }
 );
 

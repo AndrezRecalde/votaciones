@@ -65,6 +65,10 @@ import { actaConsultaSlice } from "./consulta/acta-consulta/actaConsultaSlice";
 import { resultadoConsultaSlice } from "./consulta/resultado/resultadoConsultaSlice";
 import { uiResultadoConsultaSlice } from "./consulta/resultado/uiResultadoConsultaSlice";
 
+/* Escrutinios de Consulta Popular */
+import { escrutinioConsultaSlice } from "./consulta/escrutinio-consulta/escrutinioConsultaSlice";
+import { uiEscrutinioConsultaSlice } from "./consulta/escrutinio-consulta/uiEscrutinioConsultaSlice";
+
 /* Storages */
 import { storageSlice } from "./storage/storageSlice";
 
@@ -137,6 +141,10 @@ export {
     /* Resultados Consulta Popular */
     resultadoConsultaSlice,
     uiResultadoConsultaSlice,
+
+    /* Escrutinios Consulta Popular */
+    escrutinioConsultaSlice,
+    uiEscrutinioConsultaSlice,
 
     /* Storage */
     storageSlice,

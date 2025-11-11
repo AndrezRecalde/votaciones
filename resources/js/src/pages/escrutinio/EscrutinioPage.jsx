@@ -36,7 +36,7 @@ const EscrutinioPage = () => {
                 <TitlePage order={2}>
                     Avance de Escrutinio por Dignidades
                 </TitlePage>
-                <BadgeElement variant="light">
+                <BadgeElement variant="default">
                     {`Fecha & Hora del reporte: ${fechaActual()}`}
                 </BadgeElement>
             </Group>

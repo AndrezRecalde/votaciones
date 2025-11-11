@@ -107,6 +107,13 @@ const ResultadosConsultaPage = lazy(() =>
     )
 );
 
+/* Escrutinio Consulta Popular */
+const EscrutinioConsultaPage = lazy(() =>
+    import(
+        /* webpackChunkName: "EscrutinioConsultaPage" */ "../../pages/consulta-popular/escrutinio/EscrutinioConsultaPage"
+    )
+);
+
 const ErrorNotFound = lazy(() =>
     import(
         /* webpackChunkName: "ErrorNotFound" */ "../../pages/error/ErrorNotFound"
@@ -181,6 +188,7 @@ const adminRoutes = generateRoutes(
         // Rutas para Consulta Popular
         { path: "preguntas", Component: PreguntasConsultaPage },
         { path: "resultados-consulta", Component: ResultadosConsultaPage },
+        { path: "escrutinio-consulta", Component: EscrutinioConsultaPage },
 
     ],
     ["ADMIN", "RESPONSABLE"]

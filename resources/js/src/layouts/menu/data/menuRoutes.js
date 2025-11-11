@@ -10,15 +10,6 @@ export const NavResultados = {
             roles: ["ADMIN", "RESPONSABLE", "USER"],
         },
     ],
-    CONSULTA: [
-        {
-            icon: IconBuildingBank,
-            title: "Consulta Resultados",
-            path: "consulta-resultados",
-            link: "/admin/consulta-resultados",
-            roles: ["ADMIN", "RESPONSABLE", "USER"],
-        },
-    ],
 };
 
 

@@ -1,9 +1,25 @@
 import { useEffect } from "react";
-import { ActionIcon, Box, Group, Paper, rem, Select, Stack } from "@mantine/core";
+import {
+    ActionIcon,
+    Box,
+    Group,
+    Paper,
+    rem,
+    Select,
+    Stack,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { BtnSubmit } from "../../../../components";
-import { useActaConsultaStore, useJurisdiccionStore, useResultadoConsultaStore } from "../../../../hooks";
-import { IconFileTypePdf, IconFileTypeXls, IconSearch } from "@tabler/icons-react";
+import {
+    useActaConsultaStore,
+    useJurisdiccionStore,
+    useResultadoConsultaStore,
+} from "../../../../hooks";
+import {
+    IconFileTypePdf,
+    IconFileTypeXls,
+    IconSearch,
+} from "@tabler/icons-react";
 import classes from "../../../../assets/styles/modules/digitacion/LabelsDigitacion.module.css";
 
 export const ResultadosConsultaFilter = ({ usuario }) => {
@@ -48,13 +64,15 @@ export const ResultadosConsultaFilter = ({ usuario }) => {
     }, []);
 
     useEffect(() => {
-        startLoadParroquias({ canton_id });
-        form.setFieldValue("parroquia_id", null);
+        canton_id
+            ? startLoadParroquias({ canton_id })
+            : form.setFieldValue("parroquia_id", null);
     }, [canton_id]);
 
     useEffect(() => {
-        startLoadZonas({ parroquia_id });
-        form.setFieldValue("zona_id", null);
+        parroquia_id
+            ? startLoadZonas({ parroquia_id })
+            : form.setFieldValue("zona_id", null);
     }, [parroquia_id]);
 
     const handleSubmit = (e) => {

@@ -64,6 +64,9 @@ import { useActaConsultaStore } from "./consulta/acta-consulta/useActaConsultaSt
 /* Resultados de Consulta Popular */
 import { useResultadoConsultaStore } from "./consulta/resultado/useResultadoConsultaStore";
 
+/* Escrutinio Consulta */
+import { useEscrutinioConsultaStore } from "./consulta/escrutinio-consulta/useEscrutinioConsultaStore";
+
 /* Storages */
 import { useStorageStore } from "./storage/useStorageStore";
 
@@ -138,6 +141,9 @@ export {
 
     /** Resultados Consulta */
     useResultadoConsultaStore,
+
+    /** Escrutinio Consulta */
+    useEscrutinioConsultaStore,
 
     /* Fecha */
     useFechaStore,

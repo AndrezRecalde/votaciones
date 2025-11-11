@@ -16,7 +16,6 @@ import {
     Group,
     LoadingOverlay,
     rem,
-    SimpleGrid,
     Stack,
 } from "@mantine/core";
 import {

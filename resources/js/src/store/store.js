@@ -6,6 +6,7 @@ import {
     candidatoSlice,
     dignidadSlice,
     distritoSlice,
+    escrutinioConsultaSlice,
     escrutinioSlice,
     guessSlice,
     jurisdiccionSlice,
@@ -19,6 +20,7 @@ import {
     uiCandidatoSlice,
     uiDignidadSlice,
     uiDistritoSlice,
+    uiEscrutinioConsultaSlice,
     uiGuessSlice,
     uiHeaderMenuSlice,
     uiOrganizacionSlice,
@@ -75,6 +77,9 @@ export const store = configureStore({
 
         resultadoConsulta: resultadoConsultaSlice.reducer,
         uiResultadoConsulta: uiResultadoConsultaSlice.reducer,
+
+        escrutinioConsulta: escrutinioConsultaSlice.reducer,
+        uiEscrutinioConsulta: uiEscrutinioConsultaSlice.reducer,
 
         storage: storageSlice.reducer,
     },

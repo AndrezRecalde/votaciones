@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Badge,
     Box,
@@ -9,20 +9,23 @@ import {
     SimpleGrid,
     Switch,
     Text,
-    Tooltip as MantineTooltip,
     useMantineColorScheme,
     useMantineTheme,
+    Progress,
+    Stack,
+    rem,
+    rgba,
 } from "@mantine/core";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { useResultadoConsultaStore } from "../../../../hooks";
 
-/* ===================== PALETA (colores sólidos) ===================== */
+/* ===================== PALETA (colores elegantes y sobrios) ===================== */
 const COLORS = {
-    si: "#339af0", // azul
-    no: "#ff6b6b", // rojo
-    blancos: "#20c997", // turquesa
-    nulos: "#ffd43b", // amarillo
+    si: "#2563eb", // azul clásico institucional
+    no: "#dc2626", // rojo oscuro elegante
+    blancos: "#6b7280", // gris medio
+    nulos: "#1e293b", // gris carbón profundo
 };
 
 /* ===================== FORMATTERS ===================== */
@@ -36,107 +39,105 @@ const toNum = (v) => {
     return Number.isFinite(n) ? n : 0;
 };
 
-/* ===================== SUBCOMPONENTES UI ===================== */
-function KPI({ label, value }) {
-    return (
-        <Paper
-            withBorder
-            radius="md"
-            p="md"
-            style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 6,
-                minHeight: 90,
-            }}
-        >
-            <Text
-                size="xs"
-                fw={600}
-                c="dimmed"
-                style={{ letterSpacing: 0.8, fontFamily: "Inter, sans-serif" }}
-            >
-                {label.toUpperCase()}
-            </Text>
-            <Text
-                fw={800}
-                fz="xl"
-                style={{
-                    lineHeight: 1.1,
-                    fontFamily: "Inter, sans-serif",
-                }}
-            >
-                {value}
-            </Text>
-        </Paper>
-    );
-}
-
-function MiniStat({ label, value, percent, color }) {
+/* ===================== SUBCOMPONENTES UI MEJORADOS ===================== */
+function KPI({ label, value, subtitle, color }) {
     const theme = useMantineTheme();
 
     return (
         <Paper
             withBorder
-            radius="md"
+            radius="sm"
             p="sm"
+            shadow="md"
             style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: 4,
-                minWidth: 120,
+                gap: 8,
+                minHeight: 120,
+                borderLeft: `4px solid black`,
             }}
         >
-            <Text size="xs" c="dimmed" fw={500} style={{ letterSpacing: 0.4 }}>
+            <Text fz={12} fw={600} c="dimmed" tt="uppercase">
                 {label}
             </Text>
-            <Group gap={6} align="baseline">
-                <Text
-                    fw={700}
-                    fz="lg"
-                    style={{
-                        color: color,
-                        fontFamily: "Inter, sans-serif",
-                    }}
-                >
-                    {value}
-                </Text>
-                {percent != null && (
-                    <Badge
-                        variant="light"
-                        size="xs"
-                        style={{
-                            fontWeight: 500,
-                        }}
-                    >
-                        {pf.format(percent)}
-                    </Badge>
-                )}
-            </Group>
-            <Box
+            <Text
+                fz={18}
+                fw={900}
                 style={{
-                    position: "relative",
-                    height: 6,
-                    borderRadius: 4,
-                    background:
-                        theme.colorScheme === "dark"
-                            ? theme.colors.dark[5]
-                            : theme.colors.gray[2],
-                    overflow: "hidden",
+                    fontSize: "1.3rem",
+                    lineHeight: 1,
                 }}
             >
-                <Box
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        height: "100%",
-                        width: `${(percent || 0) * 100}%`,
-                        background: color,
-                        transition: "width 180ms ease",
-                    }}
-                />
-            </Box>
+                {value}
+            </Text>
+            {subtitle && (
+                <Text fz={12} c="dimmed" fw={500}>
+                    {subtitle}
+                </Text>
+            )}
+        </Paper>
+    );
+}
+
+function KPIWithProgress({ label, current, total, color }) {
+    const percentage = total > 0 ? (current / total) * 100 : 0;
+
+    return (
+        <Paper
+            withBorder
+            radius="sm"
+            p="sm"
+            shadow="md"
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+                minHeight: 120,
+                borderLeft: `4px solid black`,
+            }}
+        >
+            <Text fz={12} fw={600} c="dimmed" tt="uppercase">
+                {label}
+            </Text>
+
+            <Stack gap={8}>
+                <Group justify="space-between" align="baseline">
+                    <Text
+                        fz={18}
+                        fw={900}
+                        style={{
+                            fontSize: "1.3rem",
+                            lineHeight: 1,
+                        }}
+                    >
+                        {nf.format(current)}
+                    </Text>
+                    <Text fz={14} c="dimmed" fw={500}>
+                        de {nf.format(total)}
+                    </Text>
+                </Group>
+
+                <Box>
+                    <Progress
+                        value={percentage}
+                        color={color}
+                        size="sm"
+                        radius="xl"
+                        style={{
+                            backgroundColor: rgba(color, 0.2),
+                        }}
+                    />
+                    <Text
+                        size="xs"
+                        fw={700}
+                        ta="center"
+                        mt={4}
+                        style={{ color: color }}
+                    >
+                        {pf.format(percentage / 100)}
+                    </Text>
+                </Box>
+            </Stack>
         </Paper>
     );
 }
@@ -157,17 +158,16 @@ export const ResultadosConsultaChart = () => {
 
     const [stacked, setStacked] = useState(false);
     const [sortBy, setSortBy] = useState("casillero");
-    const [selectedIndex, setSelectedIndex] = useState(null);
 
     // Colores adaptados al theme de Mantine
     const themeColors = useMemo(
         () => ({
-            grid: isDark ? theme.colors.dark[4] : theme.colors.gray[3],
-            border: isDark ? theme.colors.dark[4] : theme.colors.gray[4],
-            panel: isDark ? theme.colors.dark[7] : theme.white,
-            panelAlt: isDark ? theme.colors.dark[6] : theme.colors.gray[0],
-            text: isDark ? theme.colors.dark[0] : theme.black,
-            dim: isDark ? theme.colors.dark[2] : theme.colors.gray[6],
+            grid: isDark ? "#374151" : "#e5e7eb",
+            border: isDark ? "#4b5563" : "#d1d5db",
+            panel: isDark ? "#1f2937" : "#ffffff",
+            panelAlt: isDark ? "#374151" : "#f9fafb",
+            text: isDark ? "#f9fafb" : "#111827",
+            dim: isDark ? "#9ca3af" : "#6b7280",
         }),
         [isDark, theme]
     );
@@ -180,10 +180,9 @@ export const ResultadosConsultaChart = () => {
     const totalValidos = toNum(totales?.total_votos_validos);
     const totalBlancos = toNum(totales?.total_votos_blancos);
     const totalNulos = toNum(totales?.total_votos_nulos);
-    const participacion =
-        totalElectores > 0 ? totalValidos / totalElectores : 0;
-    const ruidoGlobal =
-        totalValidos > 0 ? (totalBlancos + totalNulos) / totalValidos : 0;
+
+    const pctBlancos = totalValidos > 0 ? totalBlancos / totalValidos : 0;
+    const pctNulos = totalValidos > 0 ? totalNulos / totalValidos : 0;
 
     /* Normalizar filas */
     const rows = useMemo(() => {
@@ -239,7 +238,7 @@ export const ResultadosConsultaChart = () => {
     const categories = sorted.map((r) => r.casillero);
     const stacking = stacked ? "normal" : undefined;
 
-    /* Series generadora (horizontal bar) - COLORES SÓLIDOS */
+    /* Series generadora (horizontal bar) - COLORES ELEGANTES */
     const makeSeries = (key, percentKey, name, color) => ({
         name,
         color: color,
@@ -249,6 +248,7 @@ export const ResultadosConsultaChart = () => {
             percent: r[percentKey],
             validos: r.validos,
             texto: r.texto,
+            casillero: r.casillero,
             index: idx,
         })),
     });
@@ -263,219 +263,208 @@ export const ResultadosConsultaChart = () => {
         [sorted]
     );
 
-    /* Tooltip */
-    const tooltipFormatter = function () {
-        const idx = this.points?.[0]?.point?.index ?? 0;
-        const row = sorted[idx];
-        const header =
-            `<div style="margin-bottom:4px;font-weight:600;font-size:12px;color:${themeColors.text}">Pregunta ${row.casillero}</div>` +
-            (row.texto
-                ? `<div style="max-width:360px;font-size:11px;color:${themeColors.dim};margin-bottom:6px;line-height:1.35;">${row.texto}</div>`
-                : "");
-        const body = (this.points || [])
-            .map((p) => {
-                const pct = row.validos ? p.y / row.validos : 0;
-                return `<div style="margin-bottom:2px;"><span style="display:inline-block;width:10px;height:10px;background:${
-                    p.color
-                };border-radius:2px;margin-right:6px;"></span>${
-                    p.series.name
-                }: <b>${nf.format(p.y)}</b> <span style="color:${
-                    themeColors.dim
-                }">(${pf.format(pct)})</span></div>`;
-            })
-            .join("");
-        const footer = row.validos
-            ? `<div style="margin-top:6px;font-size:11px;color:${
-                  themeColors.dim
-              };">Válidos: <b>${nf.format(row.validos)}</b></div>`
-            : "";
-        return `<div style="color:${themeColors.text}">${header}${body}${footer}</div>`;
-    };
-
-    /* Opciones gráfico barras horizontales (bar) */
+    /* Opciones gráfico barras horizontales - ESTILO ELEGANTE Y SOBRIO */
     const barOptions = useMemo(
         () => ({
             chart: {
                 type: "bar",
                 height: 480,
                 backgroundColor: "transparent",
-                style: { fontFamily: "Inter, sans-serif" },
+                style: {
+                    fontFamily: "'Poppins', 'Segoe UI', 'Roboto', sans-serif",
+                },
                 spacingTop: 20,
-                spacingBottom: 12,
+                spacingBottom: 20,
+                spacingLeft: 10,
+                spacingRight: 10,
             },
             title: { text: undefined },
             xAxis: {
                 categories,
-                gridLineColor: themeColors.grid,
+                gridLineWidth: 0,
                 lineColor: themeColors.border,
-                tickColor: themeColors.border,
-                labels: { style: { color: themeColors.dim, fontSize: "12px" } },
+                lineWidth: 1,
+                tickLength: 0,
+                labels: {
+                    style: {
+                        fontSize: "20px",
+                        fontWeight: "900",
+                        color: themeColors.text,
+                    },
+                },
             },
             yAxis: {
                 min: 0,
                 gridLineColor: themeColors.grid,
+                gridLineWidth: 1,
+                lineWidth: 0,
                 title: {
-                    text: "Votos",
-                    style: { color: themeColors.dim, fontSize: "12px" },
+                    text: "Cantidad de Votos",
+                    style: {
+                        fontSize: "16px",
+                        fontWeight: "600",
+                        color: themeColors.dim,
+                    },
                 },
                 labels: {
-                    style: { color: themeColors.dim },
+                    style: {
+                        fontSize: "12px",
+                        color: themeColors.dim,
+                        fontWeight: "500",
+                    },
                     formatter: function () {
                         return nf.format(this.value);
                     },
                 },
             },
             legend: {
-                itemStyle: { color: themeColors.text, fontWeight: 500 },
-                itemHoverStyle: { color: isDark ? "#ffffff" : "#000000" },
-                symbolRadius: 3,
+                align: "center",
+                verticalAlign: "top",
+                itemStyle: {
+                    fontWeight: "500",
+                    fontSize: "12px",
+                    color: themeColors.text,
+                },
+                itemHoverStyle: {
+                    color: isDark ? "#ffffff" : "#000000",
+                },
+                symbolRadius: 4,
+                symbolHeight: 12,
+                symbolWidth: 12,
+                itemDistance: 20,
+                padding: 12,
                 backgroundColor: themeColors.panelAlt,
                 borderColor: themeColors.border,
-                borderWidth: 1.5,
-                padding: 8,
+                borderWidth: 1,
+                borderRadius: 6,
+                shadow: false,
             },
             tooltip: {
-                shared: true,
+                shared: false,
                 useHTML: true,
+                borderRadius: 5,
+                borderWidth: 1,
+                backgroundColor: themeColors.panel,
                 borderColor: themeColors.border,
-                backgroundColor: themeColors.panelAlt,
-                style: { color: themeColors.text },
-                borderRadius: 10,
-                formatter: tooltipFormatter,
+                padding: 12,
+                shadow: {
+                    color: "rgba(0, 0, 0, 0.1)",
+                    offsetX: 0,
+                    offsetY: 2,
+                    opacity: 0.15,
+                    width: 4,
+                },
+                style: {
+                    fontSize: "12px",
+                    color: themeColors.text,
+                },
+                formatter: function () {
+                    const point = this.point;
+                    const pct = point.validos ? point.y / point.validos : 0;
+
+                    return `
+                        <div style="min-width: 200px;">
+                            <div style="font-weight: 700; font-size: 14px; margin-bottom: 8px; color: ${
+                                themeColors.text
+                            }; border-bottom: 2px solid ${
+                        this.color
+                    }; padding-bottom: 6px;">
+                                Pregunta ${point.casillero}
+                            </div>
+                            ${
+                                point.texto
+                                    ? `<div style="font-size: 12px; color: ${themeColors.dim}; margin-bottom: 10px; line-height: 1.4;">${point.texto}</div>`
+                                    : ""
+                            }
+                            <div style="display: flex; align-items: center; margin-bottom: 6px;">
+                                <span style="display: inline-block; width: 12px; height: 12px; background: ${
+                                    this.color
+                                }; border-radius: 3px; margin-right: 8px;"></span>
+                                <span style="font-weight: 600; color: ${
+                                    themeColors.text
+                                };">${this.series.name}:</span>
+                            </div>
+                            <div style="font-size: 20px; font-weight: 800; color: ${
+                                this.color
+                            }; margin-bottom: 4px;">
+                                ${nf.format(point.y)}
+                            </div>
+                            <div style="font-size: 13px; font-weight: 600; color: ${
+                                themeColors.dim
+                            };">
+                                ${pf.format(pct)} del total
+                            </div>
+                            <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid ${
+                                themeColors.border
+                            }; font-size: 11px; color: ${themeColors.dim};">
+                                Votos válidos: <span style="font-weight: 600;">${nf.format(
+                                    point.validos
+                                )}</span>
+                            </div>
+                        </div>
+                    `;
+                },
             },
             plotOptions: {
                 series: {
                     stacking,
-                    pointPadding: stacked ? 0.05 : 0.15,
-                    groupPadding: 0.1,
-                    borderRadius: 5,
+                    pointPadding: stacked ? 0.05 : 0.12,
+                    groupPadding: 0.15,
+                    borderRadius: 4,
+                    borderWidth: 0,
                     cursor: "pointer",
+                    shadow: false,
                     dataLabels: {
                         enabled: true,
                         inside: false,
+                        align: "left",
                         style: {
-                            fontSize: "11px",
-                            fontWeight: 600,
+                            fontSize: "13px",
+                            fontWeight: "700",
                             textOutline: "none",
                             color: themeColors.text,
                         },
                         formatter: function () {
                             const row = sorted[this.point.index];
                             const pct = row.validos ? this.y / row.validos : 0;
-                            return `${nf.format(this.y)} (${pf.format(pct)})`;
+                            return `<span style="font-weight: 800;">${nf.format(
+                                this.y
+                            )}</span> <span style="font-weight: 600; opacity: 0.7;">(${pf.format(
+                                pct
+                            )})</span>`;
                         },
                     },
                     states: {
-                        inactive: { opacity: 0.3 },
-                        hover: { brightness: 0.05 },
-                    },
-                    point: {
-                        events: {
-                            click: function () {
-                                setSelectedIndex(this.index);
-                            },
+                        inactive: {
+                            opacity: 0.3,
+                        },
+                        hover: {
+                            brightness: 0.09,
+                            shadow: false,
+                            borderWidth: 0,
                         },
                     },
-                },
-                bar: {
-                    borderWidth: 1.2,
                 },
             },
             series,
             credits: { enabled: false },
-            exporting: {
-                enabled: false,
-            },
+            exporting: { enabled: false },
         }),
         [categories, stacked, stacking, series, sorted, themeColors, isDark]
     );
-
-    /* Seleccionado */
-    const selected = selectedIndex != null ? sorted[selectedIndex] : null;
-
-    /* Donut */
-    const pieOptions = useMemo(() => {
-        if (!selected) return null;
-        const data = [
-            { name: "SI", y: selected.si, color: COLORS.si },
-            { name: "NO", y: selected.no, color: COLORS.no },
-            { name: "Blancos", y: selected.blancos, color: COLORS.blancos },
-            { name: "Nulos", y: selected.nulos, color: COLORS.nulos },
-        ];
-
-        return {
-            chart: {
-                type: "pie",
-                height: 300,
-                backgroundColor: "transparent",
-            },
-            title: {
-                text: `Pregunta ${selected.casillero}`,
-                align: "center",
-                style: {
-                    color: themeColors.text,
-                    fontSize: "14px",
-                    fontWeight: 600,
-                },
-            },
-            tooltip: {
-                pointFormatter: function () {
-                    const pct = selected.validos
-                        ? this.y / selected.validos
-                        : 0;
-                    return `<span style="color:${this.color}">\u25CF</span> ${
-                        this.name
-                    }: <b>${nf.format(this.y)}</b> <span style="color:${
-                        themeColors.dim
-                    }">(${pf.format(pct)})</span><br/>`;
-                },
-                borderColor: themeColors.border,
-                backgroundColor: themeColors.panelAlt,
-                style: { color: themeColors.text },
-                borderRadius: 10,
-            },
-            plotOptions: {
-                pie: {
-                    innerSize: "62%",
-                    borderColor: themeColors.panelAlt,
-                    dataLabels: {
-                        enabled: true,
-                        style: {
-                            fontWeight: 600,
-                            fontSize: "11px",
-                            textOutline: "none",
-                            color: themeColors.text,
-                        },
-                        formatter: function () {
-                            return nf.format(this.y);
-                        },
-                        distance: -28,
-                    },
-                    states: {
-                        hover: { brightness: 0.06 },
-                    },
-                },
-            },
-            series: [{ name: "Detalle", data }],
-            credits: { enabled: false },
-            exporting: {
-                enabled: false,
-            },
-        };
-    }, [selected, themeColors]);
 
     /* Loading */
     if (loading) {
         return (
             <Box>
-                <SimpleGrid cols={{ base: 2, sm: 4 }} mb="md">
+                <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} mb="md">
                     {Array.from({ length: 4 }).map((_, i) => (
                         <Paper
                             key={i}
                             withBorder
-                            radius="md"
-                            p="md"
-                            style={{ height: 90 }}
+                            radius="sm"
+                            p="sm"
+                            style={{ height: 120 }}
                         >
                             <Box
                                 style={{
@@ -497,14 +486,14 @@ export const ResultadosConsultaChart = () => {
                         </Paper>
                     ))}
                 </SimpleGrid>
-                <Paper withBorder radius="md" p="md" style={{ height: 460 }} />
+                <Paper withBorder radius="sm" p="sm" style={{ height: 460 }} />
             </Box>
         );
     }
 
     if (!loadingResultados || sorted.length === 0) {
         return (
-            <Paper withBorder radius="md" p="xl" ta="center">
+            <Paper withBorder radius="sm" p="xl" ta="center" mt={20}>
                 <Text fw={600} fz="lg">
                     Sin datos
                 </Text>
@@ -516,22 +505,46 @@ export const ResultadosConsultaChart = () => {
     }
 
     return (
-        <Box mt={20}>
-            {/* KPIs */}
-            <SimpleGrid cols={{ base: 2, sm: 4 }} spacing="md" mb="md">
-                <KPI label="Electores" value={nf.format(totalElectores)} />
-                <KPI label="Válidos" value={nf.format(totalValidos)} />
-                <KPI label="Participación" value={pf.format(participacion)} />
-                <KPI label="Ruido (B+N)" value={pf.format(ruidoGlobal)} />
+        <Box mt={20} mb={20}>
+            {/* KPIs Mejorados */}
+            <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="md" mb="xl">
+                <KPIWithProgress
+                    label="Total de Huellas/Firmas"
+                    current={totalValidos}
+                    total={totalElectores}
+                    color={theme.colors.blue[6]}
+                />
+
+                <KPI
+                    label="Votos en Blanco"
+                    value={nf.format(totalBlancos)}
+                    subtitle={pf.format(pctBlancos)}
+                    color={COLORS.blancos}
+                />
+
+                <KPI
+                    label="Votos Nulos"
+                    value={nf.format(totalNulos)}
+                    subtitle={pf.format(pctNulos)}
+                    color={COLORS.nulos}
+                />
+
+                <KPI
+                    label="Total Electores"
+                    value={nf.format(totalElectores)}
+                    subtitle="Padrón Electoral"
+                    color={theme.colors.violet[6]}
+                />
             </SimpleGrid>
 
             {/* Controles */}
-            <Group justify="space-between" mb="sm" wrap="wrap">
+            <Group justify="space-between" mb="md" wrap="wrap">
                 <Group gap="sm">
                     <Switch
                         checked={stacked}
                         onChange={(e) => setStacked(e.currentTarget.checked)}
                         label="Apilar"
+                        size="md"
                     />
                     <Select
                         value={sortBy}
@@ -548,146 +561,16 @@ export const ResultadosConsultaChart = () => {
                         placeholder="Orden"
                     />
                 </Group>
-                <Group gap={6}>
-                    <Badge color="blue" variant="dot">
-                        SI
-                    </Badge>
-                    <Badge color="red" variant="dot">
-                        NO
-                    </Badge>
-                    <Badge color="teal" variant="dot">
-                        Blancos
-                    </Badge>
-                    <Badge color="yellow" variant="dot">
-                        Nulos
-                    </Badge>
-                </Group>
             </Group>
 
             {/* Gráfico principal */}
-            <Paper withBorder radius="md" p="md">
+            <Paper withBorder radius="sm" p="sm" shadow="sm">
                 <div style={{ width: "100%", height: 480 }}>
                     <HighchartsReact
                         highcharts={Highcharts}
                         options={barOptions}
                     />
                 </div>
-
-                <Divider my="md" style={{ opacity: 0.6 }} />
-
-                <Group align="flex-start" wrap="wrap">
-                    {/* Panel detalle */}
-                    <Box style={{ flex: 1, minWidth: 320 }}>
-                        {selected ? (
-                            <Paper
-                                withBorder
-                                radius="md"
-                                p="md"
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: 14,
-                                }}
-                            >
-                                <Group justify="space-between" mb={-4}>
-                                    <Text fw={700} fz="sm">
-                                        Pregunta {selected.casillero}
-                                    </Text>
-                                    <Badge variant="light" color="gray">
-                                        Válidos: {nf.format(selected.validos)}
-                                    </Badge>
-                                </Group>
-                                {selected.texto && (
-                                    <MantineTooltip
-                                        label={selected.texto}
-                                        multiline
-                                        position="top-start"
-                                    >
-                                        <Text
-                                            c="dimmed"
-                                            size="xs"
-                                            lineClamp={3}
-                                            mb="xs"
-                                        >
-                                            {selected.texto}
-                                        </Text>
-                                    </MantineTooltip>
-                                )}
-                                <SimpleGrid
-                                    cols={{ base: 2, sm: 2 }}
-                                    spacing="md"
-                                >
-                                    <MiniStat
-                                        label="SI"
-                                        color={COLORS.si}
-                                        value={nf.format(selected.si)}
-                                        percent={selected.p_si}
-                                    />
-                                    <MiniStat
-                                        label="NO"
-                                        color={COLORS.no}
-                                        value={nf.format(selected.no)}
-                                        percent={selected.p_no}
-                                    />
-                                    <MiniStat
-                                        label="Blancos"
-                                        color={COLORS.blancos}
-                                        value={nf.format(selected.blancos)}
-                                        percent={selected.p_blancos}
-                                    />
-                                    <MiniStat
-                                        label="Nulos"
-                                        color={COLORS.nulos}
-                                        value={nf.format(selected.nulos)}
-                                        percent={selected.p_nulos}
-                                    />
-                                </SimpleGrid>
-                            </Paper>
-                        ) : (
-                            <Text c="dimmed" size="xs">
-                                Haz clic en una barra para ver el detalle de la
-                                pregunta.
-                            </Text>
-                        )}
-                    </Box>
-
-                    {/* Donut */}
-                    {pieOptions && (
-                        <Paper
-                            withBorder
-                            radius="md"
-                            p="sm"
-                            style={{
-                                width: 340,
-                                position: "relative",
-                            }}
-                        >
-                            <HighchartsReact
-                                highcharts={Highcharts}
-                                options={pieOptions}
-                            />
-                            {selected && (
-                                <Box
-                                    style={{
-                                        position: "absolute",
-                                        top: "50%",
-                                        left: "50%",
-                                        transform: "translate(-50%,-50%)",
-                                        textAlign: "center",
-                                        pointerEvents: "none",
-                                    }}
-                                >
-                                    <Text fw={700} size="sm">
-                                        Totales
-                                    </Text>
-                                    <Text size="xs" c="dimmed">
-                                        Válidos {nf.format(selected.validos)}
-                                    </Text>
-                                </Box>
-                            )}
-                        </Paper>
-                    )}
-                </Group>
             </Paper>
         </Box>
     );

@@ -812,9 +812,8 @@ class ActaConsultaController extends Controller
                 ->sum('votos_validos');
 
             // Total de electores del ámbito
-            $electoresQuery = DB::table('juntas as j')
-                ->join('recintos as r', 'r.id', '=', 'j.recinto_id')
-                ->join('zonas as z', 'z.id', '=', 'j.zona_id')
+            $electoresQuery = DB::table('recintos as r')
+                ->join('zonas as z', 'z.id', '=', 'r.zona_id')
                 ->join('parroquias as p', 'p.id', '=', 'z.parroquia_id')
                 ->join('cantones as c', 'p.canton_id', '=', 'c.id')
                 ->join('provincias as pr', 'c.provincia_id', '=', 'pr.id');

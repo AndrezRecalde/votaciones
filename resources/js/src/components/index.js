@@ -142,6 +142,10 @@ import { ResultadosConsultaFilter } from "./consulta-popular/resultados/filter/R
 import { ResultadosConsultaChart } from "./consulta-popular/resultados/section/ResultadosConsultaChart";
 import { ResultadosConsultaTable } from "./consulta-popular/resultados/section/ResultadosConsultaTable";
 
+/* Escrutinio Consulta */
+import { EscrutinioConsultaBarChart } from "./consulta-popular/escrutinio/chart/EscrutinioConsultaBarChart";
+import { EscrutinioConsultaTable } from "./consulta-popular/escrutinio/table/EscrutinioConsultaTable";
+
 export {
     /* Logo */
     Logo,
@@ -283,4 +287,8 @@ export {
     ResultadosConsultaFilter,
     ResultadosConsultaChart,
     ResultadosConsultaTable,
+
+    /* Escrutinio Consulta */
+    EscrutinioConsultaBarChart,
+    EscrutinioConsultaTable,
 }
