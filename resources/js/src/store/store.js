@@ -16,6 +16,7 @@ import {
     resultadosSlice,
     roleSlice,
     storageSlice,
+    tendenciaConsultaSlice,
     tendenciaSlice,
     uiCandidatoSlice,
     uiDignidadSlice,
@@ -80,6 +81,8 @@ export const store = configureStore({
 
         escrutinioConsulta: escrutinioConsultaSlice.reducer,
         uiEscrutinioConsulta: uiEscrutinioConsultaSlice.reducer,
+
+        tendenciaConsulta: tendenciaConsultaSlice.reducer,
 
         storage: storageSlice.reducer,
     },

@@ -69,6 +69,9 @@ import { uiResultadoConsultaSlice } from "./consulta/resultado/uiResultadoConsul
 import { escrutinioConsultaSlice } from "./consulta/escrutinio-consulta/escrutinioConsultaSlice";
 import { uiEscrutinioConsultaSlice } from "./consulta/escrutinio-consulta/uiEscrutinioConsultaSlice";
 
+/* Seguimiento de Juntas Consulta Popular */
+import { tendenciaConsultaSlice } from "./consulta/tendencia-consulta/tendenciaConsultaSlice";
+
 /* Storages */
 import { storageSlice } from "./storage/storageSlice";
 
@@ -145,6 +148,9 @@ export {
     /* Escrutinios Consulta Popular */
     escrutinioConsultaSlice,
     uiEscrutinioConsultaSlice,
+
+    /* Seguimiento de Juntas Consulta Popular */
+    tendenciaConsultaSlice,
 
     /* Storage */
     storageSlice,

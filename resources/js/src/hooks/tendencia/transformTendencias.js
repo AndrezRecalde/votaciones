@@ -1,6 +1,10 @@
 export const transformTendencias = (tendencias) => {
-    // Obtener nombres únicos de las juntas y candidatos
-    const juntas = [...new Set(tendencias.map((item) => item.junta_nombre))];
+    // Obtener nombres únicos de las juntas (categorías del eje X)
+    const categories = [
+        ...new Set(tendencias.map((item) => item.junta_nombre)),
+    ];
+
+    // Obtener candidatos únicos
     const candidatos = [
         ...new Set(tendencias.map((item) => item.nombre_candidato)),
     ];
@@ -13,27 +17,32 @@ export const transformTendencias = (tendencias) => {
         }
     });
 
-    // Transformar los datos para que cada junta tenga votos por candidato
-    const transformedData = juntas.map((junta) => {
-        const juntaData = { junta_nombre: junta };
+    // Crear un mapeo de junta a recinto
+    const recintoMap = {};
+    tendencias.forEach((item) => {
+        if (!recintoMap[item.junta_nombre]) {
+            recintoMap[item.junta_nombre] =
+                item.recinto_nombre || item.nombre_recinto || "Sin recinto";
+        }
+    });
 
-        candidatos.forEach((candidato) => {
+    // Crear las series para Highcharts
+    const series = candidatos.map((candidato) => {
+        const data = categories.map((junta) => {
             const entry = tendencias.find(
                 (item) =>
                     item.junta_nombre === junta &&
                     item.nombre_candidato === candidato
             );
-            juntaData[candidato] = entry ? parseInt(entry.total_votos, 10) : 0;
+            return entry ? parseInt(entry.total_votos, 10) : 0;
         });
 
-        return juntaData;
+        return {
+            name: candidato,
+            data: data,
+            color: colorMap[candidato],
+        };
     });
 
-    // Crear las series para el gráfico
-    const series = candidatos.map((candidato) => ({
-        name: candidato,
-        color: colorMap[candidato], // Asignar color desde el mapeo
-    }));
-
-    return { transformedData, series };
+    return { categories, series, recintoMap };
 };

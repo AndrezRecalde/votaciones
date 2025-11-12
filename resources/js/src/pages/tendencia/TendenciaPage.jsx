@@ -1,5 +1,5 @@
-import { useEffect, useMemo } from "react";
-import { Box, Container, Divider, LoadingOverlay } from "@mantine/core";
+import { useEffect } from "react";
+import { Box, Container, Divider } from "@mantine/core";
 import {
     TendenciaBusquedaForm,
     TendenciaChart,
@@ -13,13 +13,11 @@ import {
 } from "../../hooks";
 
 const TendenciaPage = () => {
-    useTitleHook("Elecciones | Tendencias");
-    const usuario = useMemo(() => {
-        return JSON.parse(localStorage.getItem("service_user")) || {};
-    }, []);
+    useTitleHook("Elecciones - Tendencias");
+    const usuario = JSON.parse(localStorage.getItem("service_user")) || {};
     const { startLoadDignidades, startClearDignidades } = useDignidadStore();
     const { startLoadCantones } = useJurisdiccionStore();
-    const { isLoading, pageLoad, startClearTendencias } = useTendenciaStore();
+    const { pageLoad, startClearTendencias } = useTendenciaStore();
 
     useEffect(() => {
         startLoadDignidades({ activo: true });
@@ -33,18 +31,13 @@ const TendenciaPage = () => {
 
     return (
         <Container size="xxl">
-            <TitlePage order={2}>Tendencias</TitlePage>
+            <TitlePage order={2}>Seguimiento de Juntas</TitlePage>
             <Divider my="md" />
             <TendenciaBusquedaForm />
-            <LoadingOverlay
-                visible={isLoading}
-                zIndex={500}
-                overlayProps={{ radius: "sm", blur: 2 }}
-            />
             {pageLoad ? (
                 <Box mt={50}>
-                    <TitlePage order={4}>
-                        Gráfico de Tendencia por Dignidades
+                    <TitlePage order={3} mb={20}>
+                        Gráfico de Seguimiento por Juntas
                     </TitlePage>
                     <TendenciaChart />
                 </Box>

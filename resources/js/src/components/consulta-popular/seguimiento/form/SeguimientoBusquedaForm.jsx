@@ -1,39 +1,41 @@
 import { useEffect } from "react";
 import { Box, Paper, Select, SimpleGrid, Stack } from "@mantine/core";
-import { BtnSubmit } from "..";
-import {
-    useDignidadStore,
-    useJurisdiccionStore,
-    useTendenciaStore,
-} from "../../hooks";
 import { isNotEmpty, useForm } from "@mantine/form";
+import {
+    useJurisdiccionStore,
+    usePreguntaStore,
+    useTendenciaConsultaStore,
+} from "../../../../hooks";
+import { BtnSubmit } from "../../../../components";
 import { IconSearch } from "@tabler/icons-react";
-import classes from "../../assets/styles/modules/digitacion/LabelsDigitacion.module.css";
+import classes from "../../../../assets/styles/modules/digitacion/LabelsDigitacion.module.css";
 
-export const TendenciaBusquedaForm = () => {
-    const { dignidades } = useDignidadStore();
+export const SeguimientoBusquedaForm = () => {
     const { cantones, parroquias, zonas, startLoadParroquias, startLoadZonas } =
         useJurisdiccionStore();
-    const { isLoading, startLoadTendencias } = useTendenciaStore();
+        const { preguntas } = usePreguntaStore();
+
+    const { isLoading, startLoadTendenciasConsulta } =
+        useTendenciaConsultaStore();
 
     const form = useForm({
         initialValues: {
-            dignidad_id: null,
             canton_id: null,
             parroquia_id: null,
             zona_id: null,
+            pregunta_id: null,
         },
         validate: {
-            dignidad_id: isNotEmpty("Por favor seleccione una dignidad"),
             canton_id: isNotEmpty("Por favor seleccione un cantón"),
             parroquia_id: isNotEmpty("Por favor seleccione una parroquia"),
             zona_id: isNotEmpty("Por favor seleccione una zona"),
+            pregunta_id: isNotEmpty("Por favor seleccione una pregunta"),
         },
         transformValues: (values) => ({
-            dignidad_id: Number(values.dignidad_id) || null,
             canton_id: Number(values.canton_id) || null,
             parroquia_id: Number(values.parroquia_id) || null,
             zona_id: Number(values.zona_id) || null,
+            pregunta_id: Number(values.pregunta_id) || null,
         }),
     });
 
@@ -55,7 +57,12 @@ export const TendenciaBusquedaForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        startLoadTendencias(form.getTransformedValues());
+        const { zona_id, pregunta_id } = form.getTransformedValues();
+        console.log({ zona_id, pregunta_id });
+        startLoadTendenciasConsulta({
+            zona_id,
+            pregunta_id,
+        });
     };
 
     return (
@@ -66,21 +73,6 @@ export const TendenciaBusquedaForm = () => {
             >
                 <Stack>
                     <SimpleGrid cols={{ base: 1, xs: 1, sm: 2, md: 4, lg: 4 }}>
-                        <Select
-                            label="Dignidad"
-                            placeholder="Seleccione una Dignidad"
-                            searchable
-                            clearable
-                            classNames={classes}
-                            nothingFoundMessage="No options"
-                            {...form.getInputProps("dignidad_id")}
-                            data={dignidades.map((dignidad) => {
-                                return {
-                                    label: dignidad.nombre_dignidad,
-                                    value: dignidad.id.toString(),
-                                };
-                            })}
-                        />
                         <Select
                             label="Cantón"
                             placeholder="Seleccione una cantón"
@@ -123,6 +115,21 @@ export const TendenciaBusquedaForm = () => {
                                 return {
                                     label: zona.nombre_zona,
                                     value: zona.id.toString(),
+                                };
+                            })}
+                        />
+                        <Select
+                            label="Pregunta"
+                            placeholder="Seleccione una pregunta"
+                            searchable
+                            clearable
+                            classNames={classes}
+                            nothingFoundMessage="No options"
+                            {...form.getInputProps("pregunta_id")}
+                            data={preguntas.map((pregunta) => {
+                                return {
+                                    label: pregunta.texto_pregunta,
+                                    value: pregunta.id.toString(),
                                 };
                             })}
                         />

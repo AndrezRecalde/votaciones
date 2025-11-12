@@ -115,16 +115,31 @@ class ResultadoController extends Controller
         return response()->json(['status' => HTTPStatus::Success, 'tendencias' => $tendencias], 200);
     }
 
-    function getTendencias(Request $request): JsonResponse
+    function getSeguimientoJuntas(Request $request): JsonResponse
     {
-
-        // Obtener parámetros de la solicitud
         $zonaId = $request->input('zona_id');
         $dignidadId = $request->input('dignidad_id');
 
+        // Primero obtenemos el TOP 5 de candidatos con más votos en la zona
+        $topCandidatos = DB::table('actas')
+            ->join('juntas', 'actas.junta_id', '=', 'juntas.id')
+            ->join('acta_candidato', 'actas.id', '=', 'acta_candidato.acta_id')
+            ->join('candidatos', 'acta_candidato.candidato_id', '=', 'candidatos.id')
+            ->where('juntas.zona_id', $zonaId)
+            ->where('actas.dignidad_id', $dignidadId)
+            ->select('candidatos.id', DB::raw('SUM(acta_candidato.num_votos) as total'))
+            ->groupBy('candidatos.id')
+            ->orderBy('total', 'desc')
+            ->limit(5)
+            ->pluck('candidatos.id')
+            ->toArray();
+
+        // Ahora obtenemos el seguimiento de juntas solo para esos TOP 5 candidatos
         $tendencias = DB::table('juntas')
-            ->join('candidatos', function ($join) use ($dignidadId) {
-                $join->on('candidatos.dignidad_id', '=', DB::raw($dignidadId)); // Filtrar por dignidad_id
+            ->leftJoin('recintos', 'juntas.recinto_id', '=', 'recintos.id')
+            ->join('candidatos', function ($join) use ($dignidadId, $topCandidatos) {
+                $join->on('candidatos.dignidad_id', '=', DB::raw($dignidadId))
+                    ->whereIn('candidatos.id', $topCandidatos);
             })
             ->leftJoin('actas', function ($join) {
                 $join->on('juntas.id', '=', 'actas.junta_id');
@@ -138,14 +153,22 @@ class ResultadoController extends Controller
             })
             ->select(
                 'juntas.junta_nombre',
+                'recintos.nombre_recinto',
                 'candidatos.nombre_candidato',
                 'organizaciones.color',
                 DB::raw('COALESCE(SUM(acta_candidato.num_votos), 0) as total_votos')
             )
-            ->where('juntas.zona_id', $zonaId) // Filtrar por zona
-            ->groupBy('juntas.id', 'juntas.junta_nombre', 'candidatos.id', 'candidatos.nombre_candidato')
+            ->where('juntas.zona_id', $zonaId)
+            ->groupBy(
+                'juntas.id',
+                'juntas.junta_nombre',
+                'recintos.nombre_recinto',
+                'candidatos.id',
+                'candidatos.nombre_candidato',
+                'organizaciones.color'
+            )
             ->orderBy('juntas.num_junta', 'asc')
-            ->orderBy('candidatos.nombre_candidato', 'asc')
+            ->orderByRaw('COALESCE(SUM(acta_candidato.num_votos), 0) DESC')
             ->get();
 
         return response()->json(['status' => HTTPStatus::Success, 'tendencias' => $tendencias], 200);

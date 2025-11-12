@@ -67,6 +67,10 @@ import { useResultadoConsultaStore } from "./consulta/resultado/useResultadoCons
 /* Escrutinio Consulta */
 import { useEscrutinioConsultaStore } from "./consulta/escrutinio-consulta/useEscrutinioConsultaStore";
 
+/* Tendencia/Seguimiento de Juntas Consulta Popular */
+import { useTendenciaConsultaStore } from "./consulta/tendencia-consulta/useTendenciaConsultaStore";
+import { transformTendenciaConsulta } from "./consulta/tendencia-consulta/transformTendenciaConsulta";
+
 /* Storages */
 import { useStorageStore } from "./storage/useStorageStore";
 
@@ -144,6 +148,10 @@ export {
 
     /** Escrutinio Consulta */
     useEscrutinioConsultaStore,
+
+    /** Tendencia/Seguimiento de Juntas Consulta Popular */
+    useTendenciaConsultaStore,
+    transformTendenciaConsulta,
 
     /* Fecha */
     useFechaStore,

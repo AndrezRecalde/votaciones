@@ -4,7 +4,7 @@ import { useTitleHook } from "../../hooks";
 import classes from "../../assets/styles/modules/auth/AuthPageBackground.module.css";
 
 const AuthPage = () => {
-    useTitleHook("Elecciones | Acceder");
+    useTitleHook("Elecciones - Acceder");
 
     return (
         <div className={classes.wrapper}>

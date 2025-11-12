@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Consulta\ActaConsultaController;
 use App\Http\Controllers\Consulta\EscrutinioConsultaController;
 use App\Http\Controllers\Consulta\PreguntaConsultaController;
+use App\Http\Controllers\Consulta\SeguimientoJuntasController;
 use App\Http\Controllers\Guess\GuessController;
 use App\Http\Controllers\StateController;
 use App\Http\Middleware\CheckRole;
@@ -132,7 +133,7 @@ Route::group(
         /* Resultados */
         Route::post('/resultados/totales', [ResultadoController::class, 'getResultados']);
         Route::post('/resultados/total/votos', [ResultadoController::class, 'getTotalVotos']);
-        Route::post('/resultados/tendencia/zonas', [ResultadoController::class, 'getTendencias']);
+        Route::post('/resultados/tendencia/zonas', [ResultadoController::class, 'getSeguimientoJuntas']);
         Route::post('/resultados/export-pdf', [ResultadoController::class, 'exportResultadosPDF']);
         Route::post('/resultados/export-pdf/zonas', [ResultadoController::class, 'exportResultadosPDFPorZona']);
         Route::post('/resultados/export-xls', [ResultadoController::class, 'exportarResultadosXLS']);
@@ -161,6 +162,9 @@ Route::group(
 
         /* Escrutinio de Consulta Popular */
         Route::get('/escrutinio/drill', [EscrutinioConsultaController::class, 'drill']);
+
+        /* Seguimiento de Juntas - Consulta Popular */
+        Route::get('/seguimiento-juntas-consulta', [SeguimientoJuntasController::class, 'getSeguimientoJuntasConsulta']);
     }
 );
 

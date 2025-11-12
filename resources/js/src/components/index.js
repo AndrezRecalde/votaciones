@@ -146,6 +146,11 @@ import { ResultadosConsultaTable } from "./consulta-popular/resultados/section/R
 import { EscrutinioConsultaBarChart } from "./consulta-popular/escrutinio/chart/EscrutinioConsultaBarChart";
 import { EscrutinioConsultaTable } from "./consulta-popular/escrutinio/table/EscrutinioConsultaTable";
 
+
+/* Seguimiento de Juntas - Consulta Popular */
+import { SeguimientoBusquedaForm } from "./consulta-popular/seguimiento/form/SeguimientoBusquedaForm";
+import { SeguimientoConsultaJuntasChart } from "./consulta-popular/seguimiento/chart/SeguimientoConsultaJuntasChart";
+
 export {
     /* Logo */
     Logo,
@@ -291,4 +296,8 @@ export {
     /* Escrutinio Consulta */
     EscrutinioConsultaBarChart,
     EscrutinioConsultaTable,
+
+    /* Seguimiento de Juntas - Consulta Popular */
+    SeguimientoBusquedaForm,
+    SeguimientoConsultaJuntasChart
 }

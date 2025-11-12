@@ -114,6 +114,13 @@ const EscrutinioConsultaPage = lazy(() =>
     )
 );
 
+/* Seguimiento de Juntas Consulta Popular */
+const SeguimientoConsultaJuntasPage = lazy(() =>
+    import(
+        /* webpackChunkName: "SeguimientoConsultaJuntasPage" */ "../../pages/consulta-popular/seguimiento/SeguimientoConsultaJuntasPage"
+    )
+);
+
 const ErrorNotFound = lazy(() =>
     import(
         /* webpackChunkName: "ErrorNotFound" */ "../../pages/error/ErrorNotFound"
@@ -144,10 +151,11 @@ export const HEADER_MENU = {
 };
 
 export const HEADER_MENU_CONSULTA = {
-    DIGITACION_CONSULTA: "consulta-digitacion",
-    RESULTADO_CONSULTA: "consulta-resultados",
-    ESCRUTINIO_CONSULTA: "consulta-escrutinio",
-    TENDENCIA_CONSULTA: "consulta-tendencia",
+    PREGUNTAS_CONSULTA: "preguntas-consulta",
+    DIGITACION_CONSULTA: "digitacion-consulta",
+    RESULTADO_CONSULTA: "resultados-consulta",
+    ESCRUTINIO_CONSULTA: "escrutinio-consulta",
+    SEGUIMIENTO_JUNTAS_CONSULTA: "seguimiento-consulta",
     ACTAS_CONSULTA: "consulta-actas",
 };
 
@@ -186,9 +194,10 @@ const adminRoutes = generateRoutes(
         { path: HEADER_MENU.ACTAS, Component: BusquedaActaPage },
 
         // Rutas para Consulta Popular
-        { path: "preguntas", Component: PreguntasConsultaPage },
-        { path: "resultados-consulta", Component: ResultadosConsultaPage },
-        { path: "escrutinio-consulta", Component: EscrutinioConsultaPage },
+        { path: HEADER_MENU_CONSULTA.PREGUNTAS_CONSULTA, Component: PreguntasConsultaPage },
+        { path: HEADER_MENU_CONSULTA.RESULTADO_CONSULTA, Component: ResultadosConsultaPage },
+        { path: HEADER_MENU_CONSULTA.ESCRUTINIO_CONSULTA, Component: EscrutinioConsultaPage },
+        { path: HEADER_MENU_CONSULTA.SEGUIMIENTO_JUNTAS_CONSULTA, Component: SeguimientoConsultaJuntasPage },
 
     ],
     ["ADMIN", "RESPONSABLE"]
