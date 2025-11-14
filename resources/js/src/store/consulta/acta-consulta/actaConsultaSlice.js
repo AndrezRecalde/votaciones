@@ -8,13 +8,19 @@ export const actaConsultaSlice = createSlice({
         disabledSearch: false,
 
         actasConsulta: [],
+        ultimosFiltros: {
+            categoria_id: null,
+            nombre_producto: null,
+            activo: null,
+            page: 1,
+            per_page: 20,
+        },
         actasPaginacion: {
             total: 0,
             por_pagina: 15,
             pagina_actual: 1,
             ultima_pagina: 0,
         },
-
 
         juntaInfo: null,
         info_acta: null,
@@ -37,6 +43,9 @@ export const actaConsultaSlice = createSlice({
         },
         onLoadPaginacionActasConsulta: (state, { payload }) => {
             state.actasPaginacion = payload;
+        },
+        onLoadUltimosFiltrosActasConsulta: (state, { payload }) => {
+            state.ultimosFiltros = payload;
         },
         onActivateJunta: (state, { payload }) => {
             state.juntaInfo = payload;
@@ -75,6 +84,7 @@ export const {
     onActiveSearch,
     onLoadActasConsulta,
     onLoadPaginacionActasConsulta,
+    onLoadUltimosFiltrosActasConsulta,
     onActivateJunta,
     onActivateInfoActa,
     onActivatePreguntas,

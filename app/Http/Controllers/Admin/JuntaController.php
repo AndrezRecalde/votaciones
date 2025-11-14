@@ -218,4 +218,20 @@ class JuntaController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Obtener reporte completo de juntas por provincia
+     *
+     * @param int $provinciaId
+     * @return JsonResponse
+     */
+    public function reporteProvincia($provinciaId): JsonResponse
+    {
+        $reporte = Junta::getReporteCompletoProvincia($provinciaId);
+
+        return response()->json([
+            'status' => HTTPStatus::Success,
+            'reporte' => $reporte
+        ]);
+    }
 }

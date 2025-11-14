@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { Container, Divider, Grid, Group } from "@mantine/core";
 import {
     FechaActual,
@@ -7,15 +7,20 @@ import {
     ResultadosConsultaTable,
     TitlePage,
 } from "../../../components";
-import { useActaConsultaStore, useTitleHook } from "../../../hooks";
+import { useResultadoConsultaStore, useTitleHook } from "../../../hooks";
 import Swal from "sweetalert2";
 
 const ResultadosConsultaPage = () => {
     useTitleHook("Elecciones - Resultados Consulta Popular");
-    const usuario = useMemo(() => {
-        return JSON.parse(localStorage.getItem("service_user")) || {};
+    const usuario = JSON.parse(localStorage.getItem("service_user")) || {};
+    const { startClearResultadosConsulta, errores } =
+        useResultadoConsultaStore();
+
+    useEffect(() => {
+        return () => {
+            startClearResultadosConsulta();
+        };
     }, []);
-    const { errores } = useActaConsultaStore();
 
     useEffect(() => {
         if (errores !== undefined) {
@@ -36,7 +41,7 @@ const ResultadosConsultaPage = () => {
                     Resultados de Consulta Popular - 2025
                 </TitlePage>
             </Group>
-            <Divider my="md" />
+            <Divider mb={20} />
             <Grid>
                 <Grid.Col span={{ base: 12, xs: 12, sm: 12, md: 3, lg: 3 }}>
                     <ResultadosConsultaFilter usuario={usuario} />

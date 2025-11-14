@@ -58,7 +58,7 @@ export const SeguimientoBusquedaForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const { zona_id, pregunta_id } = form.getTransformedValues();
-        console.log({ zona_id, pregunta_id });
+        //console.log({ zona_id, pregunta_id });
         startLoadTendenciasConsulta({
             zona_id,
             pregunta_id,

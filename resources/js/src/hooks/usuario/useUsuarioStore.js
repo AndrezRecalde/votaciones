@@ -13,8 +13,14 @@ import {
 import apiAxios from "../../api/apiAxios";
 
 export const useUsuarioStore = () => {
-    const { isLoading, usuarios, numero_actas, activateUsuario, message, errores } =
-        useSelector((state) => state.usuario);
+    const {
+        isLoading,
+        usuarios,
+        numero_actas,
+        activateUsuario,
+        message,
+        errores,
+    } = useSelector((state) => state.usuario);
 
     const dispatch = useDispatch();
 
@@ -109,10 +115,10 @@ export const useUsuarioStore = () => {
         }
     };
 
-    const startContarActas = async(usuario_id) => {
+    const startContarActas = async (usuario_id) => {
         try {
             const { data } = await apiAxios.post("/contar-actas", {
-                usuario_id
+                usuario_id,
             });
             const { resultado } = data;
             dispatch(onSetNumeroActasPerfil(resultado));
@@ -120,7 +126,7 @@ export const useUsuarioStore = () => {
             console.log(error);
             ExceptionMessageError(error);
         }
-    }
+    };
 
     const setActivateUsuario = (usuario) => {
         dispatch(onSetActivateUsuario(usuario));

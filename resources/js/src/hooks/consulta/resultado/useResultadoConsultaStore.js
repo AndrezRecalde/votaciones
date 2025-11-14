@@ -54,6 +54,60 @@ export const useResultadoConsultaStore = () => {
         }
     };
 
+    const startExportarResultadosConsulta = async () => {
+        try {
+            dispatch(onLoading(true));
+
+            const response = await apiAxios.get(
+                "/admin/exportar-resultados-consulta",
+                {
+                    responseType: "blob", // importante para archivos
+                }
+            );
+
+            // Crear un enlace para descargar el archivo
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "resultados_consulta.pdf"); // nombre del archivo
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        } catch (error) {
+            //console.log(error);
+            ExceptionMessageError(error);
+        } finally {
+            dispatch(onLoading(false));
+        }
+    };
+
+    const startExportarResultadosConsultaExcel = async () => {
+        try {
+            dispatch(onLoading(true));
+
+            const response = await apiAxios.get(
+                "/admin/exportar-resultados-consulta-excel",
+                {
+                    responseType: "blob", // importante para archivos
+                }
+            );
+
+            // Crear un enlace para descargar el archivo
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "resultados_consulta.xlsx"); // nombre del archivo
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        } catch (error) {
+            //console.log(error);
+            ExceptionMessageError(error);
+        } finally {
+            dispatch(onLoading(false));
+        }
+    };
+
     const startClearResultadosConsulta = () => {
         dispatch(onClearResultadoConsulta());
     };
@@ -70,5 +124,7 @@ export const useResultadoConsultaStore = () => {
 
         startLoadResultadosPorPregunta,
         startClearResultadosConsulta,
+        startExportarResultadosConsulta,
+        startExportarResultadosConsultaExcel
     };
 };

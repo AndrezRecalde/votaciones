@@ -96,7 +96,7 @@ export const DigitacionFilter = ({ usuario }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(searchForm.getTransformedValues());
+        //console.log(searchForm.getTransformedValues());
         setStorageFields(searchForm.getTransformedValues());
         await startLoadInfoActa(junta_id);
         startActivateSearch(true);

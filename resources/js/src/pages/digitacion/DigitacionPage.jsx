@@ -6,7 +6,7 @@ import ActaPage from "./ActaPage";
 import Swal from "sweetalert2";
 
 const DigitacionPage = () => {
-    useTitleHook("Elecciones | Digitación");
+    useTitleHook("Elecciones - Digitación");
     const { pageLoad, startClearActa, message, errores } = useActaStore();
 
     useEffect(() => {

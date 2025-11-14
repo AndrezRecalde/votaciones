@@ -37,8 +37,8 @@ export const ActaConsultaVotosSection = ({
 
     useEffect(() => {
         if (preguntas !== null && juntaInfo !== null && info_acta !== null) {
-            console.log("entra");
-            console.log(info_acta);
+            //console.log("entra");
+            //console.log(info_acta);
             actaForm.setValues({
                 id: Number(info_acta.acta_id) || null,
                 provincia_id: Number(juntaInfo.provincia_id),

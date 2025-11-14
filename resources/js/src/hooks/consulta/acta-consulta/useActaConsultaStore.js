@@ -6,9 +6,12 @@ import {
     onActivatePreguntas,
     onActiveSearch,
     onClearActaConsulta,
+    onLoadActasConsulta,
     onLoadErrores,
     onLoading,
     onLoadMessage,
+    onLoadPaginacionActasConsulta,
+    onLoadUltimosFiltrosActasConsulta,
 } from "../../../store/consulta/acta-consulta/actaConsultaSlice";
 import apiAxios from "../../../api/apiAxios";
 
@@ -20,6 +23,7 @@ export const useActaConsultaStore = () => {
 
         actasConsulta,
         actasPaginacion,
+        ultimosFiltros,
 
         juntaInfo,
         info_acta,
@@ -57,7 +61,7 @@ export const useActaConsultaStore = () => {
             // opcional: mostrar mensaje informativo
             // if (mensaje) toast.info(mensaje);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         } finally {
             dispatch(onLoading(false));
@@ -67,13 +71,13 @@ export const useActaConsultaStore = () => {
     const startAddActa = async (acta) => {
         try {
             if (acta.id) {
-                console.log("actualiza");
+                //console.log("actualiza");
                 //actualizando
                 const { data } = await apiAxios.put(
                     `/general/acta-consulta/${acta.id}`,
                     acta
                 );
-                console.log("actualizo");
+                //console.log("actualizo");
                 dispatch(onLoadMessage(data));
                 setTimeout(() => {
                     dispatch(onLoadMessage(undefined));
@@ -83,19 +87,40 @@ export const useActaConsultaStore = () => {
             }
 
             //creando
-            console.log("creando");
+            //console.log("creando");
             const { data } = await apiAxios.post(
                 "/general/acta-consulta",
                 acta
             );
-            console.log('creo');
+            //console.log("creo");
             dispatch(onLoadMessage(data));
             setTimeout(() => {
                 dispatch(onLoadMessage(undefined));
                 startClearActaConsulta();
             }, 2000);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
+            ExceptionMessageError(error);
+        } finally {
+            dispatch(onLoading(false));
+        }
+    };
+
+    const startLoadActasConsulta = async (params = {}) => {
+        try {
+            dispatch(onLoading(true));
+
+            const { data } = await apiAxios.get("/general/actas-consulta", {
+                params,
+            });
+            //console.log(data);
+            const { actas_consulta, paginacion, filters_applied } = data;
+            dispatch(onLoadActasConsulta(actas_consulta));
+            dispatch(onLoadPaginacionActasConsulta(paginacion));
+            dispatch(onLoadUltimosFiltrosActasConsulta(filters_applied));
+            // cargar datos en el store
+        } catch (error) {
+            //console.log(error);
             ExceptionMessageError(error);
         } finally {
             dispatch(onLoading(false));
@@ -113,6 +138,7 @@ export const useActaConsultaStore = () => {
 
         actasConsulta,
         actasPaginacion,
+        ultimosFiltros,
 
         juntaInfo,
         info_acta,
@@ -125,5 +151,6 @@ export const useActaConsultaStore = () => {
         startLoadInfoActa,
         startAddActa,
         startClearActaConsulta,
+        startLoadActasConsulta,
     };
 };

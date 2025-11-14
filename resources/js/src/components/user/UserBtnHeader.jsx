@@ -22,10 +22,7 @@ export const UserBtnHeader = () => {
     const [userMenuOpened, setUserMenuOpened] = useState(false);
     //const [nombres, setNombres] = useState("G");
 
-    const usuario = useMemo(() => {
-        const storedUser = localStorage.getItem("service_user");
-        return storedUser ? JSON.parse(storedUser) : null;
-    }, []);
+    const usuario = JSON.parse(localStorage.getItem("service_user")) || {};
 
     const nombres = useMemo(() => {
         if (!usuario || !usuario.nombres_completos) return "G"; // Valor predeterminado si `usuario` no tiene alias

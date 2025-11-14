@@ -2,14 +2,14 @@ import { Container, Group, Text, Title } from "@mantine/core";
 import { BtnSection } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { IconUserCircle } from "@tabler/icons-react";
+import { GENERAL_ROUTES, PREFIX_ROUTES } from "../../routes/router/routes";
 import classes from "../../assets/styles/modules/error/NotFound.module.css";
-
 
 const ErrorNotFound = () => {
     const navigate = useNavigate();
 
     const handleAction = () => {
-        navigate("/staff/d/profile");
+        navigate(`${PREFIX_ROUTES.ELECCIONES}/${GENERAL_ROUTES.PERFIL}`);
     };
 
     return (

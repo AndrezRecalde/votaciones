@@ -33,7 +33,7 @@ const EscrutinioConsultaPage = () => {
     }, []);
 
     return (
-        <Container size="xxl">
+        <Container size="xl">
             <Group justify="space-between">
                 <TitlePage order={2}>
                     Avance de Escrutinio - Consulta Popular

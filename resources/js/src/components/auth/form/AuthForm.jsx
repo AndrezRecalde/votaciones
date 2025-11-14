@@ -38,9 +38,7 @@ export const AuthForm = () => {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        //startLogin(form.values);
         startLogin(form.getValues());
-        //navigate("/u/profile", { replace: true })
     };
 
     return (

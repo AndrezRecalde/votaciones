@@ -1,13 +1,11 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { Card } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDignidadStore, useJurisdiccionStore } from "../../../hooks";
 import { WebsterBusquedaForm } from "../../../components";
 
 export const WebsterBusqueda = ({ dig }) => {
-    const usuario = useMemo(() => {
-        return JSON.parse(localStorage.getItem("service_user")) || {};
-    }, []);
+    const usuario = JSON.parse(localStorage.getItem("service_user")) || {};
 
     const { startLoadDignidades, startClearDignidades } = useDignidadStore();
     const { startLoadCantones, startLoadParroquias, startLoadZonas } =

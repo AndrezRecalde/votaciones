@@ -9,17 +9,15 @@ import {
     useJurisdiccionStore,
     useTitleHook,
 } from "../../../hooks";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import Swal from "sweetalert2";
 
 const DigitacionConsultaPage = () => {
     useTitleHook("Elecciones - Digitación Consulta Popular");
-    const usuario = useMemo(() => {
-        return JSON.parse(localStorage.getItem("service_user")) || {};
-    }, []);
+    const usuario = JSON.parse(localStorage.getItem("service_user")) || {};
 
     const { startLoadProvincias } = useJurisdiccionStore();
-    const { loadingActaConsulta, message, errores } = useActaConsultaStore();
+    const { loadingActaConsulta, startClearActaConsulta, message, errores } = useActaConsultaStore();
 
     useEffect(() => {
         startLoadProvincias({
@@ -27,7 +25,9 @@ const DigitacionConsultaPage = () => {
             activo: true,
         });
 
-        return () => {};
+        return () => {
+            startClearActaConsulta();
+        };
     }, []);
 
     useEffect(() => {

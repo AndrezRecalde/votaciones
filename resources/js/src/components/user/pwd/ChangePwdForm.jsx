@@ -12,14 +12,14 @@ import {
 import { useUsuarioStore } from "../../../hooks";
 import { useNavigate } from "react-router-dom";
 import { IconArrowLeft } from "@tabler/icons-react";
+import { GENERAL_ROUTES, PREFIX_ROUTES } from "../../../routes/router/routes";
 import classes from "../../../assets/styles/modules/user/ChangePwd.module.css";
-
 
 export const ChangePwdForm = ({ form }) => {
     const usuario = JSON.parse(localStorage.getItem("service_user"));
     const { startChangePwdUser } = useUsuarioStore();
     const navigate = useNavigate();
-    const { paswrd } = form.values
+    const { paswrd } = form.values;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -50,7 +50,17 @@ export const ChangePwdForm = ({ form }) => {
                     mt="lg"
                     className={classes.controls}
                 >
-                    <Anchor component="button" onClick={() => navigate("/staff/d/profile")} c="dimmed" size="sm" className={classes.control}>
+                    <Anchor
+                        component="button"
+                        onClick={() =>
+                            navigate(
+                                `${PREFIX_ROUTES.ELECCIONES}/${GENERAL_ROUTES.PERFIL}`
+                            )
+                        }
+                        c="dimmed"
+                        size="sm"
+                        className={classes.control}
+                    >
                         <Center inline>
                             <IconArrowLeft
                                 style={{ width: rem(12), height: rem(12) }}

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 
 class ActaConsulta extends Model
 {
@@ -35,6 +36,46 @@ class ActaConsulta extends Model
         'legible'       => 'boolean',
         'estado'        => 'boolean',
     ];
+
+    /**
+     * Obtener resumen de actas por usuario
+     *
+     * @param int $userId
+     * @return object
+     */
+    public static function getResumenPorUsuario($userId)
+    {
+        return DB::selectOne("
+            SELECT
+                SUM(CASE WHEN user_add = ? THEN 1 ELSE 0 END) AS total_ingresadas,
+                SUM(CASE WHEN user_update = ? THEN 1 ELSE 0 END) AS total_actualizadas,
+                SUM(CASE WHEN user_add = ? OR user_update = ? THEN 1 ELSE 0 END) AS total_general
+            FROM actas_consulta
+        ", [$userId, $userId, $userId, $userId]);
+    }
+
+    /**
+     * Obtener resumen de todos los usuarios con sus actas
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public static function getResumenTodosUsuarios()
+    {
+        return DB::select("
+            SELECT
+                u.id,
+                u.nombres_completos,
+                u.dni,
+                COALESCE(SUM(CASE WHEN ac.user_add = u.id THEN 1 ELSE 0 END), 0) AS total_ingresadas,
+                COALESCE(SUM(CASE WHEN ac.user_update = u.id THEN 1 ELSE 0 END), 0) AS total_actualizadas,
+                COALESCE(COUNT(DISTINCT ac.id), 0) AS total_actas_relacionadas
+            FROM users u
+            LEFT JOIN actas_consulta ac ON (ac.user_add = u.id OR ac.user_update = u.id)
+            WHERE u.activo = 1
+            GROUP BY u.id, u.nombres_completos, u.dni
+            ORDER BY total_actas_relacionadas DESC
+        ");
+    }
 
     // Relaciones geográficas
     public function provincia(): BelongsTo

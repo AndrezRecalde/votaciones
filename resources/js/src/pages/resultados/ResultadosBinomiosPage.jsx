@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import {
     useFechaStore,
     useResultadoStore,
@@ -37,9 +37,7 @@ const DIGNIDAD_CURRENT = 1;
 
 const ResultadosPresidencialesPage = () => {
     useTitleHook("Elecciones | Binomios");
-    const usuario = useMemo(() => {
-        return JSON.parse(localStorage.getItem("service_user")) || {};
-    }, []);
+    const usuario = JSON.parse(localStorage.getItem("service_user")) || {};
     const { modalActionResultadosExport, modalActionResultadosExportXLS } =
         useUiResultado();
     const { fechaActual } = useFechaStore();

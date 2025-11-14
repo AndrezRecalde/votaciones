@@ -1,36 +1,50 @@
-import { useEffect, useMemo } from "react";
-import { Box, Card, Container, Group, LoadingOverlay } from "@mantine/core";
+import { useEffect } from "react";
+import {
+    /* Box, */
+    Card,
+    Container,
+    Group,
+    LoadingOverlay,
+} from "@mantine/core";
 import {
     BadgeElement,
     ProfileBtnService,
-    ProfileContarActas,
+    ProfileContarActasConsulta,
+    //ProfileContarActas,
     ProfileHeader,
     ProfileInformation,
-    ProfileProgressActas,
+    ProfileProgressActasConsulta,
+    //ProfileProgressActas,
     TextSection,
     TitlePage,
 } from "../../components";
-import { useEscrutinioStore, useTitleHook, useUsuarioStore } from "../../hooks";
+import {
+    useEscrutinioConsultaStore,
+    /* useEscrutinioStore, */ useTitleHook /* useUsuarioStore */,
+} from "../../hooks";
 
 const ProfilePage = () => {
-        useTitleHook("Elecciones - Perfil");
-    const usuario = useMemo(() => {
-        return JSON.parse(localStorage.getItem("service_user")) || {};
-    }, []);
-    const { startContarActas } = useUsuarioStore();
-    const {
+    useTitleHook("Elecciones - Perfil");
+    const usuario = JSON.parse(localStorage.getItem("service_user")) || {};
+    //const { startContarActas } = useUsuarioStore();
+    /* const {
         isLoading,
         resultadosEscrutinio,
         startLoadEscrutinioActas,
-        startClearEscrutinios,
-    } = useEscrutinioStore();
+        //startClearEscrutinios,
+    } = useEscrutinioStore(); */
+
+    const { isLoading, startLoadResumenUsuario, startClearEscrutinioConsulta } =
+        useEscrutinioConsultaStore();
 
     useEffect(() => {
-        startContarActas(usuario?.id);
-        startLoadEscrutinioActas();
+        //startContarActas(usuario?.id);
+        //startLoadEscrutinioActas();
+        startLoadResumenUsuario(usuario?.id);
 
         return () => {
-            startClearEscrutinios();
+            //startClearEscrutinios();
+            startClearEscrutinioConsulta();
         };
     }, []);
 
@@ -66,9 +80,10 @@ const ProfilePage = () => {
                     <ProfileBtnService />
                 </Card.Section>
                 <Card.Section withBorder inheritPadding py="xs">
-                    <ProfileContarActas />
+                    {/* <ProfileContarActas /> */}
+                    <ProfileContarActasConsulta />
                 </Card.Section>
-                <Card.Section withBorder inheritPadding py="xs">
+                {/*  <Card.Section withBorder inheritPadding py="xs">
                     <LoadingOverlay
                         visible={isLoading}
                         zIndex={1000}
@@ -79,6 +94,14 @@ const ProfilePage = () => {
                             <ProfileProgressActas escrutinio={escrutinio} />
                         </Box>
                     ))}
+                </Card.Section> */}
+                <Card.Section withBorder inheritPadding py="xs">
+                    <LoadingOverlay
+                        visible={isLoading}
+                        zIndex={1000}
+                        overlayProps={{ radius: "sm", blur: 2 }}
+                    />
+                    <ProfileProgressActasConsulta />
                 </Card.Section>
             </Card>
         </Container>

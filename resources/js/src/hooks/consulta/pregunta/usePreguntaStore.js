@@ -30,12 +30,12 @@ export const usePreguntaStore = () => {
             const { data } = await apiAxios.get("/admin/preguntas-consulta", {
                 params: { page, per_page, all },
             });
-            console.log(data);
+            //console.log(data);
             const { preguntas, paginacion } = data;
             dispatch(onLoadPreguntas(preguntas));
             dispatch(onLoadPaginacion(paginacion));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         } finally {
             dispatch(onLoading(false));
@@ -74,7 +74,7 @@ export const usePreguntaStore = () => {
                 dispatch(onLoadMessage(undefined));
             }, 2000);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         } finally {
             dispatch(onLoading(false));
@@ -95,7 +95,7 @@ export const usePreguntaStore = () => {
                 dispatch(onLoadMessage(undefined));
             }, 40);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };
@@ -115,7 +115,7 @@ export const usePreguntaStore = () => {
                 dispatch(onLoadMessage(undefined));
             }, 40);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };

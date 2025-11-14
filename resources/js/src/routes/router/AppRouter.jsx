@@ -23,12 +23,8 @@ export const AppRouter = () => {
     const { checkAuthToken } = useAuthStore();
 
     useEffect(() => {
-        fnRecargarToken();
+        checkAuthToken();
     }, []);
-
-    const fnRecargarToken = async () => {
-        await checkAuthToken();
-    };
 
     const renderRoutes = (routeConfig) => {
         return routeConfig.map(({ path, Component, roles }) => (
@@ -70,7 +66,7 @@ export const AppRouter = () => {
                 element={<guessRoutes.Component />}
             />
             <Route
-                path="/admin/*"
+                path="/admin/elecciones/*"
                 element={
                     <RoutesNotFound>
                         {renderRoutes(routes.admin)}
@@ -78,7 +74,23 @@ export const AppRouter = () => {
                 }
             />
             <Route
-                path="/general/*"
+                path="/elecciones/binomios/*"
+                element={
+                    <RoutesNotFound>
+                        {renderRoutes(routes.adminBinomios)}
+                    </RoutesNotFound>
+                }
+            />
+            <Route
+                path="/elecciones/consulta/*"
+                element={
+                    <RoutesNotFound>
+                        {renderRoutes(routes.adminConsulta)}
+                    </RoutesNotFound>
+                }
+            />
+            <Route
+                path="/elecciones/digitacion/*"
                 element={
                     <RoutesNotFound>
                         {renderRoutes(routes.digitador)}
@@ -86,7 +98,7 @@ export const AppRouter = () => {
                 }
             />
             <Route
-                path="/staff/d/*"
+                path="/elecciones/*"
                 element={
                     <RoutesNotFound>
                         {renderStaffRoutes(peerLinks.peer)}

@@ -1,12 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useErrorException } from "../error/useErrorException";
-import { onClearEscrutinios, onLoadErrores, onLoadEscrutinios, onLoading } from "../../store/admin/escrutinio/escrutinioSlice";
+import {
+    onClearEscrutinios,
+    onLoadErrores,
+    onLoadEscrutinios,
+    onLoading,
+} from "../../store/admin/escrutinio/escrutinioSlice";
 import apiAxios from "../../api/apiAxios";
 
 export const useEscrutinioStore = () => {
-    const { isLoading, resultadosEscrutinio, progressEscrutinio, errores } = useSelector(
-        (state) => state.escrutinio
-    );
+    const { isLoading, resultadosEscrutinio, progressEscrutinio, errores } =
+        useSelector((state) => state.escrutinio);
 
     const dispatch = useDispatch();
 
@@ -15,16 +19,16 @@ export const useEscrutinioStore = () => {
     const startLoadEscrutinios = async () => {
         try {
             dispatch(onLoading(true));
-            const { data } = await apiAxios.get(
-                "/admin/resultado/escrutinio"
-            );
+            const { data } = await apiAxios.get("/admin/resultado/escrutinio");
             const { escrutinios } = data;
             dispatch(onLoadEscrutinios(escrutinios));
         } catch (error) {
             //console.log(error);
             ExceptionMessageError(error);
+        } finally {
+            dispatch(onLoading(false));
         }
-    }
+    };
 
     const startLoadEscrutinioActas = async () => {
         try {
@@ -37,13 +41,14 @@ export const useEscrutinioStore = () => {
         } catch (error) {
             //console.log(error);
             ExceptionMessageError(error);
+        } finally {
+            dispatch(onLoading(false));
         }
-    }
-
+    };
 
     const startClearEscrutinios = () => {
         dispatch(onClearEscrutinios());
-    }
+    };
 
     return {
         isLoading,
@@ -53,6 +58,6 @@ export const useEscrutinioStore = () => {
 
         startLoadEscrutinios,
         startLoadEscrutinioActas,
-        startClearEscrutinios
+        startClearEscrutinios,
     };
 };

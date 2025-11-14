@@ -1,32 +1,31 @@
-import { useEffect } from "react";
 import { Box, Paper, Select, SimpleGrid } from "@mantine/core";
-import { BtnSubmit } from "../../../components";
-import {
-    useActaStore,
-    useDignidadStore,
-    useJurisdiccionStore,
-} from "../../../hooks";
+import { useEffect } from "react";
+import { useActaConsultaStore, useJurisdiccionStore } from "../../../../hooks";
+import { BtnSubmit } from "../../../../components";
 import { IconSearch } from "@tabler/icons-react";
 
-export const BusquedaActaForm = ({ form }) => {
-    const { canton_id } = form.values;
-    const { dignidades } = useDignidadStore();
-    const { startLoadParroquias, cantones, parroquias } =
+export const BusquedaActasConsultaFilter = ({ form }) => {
+    const { canton_id, parroquia_id } = form.values;
+    const { startLoadParroquias, startLoadZonas, cantones, parroquias, zonas } =
         useJurisdiccionStore();
-    const { startLoadActas } = useActaStore();
+        const { startLoadActasConsulta } = useActaConsultaStore();
 
     useEffect(() => {
-        startLoadParroquias({ canton_id });
-        form.setFieldValue("parroquia_id", null);
+        canton_id
+            ? startLoadParroquias({ canton_id })
+            : form.setFieldValue("parroquia_id", null);
     }, [canton_id]);
+
+    useEffect(() => {
+        parroquia_id
+            ? startLoadZonas({ parroquia_id })
+            : form.setFieldValue("zona_id", null);
+    }, [parroquia_id]);
 
     const handleSearch = (e) => {
         e.preventDefault();
-        const { errors } = form.validate();
-        if (!errors.hasOwnProperty("dignidad_id")) {
-            startLoadActas(form.getTransformedValues());
-            //form.reset();
-        }
+        //console.log(form.getTransformedValues());
+        startLoadActasConsulta(form.getTransformedValues());
     };
 
     return (
@@ -36,17 +35,6 @@ export const BusquedaActaForm = ({ form }) => {
                 onSubmit={form.onSubmit((_, e) => handleSearch(e))}
             >
                 <SimpleGrid cols={{ base: 4, sm: 1, lg: 4 }}>
-                    <Select
-                        label="Dignidad"
-                        placeholder="Seleccione una Dignidad"
-                        clearable
-                        nothingFoundMessage="No options"
-                        {...form.getInputProps("dignidad_id")}
-                        data={dignidades.map((dignidad) => ({
-                            label: dignidad.nombre_dignidad,
-                            value: dignidad.id.toString(),
-                        }))}
-                    />
                     <Select
                         label="Cantón"
                         placeholder="Seleccione un cantón"
@@ -69,6 +57,17 @@ export const BusquedaActaForm = ({ form }) => {
                         data={parroquias.map((parroquia) => ({
                             label: parroquia.nombre_parroquia,
                             value: parroquia.id.toString(),
+                        }))}
+                    />
+                    <Select
+                        label="Zonas"
+                        placeholder="Seleccione una Zona"
+                        clearable
+                        nothingFoundMessage="No options"
+                        {...form.getInputProps("zona_id")}
+                        data={zonas.map((zona) => ({
+                            label: zona.nombre_zona,
+                            value: zona.id.toString(),
                         }))}
                     />
                     <Select

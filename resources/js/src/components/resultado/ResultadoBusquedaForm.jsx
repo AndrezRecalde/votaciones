@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { Box, Select, SimpleGrid, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {
@@ -11,9 +11,7 @@ import { BtnSubmit } from "../../components";
 import { IconSearch } from "@tabler/icons-react";
 
 export const ResultadoBusquedaForm = ({ dig }) => {
-    const usuario = useMemo(() => {
-        return JSON.parse(localStorage.getItem("service_user")) || {};
-    }, []);
+    const usuario = JSON.parse(localStorage.getItem("service_user")) || {};
 
     const form = useForm({
         initialValues: {
@@ -83,7 +81,7 @@ export const ResultadoBusquedaForm = ({ dig }) => {
         startLoadTotalActasIngresadas(form.getTransformedValues());
         startLoadTotalJuntas(form.getTransformedValues());
         startLoadResultadosCandidatos(form.getTransformedValues());
-        console.log(form.getTransformedValues());
+        //console.log(form.getTransformedValues());
     };
 
     return (

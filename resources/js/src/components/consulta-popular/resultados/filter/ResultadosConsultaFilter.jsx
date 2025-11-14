@@ -33,7 +33,11 @@ export const ResultadosConsultaFilter = ({ usuario }) => {
         zonas,
     } = useJurisdiccionStore();
     const { isLoading } = useActaConsultaStore();
-    const { startLoadResultadosPorPregunta } = useResultadoConsultaStore();
+    const {
+        startLoadResultadosPorPregunta,
+        startExportarResultadosConsulta,
+        startExportarResultadosConsultaExcel,
+    } = useResultadoConsultaStore();
 
     const form = useForm({
         initialValues: {
@@ -77,19 +81,21 @@ export const ResultadosConsultaFilter = ({ usuario }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(form.getTransformedValues());
+        //console.log(form.getTransformedValues());
         startLoadResultadosPorPregunta(form.getTransformedValues());
         //Realizar la búsqueda con los filtros seleccionados
     };
 
     const handleOpenExportXLS = (e) => {
         e.preventDefault();
+        startExportarResultadosConsultaExcel();
         //Lógica para exportar a XLS
     };
 
     const handleOpenExportPDF = (e) => {
         e.preventDefault();
         //Lógica para exportar a PDF
+        startExportarResultadosConsulta();
     };
 
     return (

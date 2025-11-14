@@ -7,12 +7,15 @@ use App\Http\Requests\StoreActaConsultaRequest;
 use App\Http\Requests\UpdateActaConsultaRequest;
 use App\Models\ActaConsulta;
 use App\Models\ActaConsultaPregunta;
-use App\Models\PreguntaConsulta;
 use App\Enums\HTTPStatus;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\ResultadosConsultaExport;
+use App\Models\Junta;
+use Maatwebsite\Excel\Facades\Excel;
 use Exception;
 
 class ActaConsultaController extends Controller
@@ -24,7 +27,7 @@ class ActaConsultaController extends Controller
      * - per_page (int, default 15)
      * Retorna: actas con sus preguntas, votos, porcentajes (respecto a acta.votos_validos), usuarios y geografía.
      */
-    public function index(Request $request): JsonResponse
+    public function getActasConsulta(Request $request): JsonResponse
     {
         $request->validate([
             'provincia_id' => 'nullable|integer|exists:provincias,id',
@@ -66,7 +69,7 @@ class ActaConsultaController extends Controller
 
         $paginated = $query->paginate($perPage);
 
-        $data = collect($paginated->items())->map(function (ActaConsulta $acta) {
+        $actas_consulta = collect($paginated->items())->map(function (ActaConsulta $acta) {
             $preguntas = $acta->preguntas->sortBy(function ($p) {
                 return $p->pregunta->casillero_pregunta ?? $p->pregunta_id;
             })->values()->map(function (ActaConsultaPregunta $p) {
@@ -120,11 +123,13 @@ class ActaConsultaController extends Controller
 
         return response()->json([
             'status' => HTTPStatus::Success,
-            'meta' => [
-                'current_page' => $paginated->currentPage(),
-                'per_page'     => $paginated->perPage(),
+            'paginacion' => [
                 'total'        => $paginated->total(),
-                'last_page'    => $paginated->lastPage(),
+                'por_pagina'     => $paginated->perPage(),
+                'pagina_actual' => $paginated->currentPage(),
+                'ultima_pagina'    => $paginated->lastPage(),
+                'desde'        => $paginated->firstItem() ?? 0,
+                'hasta'        => $paginated->lastItem() ?? 0,
             ],
             'filters_applied' => [
                 'provincia_id' => $request->provincia_id,
@@ -132,7 +137,7 @@ class ActaConsultaController extends Controller
                 'parroquia_id' => $request->parroquia_id,
                 'zona_id'      => $request->zona_id,
             ],
-            'data' => $data,
+            'actas_consulta' => $actas_consulta,
         ], 200);
     }
 
@@ -859,5 +864,140 @@ class ActaConsultaController extends Controller
                 'msg' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    /**
+     * Obtener resumen completo (usuario + general)
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function resumenEstadistico(Request $request): JsonResponse
+    {
+        $userId = $request->user()->id;
+
+        $resumenUsuario = ActaConsulta::getResumenPorUsuario($userId);
+        $resumenGeneral = Junta::getResumenGeneral();
+
+        return response()->json([
+            'status' => HTTPStatus::Success,
+            'data' => [
+                'usuario' => [
+                    'user_id' => $userId,
+                    'nombres_completos' => $request->user()->nombres_completos,
+                    'total_ingresadas' => (int) $resumenUsuario->total_ingresadas,
+                    'total_actualizadas' => (int) $resumenUsuario->total_actualizadas,
+                    'total_general' => (int) $resumenUsuario->total_general
+                ],
+                'general' => [
+                    'total_juntas' => (int) $resumenGeneral->total_juntas,
+                    'total_juntas_con_acta' => (int) $resumenGeneral->total_juntas_con_acta,
+                    'total_juntas_sin_acta' => (int) $resumenGeneral->total_juntas_sin_acta,
+                    'porcentaje_avance' => (float) $resumenGeneral->porcentaje_avance
+                ]
+            ]
+        ]);
+    }
+
+
+    /* EXPORTACION DE RESULTADOS EN PDF  */
+    public function exportarResultadosConsulta()
+    {
+        // Obtener los resultados agrupados por cantón y zona
+        $resultados = $this->obtenerResultadosAgrupados();
+
+        // Generar el PDF
+        $pdf = Pdf::loadView('resultados.consulta.resultados_consulta', [
+            'resultados' => $resultados,
+            'fecha_generacion' => now()->format('d/m/Y H:i:s')
+        ]);
+
+        // Configurar el PDF
+        $pdf->setPaper('A4', 'portrait');
+
+        return $pdf->stream('resultados-consulta-' . date('Y-m-d') . '.pdf');
+        // O para descargar directamente:
+        // return $pdf->download('resultados-consulta-' . date('Y-m-d') . '.pdf');
+    }
+
+    private function obtenerResultadosAgrupados()
+    {
+        $resultados = ActaConsulta::from('actas_consulta as ac')
+            ->join('zonas as z', 'ac.zona_id', '=', 'z.id')
+            ->join('parroquias as p', 'z.parroquia_id', '=', 'p.id')
+            ->join('cantones as c', 'ac.canton_id', '=', 'c.id')
+            ->join('provincias as prov', 'ac.provincia_id', '=', 'prov.id')
+            ->select(
+                'prov.nombre_provincia',
+                'c.id as canton_id',
+                'c.nombre_canton',
+                'z.id as zona_id',
+                'z.nombre_zona',
+                DB::raw('SUM(ac.votos_validos) as total_votos_validos')
+            )
+            ->where('ac.estado', 1)
+            ->groupBy('prov.nombre_provincia', 'c.id', 'c.nombre_canton', 'z.id', 'z.nombre_zona')
+            ->orderBy('c.nombre_canton')
+            ->orderBy('z.nombre_zona')
+            ->get();
+
+        // Agrupar por cantón
+        $resultadosAgrupados = [];
+
+        foreach ($resultados as $resultado) {
+            $cantonId = $resultado->canton_id;
+
+            if (!isset($resultadosAgrupados[$cantonId])) {
+                $resultadosAgrupados[$cantonId] = [
+                    'provincia' => $resultado->nombre_provincia,
+                    'canton' => $resultado->nombre_canton,
+                    'zonas' => [],
+                    'total_votos_canton' => 0
+                ];
+            }
+
+            // Obtener preguntas de esta zona
+            $preguntas = $this->obtenerPreguntasPorZona($resultado->zona_id);
+
+            $resultadosAgrupados[$cantonId]['zonas'][] = [
+                'zona_id' => $resultado->zona_id,
+                'nombre_zona' => $resultado->nombre_zona,
+                'total_votos_validos' => $resultado->total_votos_validos,
+                'preguntas' => $preguntas
+            ];
+
+            $resultadosAgrupados[$cantonId]['total_votos_canton'] += $resultado->total_votos_validos;
+        }
+
+        return $resultadosAgrupados;
+    }
+
+    private function obtenerPreguntasPorZona($zonaId)
+    {
+        return DB::table('actas_consulta as ac')
+            ->join('acta_consulta_preguntas as acp', 'ac.id', '=', 'acp.acta_consulta_id')
+            ->join('preguntas_consulta as pc', 'acp.pregunta_id', '=', 'pc.id')
+            ->select(
+                'pc.casillero_pregunta',
+                'pc.texto_pregunta',
+                DB::raw('SUM(acp.votos_si) as total_votos_si'),
+                DB::raw('SUM(acp.votos_no) as total_votos_no'),
+                DB::raw('SUM(acp.votos_blancos) as total_votos_blancos'),
+                DB::raw('SUM(acp.votos_nulos) as total_votos_nulos')
+            )
+            ->where('ac.zona_id', $zonaId)
+            ->where('ac.estado', 1)
+            ->groupBy('pc.id', 'pc.casillero_pregunta', 'pc.texto_pregunta')
+            ->orderBy('pc.casillero_pregunta')
+            ->get();
+    }
+
+    /* Exportar en EXCEL */
+    public function exportarResultadosConsultaExcel()
+    {
+        return Excel::download(
+            new ResultadosConsultaExport(),
+            'resultados-consulta-' . date('Y-m-d-His') . '.xlsx'
+        );
     }
 }

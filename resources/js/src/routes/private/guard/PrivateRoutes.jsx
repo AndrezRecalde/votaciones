@@ -1,8 +1,9 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { ErrorAccessDenied } from "../../../pages";
+import { PREFIX_ROUTES } from "../../router/routes";
 
 export const PrivateRoutes = ({
-    redirectPath = "/auth/login",
+    redirectPath = `${PREFIX_ROUTES.AUTH_ROUTES}`,
     children,
     requiredRole, // Ahora puede ser un string (un solo rol) o un array de roles
 }) => {

@@ -1,13 +1,11 @@
-import { useMemo } from "react";
 import { AppShell, useMantineTheme } from "@mantine/core";
 import { useUiHeaderMenu } from "../../hooks";
-import HeaderMenu from "../header/HeaderMenu";
+//import HeaderMenu from "../header/HeaderMenu";
 import classes from "../../assets/styles/modules/layout/AppBody.module.css";
+import HeaderMenuConsulta from "../header/HeaderMenuConsulta";
 
 const AppHeaderMenu = ({ children }) => {
-    const usuario = useMemo(() => {
-        return JSON.parse(localStorage.getItem("service_user")) || {};
-    }, []);
+    const usuario = JSON.parse(localStorage.getItem("service_user")) || {};
     const { isOpenDrawerMobile, modalActionDrawerMobile } = useUiHeaderMenu();
     const theme = useMantineTheme();
 
@@ -23,7 +21,7 @@ const AppHeaderMenu = ({ children }) => {
             padding={30}
         >
             <AppShell.Header>
-                <HeaderMenu
+                <HeaderMenuConsulta
                     usuario={usuario}
                     isOpenDrawerMobile={isOpenDrawerMobile}
                     modalActionDrawerMobile={modalActionDrawerMobile}

@@ -18,8 +18,8 @@ export const PreguntasTable = ({ pagination, setPagination }) => {
     const columns = useMemo(
         () => [
             {
-                header: "Numero Pregunta",
-                accessorKey: "numero_pregunta",
+                header: "Casillero Pregunta",
+                accessorKey: "casillero_pregunta",
                 //filterVariant: "autocomplete",
             },
             {

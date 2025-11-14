@@ -29,10 +29,10 @@ export const useTendenciaConsultaStore = () => {
                 }
             );
             const { tendenciasConsulta:tendencias } = data;
-            console.log(tendencias);
+            //console.log(tendencias);
             dispatch(onLoadTendenciasConsulta(tendencias));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         } finally {
             dispatch(onLoading(false));

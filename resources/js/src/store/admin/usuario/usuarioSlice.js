@@ -46,7 +46,7 @@ export const usuarioSlice = createSlice({
                 state.errores = undefined;
             }
         },
-        onSetNumeroActasPerfil: (state, {payload}) => {
+        onSetNumeroActasPerfil: (state, { payload }) => {
             state.numero_actas = payload;
         },
         onSetActivateUsuario: (state, { payload }) => {

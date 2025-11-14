@@ -22,6 +22,7 @@ class UserController extends Controller
                                  u.provincia_id, p.nombre_provincia,
                                  p.cod_cne_prov as cod_cne,
                                  u.canton_id, c.nombre_canton,
+                                 u.es_responsable,
                                  r.id as role_id, r.name as role')
             ->leftJoin('model_has_roles as mhr', 'mhr.model_id', 'u.id')
             ->leftJoin('roles as r', 'r.id', 'mhr.role_id')

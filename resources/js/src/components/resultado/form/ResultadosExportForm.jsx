@@ -36,7 +36,7 @@ export const ResultadosExportForm = ({ form }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         //console.log(form.getTransformedValues());
-        console.log(pdf_full);
+        //console.log(pdf_full);
         if (!pdf_full) {
             startLoadTotalDeVotosGuess({
                 dignidad_id,
@@ -44,7 +44,7 @@ export const ResultadosExportForm = ({ form }) => {
             });
             startLoadResultadosForMap(dignidad_id);
         } else {
-            console.log('clic');
+            //console.log('clic');
             startLoadTotalDeVotosGuess({
                 dignidad_id,
                 provincia_id: 8,

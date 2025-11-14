@@ -1,44 +1,32 @@
 import { useEffect } from "react";
 import { Box, Burger, Group } from "@mantine/core";
 import {
-    BtnSendWhatsapp,
+    //BtnSendWhatsapp,
     Logo,
     UserBtnHeader,
     WhatsAppModalResultados,
 } from "../../components";
-import { useResultadoStore, useUiResultado } from "../../hooks";
+import { useResultadoStore } from "../../hooks";
 import { Roles } from "../../helpers/dictionary";
 import { GestionMenu } from "../menu/GestionMenu";
-import { NavResultados } from "../menu/data/menuRoutes";
+import { NavResultados, NavResultadosConsulta, NavRevisarActasConsulta } from "../menu/data/menuRoutes";
 import { DrawerMenuMobile } from "../menu/DrawerMenuMobile";
 import { LinkMenu } from "../menu/LinkMenu";
-import { HEADER_MENU, PREFIX_ROUTES } from "../../routes/router/routes";
+import {
+    HEADER_MENU_CONSULTA,
+    PREFIX_ROUTES,
+} from "../../routes/router/routes";
 import classes from "../../assets/styles/modules/layout/HeaderMenu.module.css";
 import Swal from "sweetalert2";
 
-const HeaderMenu = ({
+const HeaderMenuConsulta = ({
     usuario,
     isOpenDrawerMobile,
     modalActionDrawerMobile,
     theme,
 }) => {
-    const { isSendingWhats, message, errores } = useResultadoStore();
-    const { modalActionWhatsApp } = useUiResultado();
-
-    useEffect(() => {
-        if (isSendingWhats) {
-            Swal.fire({
-                icon: "warning",
-                text: "Un momento porfavor, se está enviando el mensaje...",
-                showConfirmButton: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                },
-            });
-        } else {
-            Swal.close(); // Cierra el modal cuando isExport es false
-        }
-    }, [isSendingWhats]);
+    const { message, errores } = useResultadoStore();
+    //const { modalActionWhatsApp } = useUiResultado();
 
     useEffect(() => {
         if (message !== undefined) {
@@ -64,10 +52,10 @@ const HeaderMenu = ({
         }
     }, [errores]);
 
-    const handleOpenModal = (e) => {
+    /* const handleOpenModal = (e) => {
         e.preventDefault();
         modalActionWhatsApp(true);
-    };
+    }; */
 
     return (
         <Box pb={30}>
@@ -81,7 +69,7 @@ const HeaderMenu = ({
                             usuario.role === Roles.ADMINISTRADOR ? (
                                 <LinkMenu
                                     title="Digitación Acta"
-                                    handleNavigation={`${PREFIX_ROUTES.ELECCIONES}${PREFIX_ROUTES.DIGITACION}/${HEADER_MENU.ACTAS}`}
+                                    handleNavigation={`${PREFIX_ROUTES.ELECCIONES}${PREFIX_ROUTES.DIGITACION}/${HEADER_MENU_CONSULTA.DIGITACION_CONSULTA}`}
                                     classes={classes}
                                     toggleDrawer={modalActionDrawerMobile}
                                 />
@@ -90,7 +78,7 @@ const HeaderMenu = ({
                             {usuario.role === Roles.ADMINISTRADOR ? (
                                 <GestionMenu
                                     title="Resultados"
-                                    menuData={NavResultados}
+                                    menuData={NavResultadosConsulta}
                                     usuario={usuario}
                                     classes={classes}
                                     theme={theme}
@@ -100,7 +88,7 @@ const HeaderMenu = ({
                             {usuario.role === Roles.ADMINISTRADOR ? (
                                 <LinkMenu
                                     title="Escrutinio Acta"
-                                    handleNavigation={`${PREFIX_ROUTES.ELECCIONES_BINOMIOS}/${HEADER_MENU.ESCRUTINIO}`}
+                                    handleNavigation={`${PREFIX_ROUTES.ELECCIONES_CONSULTA}/${HEADER_MENU_CONSULTA.ESCRUTINIO_CONSULTA}`}
                                     classes={classes}
                                     toggleDrawer={modalActionDrawerMobile}
                                 />
@@ -109,27 +97,29 @@ const HeaderMenu = ({
                             {usuario.role === Roles.ADMINISTRADOR ? (
                                 <LinkMenu
                                     title="Tendencia Mesas"
-                                    handleNavigation={`${PREFIX_ROUTES.ELECCIONES_BINOMIOS}/${HEADER_MENU.TENDENCIA}`}
+                                    handleNavigation={`${PREFIX_ROUTES.ELECCIONES_CONSULTA}/${HEADER_MENU_CONSULTA.SEGUIMIENTO_JUNTAS_CONSULTA}`}
                                     classes={classes}
                                     toggleDrawer={modalActionDrawerMobile}
                                 />
                             ) : null}
-
-                            {usuario.role === Roles.ADMINISTRADOR ? (
-                                <LinkMenu
-                                    title="Revisar Actas"
-                                    handleNavigation={`${PREFIX_ROUTES.ELECCIONES_BINOMIOS}/${HEADER_MENU.ACTAS}`}
+                            {usuario.role === Roles.ADMINISTRADOR ||
+                            usuario.role === Roles.RESPONSABLE ||
+                            usuario.role === Roles.DIGITADOR ? (
+                                <GestionMenu
+                                    title="Actas Consulta"
+                                    menuData={NavRevisarActasConsulta}
+                                    usuario={usuario}
                                     classes={classes}
-                                    toggleDrawer={modalActionDrawerMobile}
+                                    theme={theme}
                                 />
                             ) : null}
                         </Group>
                     </Group>
 
                     <Group visibleFrom="lg">
-                        {usuario.role === Roles.ADMINISTRADOR ? (
+                        {/* {usuario.role === Roles.ADMINISTRADOR ? (
                             <BtnSendWhatsapp handleAction={handleOpenModal} />
-                        ) : null}
+                        ) : null} */}
 
                         <UserBtnHeader classes={classes} />
                     </Group>
@@ -153,4 +143,4 @@ const HeaderMenu = ({
     );
 };
 
-export default HeaderMenu;
+export default HeaderMenuConsulta;

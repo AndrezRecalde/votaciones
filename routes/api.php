@@ -165,6 +165,10 @@ Route::group(
 
         /* Seguimiento de Juntas - Consulta Popular */
         Route::get('/seguimiento-juntas-consulta', [SeguimientoJuntasController::class, 'getSeguimientoJuntasConsulta']);
+
+        /* Exportacion de Resultados */
+        Route::get('/exportar-resultados-consulta', [ActaConsultaController::class, 'exportarResultadosConsulta']);
+        Route::get('/exportar-resultados-consulta-excel', [ActaConsultaController::class, 'exportarResultadosConsultaExcel']);
     }
 );
 
@@ -213,9 +217,17 @@ Route::group(
         Route::get('/actas-consulta/buscar/por-junta', [JuntaController::class, 'buscarPorJunta']);
 
         /* CRUD Acta Consulta Popular */
-        Route::get('/actas-consulta', [ActaConsultaController::class, 'getActasConsulta']); // Listar actas
         Route::post('/acta-consulta', [ActaConsultaController::class, 'store']); // Crear acta
         Route::put('/acta-consulta/{id}', [ActaConsultaController::class, 'update']); // Actualizar acta
         Route::delete('/acta-consulta/{id}', [ActaConsultaController::class, 'destroy']); // Eliminar acta
+
+        /* Resumen de Perfil - Consulta Popular */
+        Route::get('/actas-consulta/resumen-estadistico', [ActaConsultaController::class, 'resumenEstadistico']);
+
+        /* Revisar Actas de Consulta Popular */
+        Route::get('/actas-consulta', [ActaConsultaController::class, 'getActasConsulta']); // Listar actas
+
+        /* Reporte por Provincia de actas */
+        Route::get('/reporte/provincia/{provinciaId}', [JuntaController::class, 'reporteProvincia']);
     }
 );

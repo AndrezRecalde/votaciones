@@ -3,11 +3,11 @@ import {
     IconLogout,
     IconQuestionMark,
     IconSettings,
-    IconSitemap,
+    //IconSitemap,
     IconUserHexagon,
     IconUserPlus,
-    IconUserScan,
-    IconUserStar,
+    //IconUserScan,
+    //IconUserStar,
 } from "@tabler/icons-react";
 
 const AuthPage = lazy(() =>
@@ -121,6 +121,18 @@ const SeguimientoConsultaJuntasPage = lazy(() =>
     )
 );
 
+const BusquedaActasConsultaPage = lazy(() =>
+    import(
+        /* webpackChunkName: "BusquedaActasConsultaPage" */ "../../pages/consulta-popular/actas-consulta/BusquedaActasConsultaPage"
+    )
+);
+
+const ReporteJuntasProvinciaPage = lazy(() =>
+    import(
+        /* webpackChunkName: "ReporteJuntasProvinciaPage" */ "../../pages/consulta-popular/escrutinio/ReporteJuntasProvinciaPage"
+    )
+);
+
 const ErrorNotFound = lazy(() =>
     import(
         /* webpackChunkName: "ErrorNotFound" */ "../../pages/error/ErrorNotFound"
@@ -136,27 +148,14 @@ const generateRoutes = (basePath, components, roles) =>
     }));
 
 export const PREFIX_ROUTES = {
+    AUTH_ROUTES: "/auth/login",
     ADMIN: "/admin",
-    DIGITADOR: "/general",
-};
+    ELECCIONES: "/elecciones",
+    DIGITACION: "/digitacion",
 
-export const HEADER_MENU = {
-    DIGITACION: "digitacion-acta",
-    RESULTADO_BINOMIOS: "binomios-resultados",
-    RESULTADO_WEBSTER: "webster-resultados",
-    ESCRUTINIO: "escrutinio",
-    TENDENCIA: "tendencia",
-    ACTAS: "actas",
-    GUESSES_RESULTADOS: "guesses-resultados",
-};
-
-export const HEADER_MENU_CONSULTA = {
-    PREGUNTAS_CONSULTA: "preguntas-consulta",
-    DIGITACION_CONSULTA: "digitacion-consulta",
-    RESULTADO_CONSULTA: "resultados-consulta",
-    ESCRUTINIO_CONSULTA: "escrutinio-consulta",
-    SEGUIMIENTO_JUNTAS_CONSULTA: "seguimiento-consulta",
-    ACTAS_CONSULTA: "consulta-actas",
+    ELECCIONES_BINOMIOS: "/elecciones/binomios",
+    ELECCIONES_CONSULTA: "/elecciones/consulta",
+    ELECCIONES_DIGITACION: "/elecciones/digitacion",
 };
 
 export const authRoutes = {
@@ -165,23 +164,74 @@ export const authRoutes = {
     Component: AuthPage,
 };
 
+export const GENERAL_ROUTES = {
+    PERFIL: "perfil",
+    CAMBIAR_CONTRASENA: "cambiar-contrasena",
+};
+
+export const HEADER_MENU = {
+    USUARIOS: "usuarios",
+    ORGANIZACIONES: "organizaciones",
+    CANDIDATOS: "candidatos",
+    INVITADOS: "invitados",
+
+    DIGITACION: "digitacion",
+    RESULTADO_BINOMIOS: "resultados",
+    RESULTADO_WEBSTER: "webster-resultados",
+    ESCRUTINIO: "escrutinio",
+    TENDENCIA: "tendencia",
+    ACTAS: "actas",
+    RESULTADOS_ELECCIONES_MAP: "resultados-elecciones",
+};
+
+/* Consulta Popular */
+export const HEADER_MENU_CONSULTA = {
+    PREGUNTAS_CONSULTA: "preguntas",
+    DIGITACION_CONSULTA: "consulta",
+    RESULTADO_CONSULTA: "resultados",
+    ESCRUTINIO_CONSULTA: "escrutinio",
+    SEGUIMIENTO_JUNTAS_CONSULTA: "seguimiento",
+    ACTAS_CONSULTA: "revisar-actas",
+    REPORTE_JUNTAS_CONSULTA: "reporte-juntas",
+};
+
 export const guessRoutes = {
-    path: "guesses/resultados",
-    link: "guesses/resultados",
+    path: HEADER_MENU.RESULTADOS_ELECCIONES_MAP,
+    link: HEADER_MENU.RESULTADOS_ELECCIONES_MAP,
     Component: GuessesResultadosPage,
 };
 
 const adminRoutes = generateRoutes(
-    "admin",
+    "admin/elecciones",
     [
-        { path: "usuarios", Component: UsuariosPage },
-        { path: "guesses", Component: GuessesPage },
-        { path: "candidatos", Component: CandidatosPage },
-        { path: "organizaciones", Component: OrganizacionesPage },
-        //{ path: HEADER_MENU.DIGITACION, Component: DigitacionPage },
+        {
+            path: HEADER_MENU.USUARIOS,
+            Component: UsuariosPage,
+        },
+        {
+            path: HEADER_MENU.CANDIDATOS,
+            Component: CandidatosPage,
+        },
+        {
+            path: HEADER_MENU.ORGANIZACIONES,
+            Component: OrganizacionesPage,
+        },
+        {
+            path: HEADER_MENU.INVITADOS,
+            Component: GuessesPage,
+        },
+    ],
+    ["ADMIN", "RESPONSABLE"]
+);
 
+const adminBinomiosRoutes = generateRoutes(
+    "elecciones/binomios",
+    [
         // Rutas de Elecciones Binomios y Webster
-        { path: HEADER_MENU.ESCRUTINIO, Component: EscrutinioPage },
+        {
+            path: HEADER_MENU.ESCRUTINIO,
+            Component: EscrutinioPage,
+        },
         {
             path: HEADER_MENU.RESULTADO_BINOMIOS,
             Component: ResultadosBinomiosPage,
@@ -190,36 +240,75 @@ const adminRoutes = generateRoutes(
             path: HEADER_MENU.RESULTADO_WEBSTER,
             Component: ResultadosWebsterPage,
         },
-        { path: HEADER_MENU.TENDENCIA, Component: TendenciaPage },
-        { path: HEADER_MENU.ACTAS, Component: BusquedaActaPage },
+        {
+            path: HEADER_MENU.TENDENCIA,
+            Component: TendenciaPage,
+        },
+        {
+            path: HEADER_MENU.ACTAS,
+            Component: BusquedaActaPage,
+        },
+    ],
+    ["ADMIN", "RESPONSABLE"]
+);
 
+const adminConsultaRoutes = generateRoutes(
+    "elecciones/consulta",
+    [
         // Rutas para Consulta Popular
-        { path: HEADER_MENU_CONSULTA.PREGUNTAS_CONSULTA, Component: PreguntasConsultaPage },
-        { path: HEADER_MENU_CONSULTA.RESULTADO_CONSULTA, Component: ResultadosConsultaPage },
-        { path: HEADER_MENU_CONSULTA.ESCRUTINIO_CONSULTA, Component: EscrutinioConsultaPage },
-        { path: HEADER_MENU_CONSULTA.SEGUIMIENTO_JUNTAS_CONSULTA, Component: SeguimientoConsultaJuntasPage },
-
+        {
+            path: HEADER_MENU_CONSULTA.PREGUNTAS_CONSULTA,
+            Component: PreguntasConsultaPage,
+        },
+        {
+            path: HEADER_MENU_CONSULTA.RESULTADO_CONSULTA,
+            Component: ResultadosConsultaPage,
+        },
+        {
+            path: HEADER_MENU_CONSULTA.ESCRUTINIO_CONSULTA,
+            Component: EscrutinioConsultaPage,
+        },
+        {
+            path: HEADER_MENU_CONSULTA.SEGUIMIENTO_JUNTAS_CONSULTA,
+            Component: SeguimientoConsultaJuntasPage,
+        },
     ],
     ["ADMIN", "RESPONSABLE"]
 );
 
 const digitadorRoutes = generateRoutes(
-    "general",
+    "elecciones/digitacion",
     [
         // Digitacion de acta para Binomios y Webster
-        { path: "digitacion-acta", Component: DigitacionPage },
+        { path: "actas", Component: DigitacionPage },
 
         // Digitacion de acta para Consulta Popular
-        { path: "digitacion-consulta", Component: DigitacionConsultaPage },
+        { path: "consulta", Component: DigitacionConsultaPage },
+
+        /* Revisar Actas - Consulta Popular */
+        {
+            path: HEADER_MENU_CONSULTA.ACTAS_CONSULTA,
+            Component: BusquedaActasConsultaPage,
+        },
+        {
+            path: HEADER_MENU_CONSULTA.REPORTE_JUNTAS_CONSULTA,
+            Component: ReporteJuntasProvinciaPage,
+        },
     ],
     ["ADMIN", "DIGITADOR", "RESPONSABLE"]
 );
 
 const peerRoutes = generateRoutes(
-    "staff/d",
+    "elecciones",
     [
-        { path: "profile", Component: ProfilePage },
-        { path: "change-password", Component: ChangePwdPage },
+        {
+            path: GENERAL_ROUTES.PERFIL,
+            Component: ProfilePage,
+        },
+        {
+            path: GENERAL_ROUTES.CAMBIAR_CONTRASENA,
+            Component: ChangePwdPage,
+        },
     ],
     [""]
 );
@@ -228,8 +317,8 @@ export const routes = {
     //auth: authRoutes,
     admin: adminRoutes,
     digitador: digitadorRoutes,
-    //usuario: usuarioRoutes,
-    //peer: peerRoutes,
+    adminBinomios: adminBinomiosRoutes,
+    adminConsulta: adminConsultaRoutes,
 };
 
 export const peerLinks = {
@@ -248,16 +337,16 @@ export const menuRoutes = [
 
     {
         label: "Ver Perfil",
-        path: "profile",
-        link: "/staff/d/profile",
+        path: "perfil",
+        link: `${PREFIX_ROUTES.ELECCIONES}/${GENERAL_ROUTES.PERFIL}`,
         icon: IconUserHexagon,
         color: "#12b561",
         role: "",
     },
     {
         label: "Cambiar contraseña",
-        path: "change-password",
-        link: "/staff/d/change-password",
+        path: "cambiar-contrasena",
+        link: `${PREFIX_ROUTES.ELECCIONES}/${GENERAL_ROUTES.CAMBIAR_CONTRASENA}`,
         icon: IconSettings,
         color: "#6d7c85",
         role: "",
@@ -265,7 +354,7 @@ export const menuRoutes = [
     {
         label: "Usuarios",
         path: "usuarios",
-        link: "/admin/usuarios",
+        link: `${PREFIX_ROUTES.ADMIN}${PREFIX_ROUTES.ELECCIONES}/${HEADER_MENU.USUARIOS}`,
         icon: IconUserPlus,
         color: "#1250fc",
         role: "ADMIN",
@@ -273,12 +362,12 @@ export const menuRoutes = [
     {
         label: "Usuarios",
         path: "usuarios",
-        link: "/admin/usuarios",
+        link: `${PREFIX_ROUTES.ADMIN}${PREFIX_ROUTES.ELECCIONES}/${HEADER_MENU.USUARIOS}`,
         icon: IconUserPlus,
         color: "#1250fc",
         role: "RESPONSABLE",
     },
-    {
+    /* {
         label: "Organizaciones",
         path: "organizaciones",
         link: "/admin/organizaciones",
@@ -293,23 +382,23 @@ export const menuRoutes = [
         icon: IconUserScan,
         color: "#0865ce",
         role: "ADMIN",
-    },
+    }, */
     {
         label: "Preguntas",
         path: "preguntas",
-        link: "/admin/preguntas",
+        link: "/elecciones/consulta/preguntas",
         icon: IconQuestionMark,
         color: "#f39c12",
         role: "ADMIN",
     },
-    {
+    /* {
         label: "Invitados",
         path: "guesses",
         link: "/admin/guesses",
         icon: IconUserStar,
         color: "#72d1d7",
         role: "ADMIN",
-    },
+    }, */
     {
         label: "Cerrar sesión",
         path: "cerrar-sesion",

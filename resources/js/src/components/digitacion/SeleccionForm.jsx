@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Grid, Select, Paper } from "@mantine/core";
 import { BtnSubmit } from "../../components";
 import { isNotEmpty, useForm } from "@mantine/form";
@@ -13,9 +13,7 @@ import { IconSearch } from "@tabler/icons-react";
 import classes from "../../assets/styles/modules/digitacion/LabelsDigitacion.module.css";
 
 export const SeleccionForm = () => {
-    const usuario = useMemo(() => {
-        return JSON.parse(localStorage.getItem("service_user")) || {};
-    }, []);
+    const usuario = JSON.parse(localStorage.getItem("service_user")) || {};
 
     const {
         provincias,

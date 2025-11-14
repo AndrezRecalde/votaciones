@@ -44,6 +44,8 @@ import { ProfileInformation } from "./user/ProfileInformation";
 import { ProfileProgressActas } from "./user/ProfileProgressActas";
 import { ProfileBtnService } from "./user/ProfileBtnService";
 import { ProfileContarActas } from "./user/ProfileContarActas";
+import { ProfileContarActasConsulta } from "./user/ProfileContarActasConsulta";
+import { ProfileProgressActasConsulta } from "./user/ProfileProgressActasConsulta";
 
 /* Usuario: Cambio de contraseña */
 import { ChangePwdForm } from "./user/pwd/ChangePwdForm";
@@ -151,6 +153,10 @@ import { EscrutinioConsultaTable } from "./consulta-popular/escrutinio/table/Esc
 import { SeguimientoBusquedaForm } from "./consulta-popular/seguimiento/form/SeguimientoBusquedaForm";
 import { SeguimientoConsultaJuntasChart } from "./consulta-popular/seguimiento/chart/SeguimientoConsultaJuntasChart";
 
+/* Acta Consulta Popular */
+import { BusquedaActasConsultaFilter } from "./consulta-popular/acta/filter/BusquedaActasConsultaFilter";
+import { BusquedaActasConsultaTable } from "./consulta-popular/acta/table/BusquedaActasConsultaTable";
+
 export {
     /* Logo */
     Logo,
@@ -198,6 +204,8 @@ export {
     ProfileProgressActas,
     ProfileBtnService,
     ProfileContarActas,
+    ProfileContarActasConsulta,
+    ProfileProgressActasConsulta,
 
     /* Usuario: Cambio de contraseña */
     ChangePwdForm,
@@ -299,5 +307,7 @@ export {
 
     /* Seguimiento de Juntas - Consulta Popular */
     SeguimientoBusquedaForm,
-    SeguimientoConsultaJuntasChart
+    SeguimientoConsultaJuntasChart,
+    BusquedaActasConsultaFilter,
+    BusquedaActasConsultaTable
 }

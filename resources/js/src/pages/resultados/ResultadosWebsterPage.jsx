@@ -1,12 +1,10 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import {
-    ActionIcon,
     Container,
     Divider,
     Grid,
     Group,
     LoadingOverlay,
-    rem,
 } from "@mantine/core";
 import {
     BadgeElement,
@@ -28,9 +26,7 @@ const DIGNIDAD_CURRENT = 3;
 
 const ResultadosWebsterPage = () => {
     useTitleHook("Elecciones | Webster");
-    const usuario = useMemo(() => {
-        return JSON.parse(localStorage.getItem("service_user")) || {};
-    }, []);
+    const usuario = JSON.parse(localStorage.getItem("service_user")) || {};
     const { fechaActual } = useFechaStore();
     const {
         isLoading,

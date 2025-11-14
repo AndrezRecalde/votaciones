@@ -35,7 +35,7 @@ class PreguntaConsultaController extends Controller
         $perPage = intval($request->input('per_page', 20));
         $page = intval($request->input('page', 1));
 
-        $preguntasPaginadas = $preguntas->orderBy('numero_pregunta', 'ASC')->paginate($perPage, ['*'], 'page', $page);
+        $preguntasPaginadas = $preguntas->orderBy('casillero_pregunta', 'ASC')->paginate($perPage, ['*'], 'page', $page);
 
         return response()->json([
             'status' => HTTPStatus::Success,
@@ -204,7 +204,7 @@ class PreguntaConsultaController extends Controller
     {
         try {
             $preguntas = PreguntaConsulta::activas()->ordenadoPorNumero()
-                ->get(['id', 'numero_pregunta', 'texto_pregunta', 'descripcion']);
+                ->get(['id', 'casillero_pregunta', 'texto_pregunta', 'descripcion']);
 
             return response()->json([
                 'success' => true,

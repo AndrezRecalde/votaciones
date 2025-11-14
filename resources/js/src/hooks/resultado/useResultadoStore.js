@@ -61,7 +61,7 @@ export const useResultadoStore = () => {
                 }, 40);
             } else {
                 const { totalDeVotos } = data;
-                console.log(totalDeVotos);
+                //console.log(totalDeVotos);
                 dispatch(onLoadTotalDeVotos(totalDeVotos));
             }
         } catch (error) {
@@ -278,7 +278,7 @@ export const useResultadoStore = () => {
             const { resultados } = data;
             dispatch(onLoadResultadosForMap(resultados));
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             ExceptionMessageError(error);
         }
     };

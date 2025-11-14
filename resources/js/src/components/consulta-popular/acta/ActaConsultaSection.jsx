@@ -137,7 +137,7 @@ export const ActaConsultaSection = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const payload = actaForm.getTransformedValues();
-        console.log(payload);
+        //console.log(payload);
         startAddActa(payload); // internamente POST o PUT
         actaForm.reset();
         startClearActaConsulta();

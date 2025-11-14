@@ -18,7 +18,7 @@ export const ActaResumenTotalVotos = ({
     votos_validos,
     totales,
 }) => {
-    console.log(esCuadrada);
+    //console.log(esCuadrada);
     return (
         <Card shadow="md" padding="lg" radius="md" withBorder>
             <Group mb="sm" gap="xs">
