@@ -119,7 +119,6 @@ export const ActaConsultaVotosSection = ({
                             {preguntas.map((pregunta, index) => {
                                 const casillero =
                                     pregunta.casillero_pregunta ??
-                                    pregunta.numero_pregunta ??
                                     String(index + 1);
 
                                 const { total, coincide } = getInfo(index);
@@ -182,7 +181,7 @@ export const ActaConsultaVotosSection = ({
                                                     <Divider my={6} />
                                                     <Text size="xs" c="dimmed">
                                                         Pregunta{" "}
-                                                        {pregunta.numero_pregunta ??
+                                                        {pregunta.casillero_pregunta ??
                                                             index + 1}
                                                     </Text>
                                                     <Text

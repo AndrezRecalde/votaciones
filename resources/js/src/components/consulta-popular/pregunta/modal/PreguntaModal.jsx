@@ -9,14 +9,14 @@ export const PreguntaModal = () => {
 
     const form = useForm({
         initialValues: {
-            numero_pregunta: "",
+            casillero_pregunta: "",
             texto_pregunta: "",
             descripcion: "",
         },
         validate: {
-            numero_pregunta: (value) =>
+            casillero_pregunta: (value) =>
                 value.length <= 0
-                    ? "El número de pregunta es obligatorio"
+                    ? "El casillero de pregunta es obligatorio"
                     : null,
             texto_pregunta: (value) =>
                 value.length <= 0

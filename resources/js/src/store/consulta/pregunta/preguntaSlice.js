@@ -53,8 +53,15 @@ export const preguntaSlice = createSlice({
             state.errores = undefined;
         },
         onClearPreguntas: (state) => {
+            state.isLoading = false;
             state.preguntas = [];
-            state.activatePregunta = null;
+            (state.paginacion = {
+                total: 0,
+                por_pagina: 15,
+                pagina_actual: 1,
+                ultima_pagina: 0,
+            }),
+                (state.activatePregunta = null);
             state.errores = undefined;
         },
         onLoadMessage: (state, { payload }) => {

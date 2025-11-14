@@ -56,7 +56,7 @@ export const PreguntasTable = ({ pagination, setPagination }) => {
             setActivatePregunta(selected);
             Swal.fire({
                 icon: "warning",
-                text: `Estas seguro de eliminar ${selected.numero_pregunta}?`,
+                text: `Estas seguro de eliminar ${selected.casillero_pregunta}?`,
                 showDenyButton: true,
                 confirmButtonColor: "#3085d6",
                 confirmButtonText: "Si",

@@ -128,7 +128,7 @@ export const SeguimientoBusquedaForm = () => {
                             {...form.getInputProps("pregunta_id")}
                             data={preguntas.map((pregunta) => {
                                 return {
-                                    label: pregunta.texto_pregunta,
+                                    label: pregunta.descripcion,
                                     value: pregunta.id.toString(),
                                 };
                             })}

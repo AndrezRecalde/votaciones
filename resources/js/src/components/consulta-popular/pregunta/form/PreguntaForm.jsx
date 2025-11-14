@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import {
     Box,
     Divider,
-    NumberInput,
     Stack,
     Textarea,
     TextInput,
@@ -43,10 +42,11 @@ export const PreguntaForm = ({ form }) => {
         >
             <Divider my="xs" />
             <Stack>
-                <NumberInput
-                    label="Número de la pregunta"
-                    placeholder="Digite el número de la pregunta"
-                    {...form.getInputProps("numero_pregunta")}
+                <TextInput
+                    withAsterisk
+                    label="Casillero de la pregunta"
+                    placeholder="Digite el casillero de la pregunta"
+                    {...form.getInputProps("casillero_pregunta")}
                 />
                 <TextInput
                     withAsterisk

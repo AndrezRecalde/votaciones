@@ -27,11 +27,9 @@ class PreguntaConsultaRequest extends FormRequest
         $preguntaId = $this->route('pregunta') ?? $this->route('id') ?? null;
 
         return [
-            'numero_pregunta' => [
+            'casillero_pregunta' => [
                 'required',
-                'integer',
-                'min:1',
-                Rule::unique('preguntas_consulta', 'numero_pregunta')->ignore($preguntaId),
+                Rule::unique('preguntas_consulta', 'casillero_pregunta')->ignore($preguntaId),
             ],
             'texto_pregunta' => ['required', 'string', 'min:5'],
             'descripcion' => ['nullable', 'string'],
@@ -42,8 +40,8 @@ class PreguntaConsultaRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'numero_pregunta.required' => 'El número de pregunta es obligatorio.',
-            'numero_pregunta.unique' => 'El número de pregunta ya existe.',
+            'casillero_pregunta.required' => 'El casillero de pregunta es obligatorio.',
+            'casillero_pregunta.unique' => 'El casillero de pregunta ya existe.',
             'texto_pregunta.required' => 'El texto de la pregunta es obligatorio.',
         ];
     }

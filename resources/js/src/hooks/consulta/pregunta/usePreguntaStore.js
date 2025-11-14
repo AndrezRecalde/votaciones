@@ -24,7 +24,11 @@ export const usePreguntaStore = () => {
 
     const { ExceptionMessageError } = useErrorException(onLoadErrores);
 
-    const startLoadPreguntas = async ({ page = 1, per_page = 20, all = false } = {}) => {
+    const startLoadPreguntas = async ({
+        page = 1,
+        per_page = 20,
+        all = false,
+    } = {}) => {
         try {
             dispatch(onLoading(true));
             const { data } = await apiAxios.get("/admin/preguntas-consulta", {
@@ -32,8 +36,12 @@ export const usePreguntaStore = () => {
             });
             //console.log(data);
             const { preguntas, paginacion } = data;
-            dispatch(onLoadPreguntas(preguntas));
-            dispatch(onLoadPaginacion(paginacion));
+            if (!all) {
+                dispatch(onLoadPreguntas(preguntas));
+                dispatch(onLoadPaginacion(paginacion));
+            } else {
+                dispatch(onLoadPreguntas(preguntas));
+            }
         } catch (error) {
             //console.log(error);
             ExceptionMessageError(error);
