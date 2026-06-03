@@ -3,6 +3,7 @@ import { useUiHeaderMenu } from "../../hooks";
 //import HeaderMenu from "../header/HeaderMenu";
 import classes from "../../assets/styles/modules/layout/AppBody.module.css";
 import HeaderMenuConsulta from "../header/HeaderMenuConsulta";
+import HeaderMenu from "../header/HeaderMenu";
 
 const AppHeaderMenu = ({ children }) => {
     const usuario = JSON.parse(localStorage.getItem("service_user")) || {};
@@ -21,7 +22,7 @@ const AppHeaderMenu = ({ children }) => {
             padding={30}
         >
             <AppShell.Header>
-                <HeaderMenuConsulta
+                <HeaderMenu
                     usuario={usuario}
                     isOpenDrawerMobile={isOpenDrawerMobile}
                     modalActionDrawerMobile={modalActionDrawerMobile}
