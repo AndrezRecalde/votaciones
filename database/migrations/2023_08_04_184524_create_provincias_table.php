@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('cod_cne_prov');
             $table->string('nombre_provincia');
-            $table->boolean('activo')->default(true);
+            $table->tinyInteger('activo')->default(1);
             $table->timestamps();
         });
     }

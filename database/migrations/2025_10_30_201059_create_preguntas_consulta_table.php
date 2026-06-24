@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('casillero_pregunta', 5)->unique()->comment('Número o Letra correlativo de la pregunta');
             $table->text('texto_pregunta')->comment('Texto completo de la pregunta');
             $table->text('descripcion')->nullable()->comment('Descripción adicional de la pregunta');
-            $table->boolean('activo')->default(true)->comment('Estado activo/inactivo de la pregunta');
+            $table->tinyInteger('activo')->default(1)->comment('Estado activo/inactivo de la pregunta');
             $table->timestamps();
 
             // Índices

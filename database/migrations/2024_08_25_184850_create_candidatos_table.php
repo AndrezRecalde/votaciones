@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('organizacion_id');
             $table->unsignedBigInteger('dignidad_id');
             $table->string('nombre_candidato');
-            $table->boolean('activo')->default(false);
+            $table->tinyInteger('activo')->default(0);
             $table->timestamps();
 
             // Definir relaciones foráneas

@@ -23,11 +23,11 @@ return new class extends Migration
             $table->unsignedBigInteger('votos_validos')->default(0);
             $table->unsignedBigInteger('votos_blancos')->default(0);
             $table->unsignedBigInteger('votos_nulos')->default(0);
-            $table->boolean('cuadrada')->default(true);
-            $table->boolean('legible')->default(true);
+            $table->tinyInteger('cuadrada')->default(1);
+            $table->tinyInteger('legible')->default(1);
             $table->unsignedBigInteger('user_add');
             $table->unsignedBigInteger('user_update')->nullable();
-            $table->boolean('estado')->default(true);
+            $table->tinyInteger('estado')->default(1);
             $table->timestamps();
 
             // Definir relaciones foráneas

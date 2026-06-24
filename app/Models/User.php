@@ -25,8 +25,9 @@ class User extends Authenticatable
         'nombres_completos',
         'dni',
         'provincia_id',
-        'es_responsable',
         'canton_id',
+        'recinto_id',
+        'junta_id',
         'password',
         'activo',
         'user_id'
@@ -57,7 +58,7 @@ class User extends Authenticatable
 
     public function scopeAllowed($query)
     {
-        if (auth()->user()->hasRole('ADMIN')) {
+        if (auth()->user()->hasRole('ADMINISTRADOR')) {
             return $query;
         } else {
             return $query->where('user_id', auth()->id());
@@ -92,5 +93,30 @@ class User extends Authenticatable
         if ($canton_id > 0) {
             return $query->where('u.canton_id', $canton_id);
         }
+    }
+
+    public function provincia()
+    {
+        return $this->belongsTo(Provincia::class);
+    }
+
+    public function canton()
+    {
+        return $this->belongsTo(Canton::class);
+    }
+
+    public function recinto()
+    {
+        return $this->belongsTo(Recinto::class);
+    }
+
+    public function junta()
+    {
+        return $this->belongsTo(Junta::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('cne_cod_junta')->nullable();
             $table->unsignedBigInteger('num_junta')->nullable();
             $table->string('genero', 1)->nullable();
-            $table->string('´junta_nombre', 4)->nullable();
+            $table->string('junta_nombre', 4)->nullable();
             $table->unsignedBigInteger('num_electores_cne')->nullable();
             $table->unsignedBigInteger('num_votaron')->nullable();
             $table->unsignedBigInteger('num_no_votaron')->nullable();

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre_dignidad');
             $table->char('tipo_dignidad');
-            $table->boolean('activo')->default(false);
+            $table->tinyInteger('activo')->default(0);
             $table->timestamps();
         });
     }

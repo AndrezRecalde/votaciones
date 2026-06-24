@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nombres_completos');
             $table->string('telefono', 15);
             $table->integer('codigo');
-            $table->boolean('activo')->default(false);
+            $table->tinyInteger('activo')->default(0);
             $table->timestamps();
         });
     }

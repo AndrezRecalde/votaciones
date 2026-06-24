@@ -26,13 +26,13 @@ return new class extends Migration
             $table->unsignedBigInteger('votos_validos')->default(0);
 
             // Estado del acta
-            $table->boolean('cuadrada')->default(true)->comment('Indica si el acta cuadra');
-            $table->boolean('legible')->default(true)->comment('Indica si el acta es legible');
+            $table->tinyInteger('cuadrada')->default(1)->comment('Indica si el acta cuadra');
+            $table->tinyInteger('legible')->default(1)->comment('Indica si el acta es legible');
 
             // Auditoría
             $table->unsignedBigInteger('user_add')->comment('Usuario que registró el acta');
             $table->unsignedBigInteger('user_update')->nullable()->comment('Usuario que actualizó el acta');
-            $table->boolean('estado')->default(true)->comment('Estado activo/inactivo del acta');
+            $table->tinyInteger('estado')->default(1)->comment('Estado activo/inactivo del acta');
 
             $table->timestamps();
 

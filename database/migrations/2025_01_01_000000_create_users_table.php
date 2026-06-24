@@ -19,21 +19,25 @@ return new class extends Migration
             $table->unsignedBigInteger('canton_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->boolean('activo')->default(false);
-            $table->boolean('es_responsable')->default(false);
-            $table->unsignedBigInteger('user_id');
+            $table->tinyInteger('activo')->default(0);
+            $table->unsignedBigInteger('user_id')->nullable(); // Who created this user
+            $table->unsignedBigInteger('recinto_id')->nullable();
+            $table->unsignedBigInteger('junta_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
 
             // Definir relaciones foráneas
             $table->foreign('provincia_id')->references('id')->on('provincias')->onDelete('cascade');
             $table->foreign('canton_id')->references('id')->on('cantones')->onDelete('cascade');
+            $table->foreign('recinto_id')->references('id')->on('recintos')->onDelete('cascade');
+            $table->foreign('junta_id')->references('id')->on('juntas')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
 
             // Añadir índices
             $table->index('provincia_id');
             $table->index('canton_id');
+            $table->index('recinto_id');
+            $table->index('junta_id');
             $table->index('user_id');
 
         });
